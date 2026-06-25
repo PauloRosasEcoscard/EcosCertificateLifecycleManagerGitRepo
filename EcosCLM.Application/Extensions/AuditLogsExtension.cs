@@ -2,7 +2,7 @@
 using EcosCLM.Application.Interfaces;
 using EcosCLM.Application.Services;
 using EcosCLM.Application.ViewModels;
-using EcosCLM.Domain.Entities;
+using EcosCLM.Domain.Entities.Base;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using System;

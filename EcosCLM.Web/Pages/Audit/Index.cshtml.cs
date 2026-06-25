@@ -3,7 +3,7 @@ using DocumentFormat.OpenXml.Spreadsheet;
 using EcosCLM.Application.Extensions;
 using EcosCLM.Application.Interfaces;
 using EcosCLM.Application.ViewModels;
-using EcosCLM.Domain.Entities;
+using EcosCLM.Domain.Entities.Base;
 using EcosCLM.Web.EcosLoginIntegration.Interfaces;
 using EcosCLM.Web.Infrastructure.Core;
 using EcosCLM.Web.Models;

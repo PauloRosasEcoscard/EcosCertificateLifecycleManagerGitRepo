@@ -1,4 +1,4 @@
-﻿using EcosCLM.Domain.Entities;
+﻿using EcosCLM.Domain.Entities.Base;
 
 namespace EcosCLM.Application.Interfaces
 {

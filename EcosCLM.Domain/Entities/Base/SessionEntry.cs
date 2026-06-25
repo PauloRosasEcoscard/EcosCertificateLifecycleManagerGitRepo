@@ -1,4 +1,4 @@
-﻿namespace EcosCLM.Domain.Entities
+﻿namespace EcosCLM.Domain.Entities.Base
 {
     public class SessionEntry
     {

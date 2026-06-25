@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace EcosCLM.Domain.Entities
+namespace EcosCLM.Domain.Entities.Base
 {
     public class AuditLogs
     {

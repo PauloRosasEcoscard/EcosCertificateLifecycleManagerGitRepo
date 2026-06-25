@@ -1,5 +1,5 @@
 ﻿using EcosCLM.Application.Interfaces;
-using EcosCLM.Domain.Entities;
+using EcosCLM.Domain.Entities.Base;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace EcosCLM.Application.Services

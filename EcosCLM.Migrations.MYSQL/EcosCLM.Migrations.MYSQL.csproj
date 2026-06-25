@@ -4,9 +4,10 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
-
 	<ItemGroup>
-		<Folder Include="Factory\" />
+	  <Compile Remove="Factory\**" />
+	  <EmbeddedResource Remove="Factory\**" />
+	  <None Remove="Factory\**" />
 	</ItemGroup>
 
 	<ItemGroup>

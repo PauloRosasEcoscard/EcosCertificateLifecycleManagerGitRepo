@@ -1,6 +1,6 @@
 ﻿using EcosCLM.Application.Interfaces;
 using EcosCLM.Application.ViewModels;
-using EcosCLM.Domain.Entities;
+using EcosCLM.Domain.Entities.Base;
 
 namespace EcosCLM.Application.Extensions
 {

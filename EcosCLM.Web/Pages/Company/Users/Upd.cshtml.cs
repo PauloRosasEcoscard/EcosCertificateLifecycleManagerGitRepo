@@ -1,7 +1,7 @@
 using EcosCLM.Application.Interfaces;
 using EcosCLM.Application.Extensions;
 using EcosCLM.Application.ViewModels;
-using EcosCLM.Domain.Entities;
+using EcosCLM.Domain.Entities.Base;
 using EcosCLM.Web.EcosLoginIntegration.Interfaces;
 using EcosCLM.Web.EcosLoginIntegration.Model;
 using EcosCLM.Web.Infrastructure.Core;

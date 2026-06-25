@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EcosCLM.Domain.Entities
+namespace EcosCLM.Domain.Entities.Base
 {
     public class SyslogServers
     {

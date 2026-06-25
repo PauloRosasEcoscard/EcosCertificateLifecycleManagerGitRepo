@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using EcosCLM.Application.Validators;
-using EcosCLM.Domain.Entities;
+using EcosCLM.Domain.Entities.Base;
 using System.ComponentModel.DataAnnotations;
 
 namespace EcosCLM.Application.ViewModels

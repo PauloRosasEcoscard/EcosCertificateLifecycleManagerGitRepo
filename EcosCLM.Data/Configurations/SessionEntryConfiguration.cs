@@ -1,4 +1,4 @@
-﻿using EcosCLM.Domain.Entities;
+﻿using EcosCLM.Domain.Entities.Base;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

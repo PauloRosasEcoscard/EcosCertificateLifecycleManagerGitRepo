@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.WebUtilities;
 using EcosCLM.Domain.DataTypes;
 using EcosCLM.Data.Services;
 using EcosCLM.Application.Interfaces;
-using EcosCLM.Domain.Entities;
+using EcosCLM.Domain.Entities.Base;
 using EcosCLM.Application.Extensions;
 using EcosCLM.Web.EcosLoginIntegration.Interfaces;
 using EcosCLM.Web.EcosLoginIntegration.Model;

@@ -2,7 +2,7 @@
 using EcosCLM.Application.Interfaces;
 using EcosCLM.Application.ViewModels;
 using EcosCLM.Data.Context;
-using EcosCLM.Domain.Entities;
+using EcosCLM.Domain.Entities.Base;
 
 namespace EcosCLM.Data.Repositories
 {

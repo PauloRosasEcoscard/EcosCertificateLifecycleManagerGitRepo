@@ -3,6 +3,7 @@ using EcosCLM.Application.ViewModels;
 using EcosCLM.Web.Infrastructure.Core;
 using Microsoft.AspNetCore.Mvc;
 using EcosCLM.Web.EcosLoginIntegration.Interfaces;
+using EcosCLM.Domain.Entities.Base;
 
 namespace EcosCLM.Web.Pages
 {
@@ -31,14 +32,14 @@ namespace EcosCLM.Web.Pages
                 return RedirectToPage(location);
             }
 
-            if (job.Status != Domain.Entities.DownloadStatus.Ready) 
+            if (job.Status != DownloadStatus.Ready) 
             {
-                if(job.Status == Domain.Entities.DownloadStatus.Error)
+                if(job.Status == DownloadStatus.Error)
                 {
                     TempData["error"] = "An error ocurred while generating your file, please try again!";
                 }
 
-                if(job.Status == Domain.Entities.DownloadStatus.Pending || job.Status == Domain.Entities.DownloadStatus.Processing)
+                if(job.Status == DownloadStatus.Pending || job.Status == DownloadStatus.Processing)
                 {
                     TempData["warning"] = "Your file is not ready yet!";
                 }

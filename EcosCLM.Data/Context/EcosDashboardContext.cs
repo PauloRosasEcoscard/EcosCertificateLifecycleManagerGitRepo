@@ -1,5 +1,5 @@
 ﻿using EcosCLM.Data.Configurations;
-using EcosCLM.Domain.Entities;
+using EcosCLM.Domain.Entities.Base;
 using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
