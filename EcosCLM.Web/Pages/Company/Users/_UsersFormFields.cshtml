@@ -1,0 +1,65 @@
+﻿@using EcosCLM.Web.EcosLoginIntegration.Model
+@model PolicySystemUserViewModel
+
+<div class="row g-4 px-2 pb-2">
+
+    <div class="col-12">
+        <h6 class="fw-bold mb-0 pb-2 border-bottom border-2" style="border-color: var(--bs-primary) !important; color: var(--bs-primary);">
+            Personal Information
+        </h6>
+    </div>
+
+    <div class="col-12">
+        <label asp-for="TxName" class="form-label small fw-bold text-muted mb-1">Full Name</label>
+        <input asp-for="TxName" class="form-control ecos-input shadow-none rounded-3 px-3 py-2" placeholder="Ex: John Doe" />
+        <span asp-validation-for="TxName" class="text-danger small mt-1"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="TxEmail" class="form-label small fw-bold text-muted mb-1">Email Address</label>
+        <input asp-for="TxEmail" class="form-control ecos-input shadow-none rounded-3 px-3 py-2" type="email" placeholder="name@company.com" />
+        <span asp-validation-for="TxEmail" class="text-danger small mt-1"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="TxPhone" class="form-label small fw-bold text-muted mb-1">Phone</label>
+        <input asp-for="TxPhone" class="form-control ecos-input shadow-none rounded-3 px-3 py-2" placeholder="+1 (000) 000-0000" />
+        <span asp-validation-for="TxPhone" class="text-danger small mt-1"></span>
+    </div>
+
+    <div class="col-12 mt-5">
+        <h6 class="fw-bold mb-0 pb-2 border-bottom border-2" style="border-color: var(--bs-primary) !important; color: var(--bs-primary);">
+            Security and Access
+        </h6>
+    </div>
+
+    <div class="col-12">
+        <label asp-for="TxPassword" class="form-label small fw-bold text-muted mb-1">
+            Password @(Model.IdUser != Guid.Empty ? "(Leave blank to keep current)" : "")
+        </label>
+        <input type="password" asp-for="TxPassword" class="form-control ecos-input shadow-none rounded-3 px-3 py-2" placeholder="••••••••" />
+        <span asp-validation-for="TxPassword" class="text-danger small mt-1"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="NuStatus" class="form-label small fw-bold text-muted mb-1">Account Status</label>
+        <select asp-for="NuStatus" class="form-select ecos-input shadow-none rounded-3 px-3 py-2">
+            <option value="1">Active</option>
+            <option value="0">Inactive</option>
+            <option value="2">Blocked</option>
+        </select>
+        <span asp-validation-for="NuStatus" class="text-danger small mt-1"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="IdProfile" class="form-label small fw-bold text-muted mb-1">Profile</label>
+        @{
+            var profilesList = ViewData["Profiles"] as IEnumerable<SelectListItem>;
+        }
+        <select asp-for="IdProfile" asp-items="profilesList" class="form-select ecos-input shadow-none rounded-3 px-3 py-2">
+            <option value="">Select a profile...</option>
+        </select>
+        <span asp-validation-for="IdProfile" class="text-danger small mt-1"></span>
+    </div>
+
+</div>

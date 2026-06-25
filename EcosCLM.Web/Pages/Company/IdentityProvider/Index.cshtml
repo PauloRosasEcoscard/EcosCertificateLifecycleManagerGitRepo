@@ -1,0 +1,114 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Identity Provider";
+    ViewData["Breadcrumb"] = "Ecos Cloud Vhsm";
+    ViewData["PageName"] = "Identity Provider";
+}
+
+<div class="row">
+    <div class="col-12 mt-3">
+
+        <ecos-grid config="Model.GridConfig">
+
+            <search-append>
+                @if (Model.Itens?.Count() > 0)
+                {
+                    <div class="d-flex flex-row align-items-center me-3 my-1">
+                        <strong class="me-2 small text-muted text-uppercase tracking-wider" style="font-size: 0.75rem;">URL to Identity Provider:</strong>
+                        <span id="urlText" class="text-info me-2 small fw-semibold text-decoration-underline" style="cursor: pointer; user-select: none;">
+                            @Model.UrlForCustomer
+                        </span>
+                        <i id="copyIcon" class="material-symbols-outlined text-primary fs-5" style="cursor: pointer;" title="Copy URL">content_copy</i>
+                    </div>
+                }
+            </search-append>
+
+            @if (Model.Itens?.Any() == true)
+            {
+                @foreach (var item in Model.Itens)
+                {
+                    <div class="ecos-model-card p-3">
+                        <div class="row align-items-center w-100 m-0">
+
+                            <div class="col-12 col-md-5 mb-2 mb-md-0">
+                                <span class="ecos-card-label">Name</span>
+                                <span class="ecos-card-value fw-semibold text-main d-block">@item.Name</span>
+                            </div>
+
+                            <div class="col-12 col-md-5 mb-2 mb-md-0">
+                                <span class="ecos-card-label">Email Claim</span>
+                                <span class="ecos-card-value text-muted d-block">@item.EmailClaim</span>
+                            </div>
+
+                            <div class="col-12 col-md-2 text-end ms-auto card-action-col">
+                                <div class="d-flex justify-content-end gap-1">
+                                    <button type="button" class="btn btn-link text-muted p-1 d-inline-flex align-items-center" data-bs-toggle="modal" data-bs-target="#userDetailsModal-@item.Id" title="View Details">
+                                        <i class="material-symbols-outlined fs-5">visibility</i>
+                                    </button>
+                                    <a asp-page="Update" asp-route-id="@item.Id" class="btn btn-link text-primary p-1 d-inline-flex align-items-center" title="Edit">
+                                        <i class="material-symbols-outlined fs-5">edit</i>
+                                    </a>
+                                    <a asp-page="Delete" asp-route-id="@item.Id" class="btn btn-link text-danger p-1 d-inline-flex align-items-center" title="Delete">
+                                        <i class="material-symbols-outlined fs-5">delete</i>
+                                    </a>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="modal fade" id="userDetailsModal-@item.Id" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content border-0 shadow">
+                                <div class="modal-header border-bottom-0 pb-0">
+                                    <h5 class="modal-title fw-bold text-main">Identity Provider Details</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body py-3">
+                                    <div class="d-flex flex-column gap-2" style="font-size: 0.9rem;">
+                                        <div><span class="text-muted small d-block">Name</span><strong class="text-main">@item.Name</strong></div>
+                                        <div><span class="text-muted small d-block">Customer Id</span><span class="text-main">@item.IdCustomer</span></div>
+                                        <div><span class="text-muted small d-block">Discovery Uri</span><span class="text-main text-break">@item.DiscoveryUri</span></div>
+                                        <div><span class="text-muted small d-block">Client Id</span><span class="text-main text-break">@item.ClientId</span></div>
+                                        <div><span class="text-muted small d-block">Client Secret</span><span class="text-main">••••••••••••••••</span></div>
+                                        <div><span class="text-muted small d-block">Grant Type</span><span class="text-main">@item.GrantType</span></div>
+                                        <div><span class="text-muted small d-block">Email Claim</span><span class="text-main">@item.EmailClaim</span></div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer border-top-0 pt-0">
+                                    <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="ecos-model-card p-4 text-center text-muted small">
+                    No information available.
+                </div>
+            }
+
+        </ecos-grid>
+
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const copyIcon = document.getElementById("copyIcon");
+            if (copyIcon) {
+                copyIcon.addEventListener("click", () => {
+                    const urlElement = document.getElementById("urlText");
+                    if (urlElement) {
+                        const url = urlElement.innerText.trim();
+                        navigator.clipboard.writeText(url);
+                    }
+                });
+            }
+        });
+    </script>
+}

@@ -1,0 +1,23 @@
+﻿@page
+@model AddModel
+@{
+    ViewData["Title"] = "Add Identity Provider";
+}
+
+<div class="row">
+    <div class="col-12 mt-3">
+        @* O ecos-form já gerencia o <form>, o título, a subtitle e o rodapé padrão com Cancel/Save *@
+        <ecos-form title="Add Identity Provider"
+                   subtitle="Configure the connection details for your identity provider."
+                   handler="Save">
+
+            <partial name="_IdentityProviderFormFields" model="Model.Item" />
+
+            @* Botão extra de teste deve ficar dentro do ecos-form, mas antes do fechamento *@
+            <div class="d-flex justify-content-end mt-3">
+                <button type="submit" asp-page-handler="Test" class="btn btn-info px-4">Test Connection</button>
+            </div>
+
+        </ecos-form>
+    </div>
+</div>

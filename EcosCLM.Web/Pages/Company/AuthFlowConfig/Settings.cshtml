@@ -1,0 +1,110 @@
+﻿@page
+@model EcosCLM.Web.Pages.Company.AuthFlowConfig.SettingsModel
+@{
+    ViewData["Title"] = "Company";
+    ViewData["Breadcrumb"] = "Company";
+    ViewData["PageName"] = "Authentication Flow";
+}
+
+<div class="row">
+    @* Alterado de col-lg-8 para col-12 para remover os espaços em branco nas laterais *@
+    <div class="col-12 mt-3">
+        <div class="ecos-card p-0">
+
+            <div class="p-4 border-bottom border-color-subtle">
+                <h4 class="fw-bold mb-0 text-main">Authentication Flow Settings</h4>
+                <p class="text-muted small mb-0 mt-1">Configure how users identify themselves and the security layers required.</p>
+            </div>
+
+            <form method="post" asp-page-handler="Save">
+                <div class="p-4">
+                    <input type="hidden" asp-for="Item.Id" />
+                    <input type="hidden" asp-for="Item.IdCustomer" />
+
+                    <div class="d-flex flex-column gap-2">
+                        @* Espaçamento reduzido de gap-3 para gap-2 seguindo a densidade da grid *@
+
+                        <div class="ecos-settings-item d-flex align-items-center justify-content-between p-3 rounded-3 border border-color-subtle">
+                            <div>
+                                <label class="fw-bold text-main d-block mb-0" asp-for="Item.DefaultAutenthicationEnabled">Username and Password</label>
+                                <span class="text-muted small">Standard login using local credentials.</span>
+                            </div>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input fs-5" asp-for="Item.DefaultAutenthicationEnabled" type="checkbox" role="switch">
+                            </div>
+                        </div>
+
+                        <div class="ecos-settings-item d-flex align-items-center justify-content-between p-3 rounded-3 border border-color-subtle">
+                            <div>
+                                <label class="fw-bold text-main d-block mb-0" asp-for="Item.MicrosoftAutenthicationEnabled">Microsoft SSO</label>
+                                <span class="text-muted small">Allow users to sign in with their Microsoft account.</span>
+                            </div>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input fs-5" asp-for="Item.MicrosoftAutenthicationEnabled" id="microsoftSsoCheckbox" type="checkbox" role="switch">
+                            </div>
+                        </div>
+
+                        <div class="ecos-settings-item d-flex align-items-center justify-content-between p-3 rounded-3 border border-color-subtle">
+                            <div>
+                                <label class="fw-bold text-main d-block mb-0" asp-for="Item.MicrosoftIdentityProviderEnabled">Microsoft Identity Provider</label>
+                                <span class="text-muted small">Enable identity federation via Microsoft IDP.</span>
+                            </div>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input fs-5" asp-for="Item.MicrosoftIdentityProviderEnabled" id="microsoftIdentityProviderEnabledCheckbox" type="checkbox" role="switch">
+                            </div>
+                        </div>
+
+                        <div class="ecos-settings-item d-flex align-items-center justify-content-between p-3 rounded-3 border border-color-subtle">
+                            <div>
+                                <label class="fw-bold text-main d-block mb-0" asp-for="Item.MultFactorAuthenticationEnabled">Multi-Factor Authentication (MFA)</label>
+                                <span class="text-muted small">Require a second verification step for all logins.</span>
+                            </div>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input fs-5" asp-for="Item.MultFactorAuthenticationEnabled" type="checkbox" role="switch">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                @* Rodapé com botões totalmente estilizados *@
+                <div class="p-4 bg-light bg-opacity-10 border-top border-color-subtle d-flex justify-content-end gap-2 rounded-bottom-3">
+                    <a asp-page="Index" class="btn btn-outline-secondary px-4 fw-semibold border-color-subtle text-main" style="min-width: 120px;">
+                        Cancel
+                    </a>
+                    <button type="submit" class="btn btn-ecos-action px-4 fw-semibold" style="min-width: 120px;">
+                        Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const defaultAuthCheckbox = document.querySelector('[name="Item.DefaultAutenthicationEnabled"]');
+            const microsoftSsoCheckbox = document.getElementById('microsoftSsoCheckbox');
+            const microsoftIdentityProviderEnabledCheckbox = document.getElementById('microsoftIdentityProviderEnabledCheckbox');
+
+            function ensureOneIsChecked() {
+                if (!defaultAuthCheckbox.checked && !microsoftSsoCheckbox.checked && !microsoftIdentityProviderEnabledCheckbox.checked) {
+                    defaultAuthCheckbox.checked = true;
+                }
+            }
+
+            function handleMicrosoftCheckboxes(changedCheckbox, otherCheckbox) {
+                if (changedCheckbox.checked) {
+                    otherCheckbox.checked = false;
+                }
+                ensureOneIsChecked();
+            }
+
+            microsoftSsoCheckbox.addEventListener('change', () => handleMicrosoftCheckboxes(microsoftSsoCheckbox, microsoftIdentityProviderEnabledCheckbox));
+            microsoftIdentityProviderEnabledCheckbox.addEventListener('change', () => handleMicrosoftCheckboxes(microsoftIdentityProviderEnabledCheckbox, microsoftSsoCheckbox));
+            defaultAuthCheckbox.addEventListener('change', ensureOneIsChecked);
+
+            ensureOneIsChecked();
+        });
+    </script>
+}

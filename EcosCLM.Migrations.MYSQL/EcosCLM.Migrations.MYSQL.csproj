@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Folder Include="Factory\" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="EPPlus" />
+		<PackageReference Include="Microsoft.AspNetCore.DataProtection.EntityFrameworkCore" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.Extensions.Caching.SqlServer" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
+		<PackageReference Include="Newtonsoft.Json" />
+		<PackageReference Include="Pomelo.EntityFrameworkCore.MySql" />
+		<PackageReference Include="Pomelo.Extensions.Caching.MySql" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\EcosCLM.Application\EcosCLM.Application.csproj" />
+		<ProjectReference Include="..\EcosCLM.Data\EcosCLM.Data.csproj" />
+		<ProjectReference Include="..\EcosCLM.Domain\EcosCLM.Domain.csproj" />
+	</ItemGroup>
+</Project>

@@ -1,0 +1,20 @@
+﻿@page
+@model AddModel
+@{
+    ViewData["Title"] = "Company";
+    ViewData["Breadcrumb"] = "Ecos Dashboard Template";
+    ViewData["PageName"] = "Company";
+    ViewData["Profiles"] = Model.Profiles;
+}
+
+<div class="row">
+    <div class="col-12 mt-3">
+        <ecos-form title="Add User" subtitle="Change the access permissions, credentials, or contact information of the selected operator.">
+
+            <input type="hidden" asp-for="Item.IdCustomer" value="@Model.CustumerId" />
+
+            <partial name="_UsersFormFields" for="Item" />
+
+        </ecos-form>
+    </div>
+</div>

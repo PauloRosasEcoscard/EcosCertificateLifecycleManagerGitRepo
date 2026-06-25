@@ -1,0 +1,71 @@
+﻿@page
+@model DeleteModel
+@{
+    ViewData["Title"] = "Company";
+    ViewData["Breadcrumb"] = "Ecos Dashboard Template";
+    ViewData["PageName"] = "Company";
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="my-4">
+
+            <div class="card-header p-0 position-relative">
+                <div class="card-body d-flex align-items-center justify-content-between bg-secondary pt-4 pb-3">
+                    <h5 class="text-white text-capitalize fw-bold fs-5 mb-0">Delete user</h5>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12 mb-2">
+                    <div class="card">
+                        <div class="card-body px-4 pb-4">
+
+                            <div class="col-md-12 mb-4">
+
+                                @if (!Model.CanDelete)
+                                {
+                                    <div class="alert alert-danger fw-bold" role="alert">
+                                        You cannot delete your own user.
+                                    </div>
+                                }
+
+                                <h5 class="text-danger">Attention</h5>
+
+                                <form method="post">
+                                    <input type="hidden" asp-for="Item.IdUser" />
+                                    <input type="hidden" asp-for="Item.IdCustomer" />
+                                    <input type="hidden" asp-for="Item.TxName" />
+                                    <input type="hidden" asp-for="Item.TxEmail" />
+                                    <input type="hidden" asp-for="Item.TxPhone" />
+                                    <input type="hidden" asp-for="Item.TxPassword" />
+                                    <input type="hidden" asp-for="Item.TxSalt" />
+                                    <input type="hidden" asp-for="Item.NuStatus" />
+                                    <input type="hidden" asp-for="Item.Profile" />
+
+                                    <p>Are you sure you want to delete the user <strong>@Model.Item.TxName</strong>?</p>
+                                    <p class="fw-bold text-danger">This action is <u>irreversible</u>.</p>
+
+                                    <div class="col-md-12 text-center mt-4">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <a asp-page="Index" class="btn btn-secondary w-100">Cancel</a>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <button type="submit" class="btn-danger btn w-100" @(Model.CanDelete ? "" : "disabled")>
+                                                    Delete
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

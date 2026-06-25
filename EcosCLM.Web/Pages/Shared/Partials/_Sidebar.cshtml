@@ -1,0 +1,167 @@
+﻿@using System.Reflection
+@using EcosCLM.Web.EcosLoginIntegration.Model
+@using EcosCLM.Web.EcosLoginIntegration.Services
+@using Newtonsoft.Json
+@using System.Security.Claims
+@inject IHttpContextAccessor HttpContextAccessor
+@inject IConfiguration Configuration
+@inject EcosCLM.Web.EcosLoginIntegration.Interfaces.IEncryptionService _encryptionService
+
+@{
+    bool IsAdmin = false;
+    bool IsAudit = false;
+
+    var profileClaim = User.Claims.FirstOrDefault(c => c.Type == "Profile");
+
+    if (profileClaim != null && int.TryParse(profileClaim.Value, out int profileInt))
+    {
+        TypeProfile profile = ((TypeProfile)profileInt);
+
+        switch (profile)
+        {
+            case TypeProfile.Admin:
+                IsAdmin = true;
+                break;
+
+            case TypeProfile.Audit:
+                IsAudit = true;
+                break;
+        }
+    }
+
+    List<ContextRolesViewModel> ContextRoles = new List<ContextRolesViewModel>();
+    try
+    {
+        var claimsRoles = User.FindFirst(ClaimTypes.Role)?.Value;
+        if (!string.IsNullOrEmpty(claimsRoles))
+        {
+            var encryptKey = Configuration["EncryptKey"] ?? "ChavePadraoEcosIfEmpty";
+            
+            var decryptedJson = _encryptionService.Decrypt(claimsRoles, encryptKey);
+            ContextRoles = JsonConvert.DeserializeObject<List<ContextRolesViewModel>>(decryptedJson) ?? new List<ContextRolesViewModel>();
+        }
+    }
+    catch 
+    {
+        ContextRoles = new List<ContextRolesViewModel>();
+    }
+}
+
+@functions
+{
+    bool IsActivePage(string pageName)
+    {
+        var currentPage = ViewContext.RouteData.Values["page"] as string ?? string.Empty;
+        var currentPath = ViewContext.HttpContext.Request.Path.Value?.ToLower() ?? string.Empty;
+
+        return currentPage.Equals(pageName, StringComparison.OrdinalIgnoreCase) || currentPath.StartsWith(pageName.ToLower());
+    }
+
+    bool ShowPage(List<ContextRolesViewModel> contextRoles, string txPage)
+    {
+        try
+        {
+            return contextRoles.Any(x => txPage.Contains(x.ModuleController, StringComparison.OrdinalIgnoreCase));
+        }
+        catch
+        {
+            return false;
+        }
+    }
+}
+
+<div class="d-flex flex-column h-100">
+    <div class="d-flex align-items-center mb-3 sidebar-brand">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="me-2 text-accent"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+        <span>Ecos SSL Certificates</span>
+    </div>
+
+    <hr class="border-color opacity-25 mb-4">
+
+    <ul class="nav flex-column mb-auto gap-1">
+        <li>
+            <a class="nav-link nav-link-custom d-flex align-items-center @(IsActivePage("/Index") ? "active" : "")" asp-page="/Index">
+                <i class="material-symbols-outlined me-2">dashboard</i>
+                <span>Dashboard</span>
+            </a>
+        </li>
+
+        @if (IsAdmin || IsAudit)
+        {
+            <li>
+                <a class="nav-link nav-link-custom d-flex align-items-center @(IsActivePage("/Audit") ? "active" : "")" asp-page="/Audit/Index">
+                    <i class="material-symbols-outlined me-2">history_toggle_off</i>
+                    <span>Audit Logs</span>
+                </a>
+            </li>
+        }
+
+        @if (IsAdmin || ShowPage(ContextRoles, "Company"))
+        {
+            <li>
+                <a class="nav-link nav-link-custom d-flex align-items-center @(IsActivePage("/Company") ? "active" : "")"
+                   data-bs-toggle="collapse" href="#collapseCompany" role="button"
+                   aria-expanded="@(IsActivePage("/Company") ? "true" : "false")"
+                   aria-controls="collapseCompany">
+                    <i class="material-symbols-outlined me-2">business</i>
+                    <span>Company</span>
+                    <i class="material-symbols-outlined ms-auto fs-6 text-muted dropdown-arrow">expand_more</i>
+                </a>
+            </li>
+
+            <div class="collapse @(IsActivePage("/Company") ? "show" : "")" id="collapseCompany">
+                <ul class="submenu-list nav flex-column ms-3 gap-1">
+                    @if (IsAdmin || ShowPage(ContextRoles, "Company/Users"))
+                    {
+                        <li>
+                            <a class="nav-link nav-link-custom @(IsActivePage("/Company/Users") ? "active" : "")" asp-page="/Company/Users/Index">
+                                <i class="material-symbols-outlined me-2">group</i>
+                                <span>Users</span>
+                            </a>
+                        </li>
+                    }
+
+                    @if (IsAdmin || ShowPage(ContextRoles, "Company/IdentityProvider"))
+                    {
+                        <li>
+                            <a class="nav-link nav-link-custom @(IsActivePage("/Company/IdentityProvider") ? "active" : "")" asp-page="/Company/IdentityProvider/Index">
+                                <i class="material-symbols-outlined me-2">badge</i>
+                                <span>Identity Provider</span>
+                            </a>
+                        </li>
+                    }
+
+                    @if (IsAdmin || ShowPage(ContextRoles, "Company/AuthFlowConfig"))
+                    {
+                        <li>
+                            <a class="nav-link nav-link-custom @(IsActivePage("/Company/AuthFlowConfig") ? "active" : "")" asp-page="/Company/AuthFlowConfig/Settings">
+                                <i class="material-symbols-outlined me-2">key</i>
+                                <span>Enable Credentials</span>
+                            </a>
+                        </li>
+                    }
+
+                    @if (IsAdmin || ShowPage(ContextRoles, "Company/SyslogServers"))
+                    {
+                        <li>
+                            <a class="nav-link nav-link-custom @(IsActivePage("/Company/SyslogServers") ? "active" : "")" asp-page="/Company/SyslogServers/Index">
+                                <i class="material-symbols-outlined me-2">dns</i>
+                                <span>Syslog Servers</span>
+                            </a>
+                        </li>
+                    }
+
+                    @if (IsAdmin || ShowPage(ContextRoles, "Company/PolicySettings"))
+                    {
+                        <li>
+                            <a class="nav-link nav-link-custom @(IsActivePage("/Company/PolicySettings") ? "active" : "")" asp-page="/Company/PolicySettings/Index">
+                                <i class="material-symbols-outlined me-2">settings_account_box</i>
+                                <span>Policy Settings</span>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        }
+    </ul>
+</div>

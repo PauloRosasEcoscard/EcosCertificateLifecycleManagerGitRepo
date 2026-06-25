@@ -1,0 +1,35 @@
+﻿@model EcosCLM.Web.ViewComponents.Paginatorbar
+
+@if (Model.Pager != null)
+{
+    <nav class="table-responsive">
+        <ul class="pagination justify-content-center d-flex flex-wrap">
+            @if (Model.Pager.CurrentPage > 1)
+            {
+                <li class="page-item">
+                    <a class="page-link text-white bg-secondary" asp-page="@Model.Url" asp-route-p="1"><span aria-hidden="true">&laquo;</span></a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link text-white bg-secondary" asp-page="@Model.Url" asp-route-p="@(Model.Pager.CurrentPage - 1)"><span aria-hidden="true">&lsaquo;</span></a>
+                </li>
+            }
+
+            @foreach (var p in Model.Pager.Pages)
+            {
+                <li class="page-item ">
+                    <a class="page-link text-white @(p == Model.Pager.CurrentPage ? "bg-primary" : "bg-secondary")" asp-page="@Model.Url" asp-route-p="@p">@p</a>
+                </li>
+            }
+
+            @if (Model.Pager.CurrentPage < Model.Pager.TotalPages)
+            {
+                <li class="page-item">
+                    <a class="page-link text-white bg-secondary" asp-page="@Model.Url" asp-route-p="@(Model.Pager.CurrentPage + 1)"><span aria-hidden="true">&rsaquo;</span></a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link text-white bg-secondary" asp-page="@Model.Url" asp-route-p="@(Model.Pager.TotalPages)"><span aria-hidden="true">&raquo;</span></a>
+                </li>
+            }
+        </ul>
+    </nav>
+}

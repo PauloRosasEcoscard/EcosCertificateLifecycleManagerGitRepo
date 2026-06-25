@@ -1,0 +1,39 @@
+﻿@page
+@model Ecos_Cloud_Vhsm_Dashboard.Pages.Company.SyslogServers.AddModel
+@{
+    ViewData["Title"] = "Add Syslog Server";
+}
+
+<div class="row">
+    <div class="col-12 mt-3">
+        <ecos-form title="Add New Syslog Server"
+                   subtitle="Configure external syslog server integration."
+                   handler="Save">
+
+            <partial name="_SyslogServerFormFields" model="Model.Item" />
+
+        </ecos-form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const useTlsCheckbox = document.getElementById("UseTLS");
+            // Agora pegamos o container diretamente pelo ID seguro
+            const verificationCAField = document.getElementById("VerificationCAContainer");
+
+            function toggleVerificationCA() {
+                if (useTlsCheckbox.checked) {
+                    verificationCAField.style.display = "block";
+                } else {
+                    verificationCAField.style.display = "none";
+                }
+            }
+
+            toggleVerificationCA();
+            useTlsCheckbox.addEventListener("change", toggleVerificationCA);
+        });
+    </script>
+}

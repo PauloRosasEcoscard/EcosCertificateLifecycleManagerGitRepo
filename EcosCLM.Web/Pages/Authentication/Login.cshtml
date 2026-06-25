@@ -1,0 +1,97 @@
+﻿@page
+@model EcosCLM.Web.Pages.Authentication.LoginModel
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
+
+@{
+    Layout = "~/Pages/Shared/_LayoutLogin.cshtml";
+    ViewData["Title"] = "Login";
+    System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
+    System.Diagnostics.FileVersionInfo fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(assembly.Location);
+    string version = fvi.FileVersion;
+}
+
+<div class="container-fluid p-0 login-container">
+    <div class="row g-0 min-vh-100">
+
+        <div class="col-12 col-md-5 col-lg-4 left-side-panel">
+            <div class="login-card">
+                <div class="text-start mb-4">
+                    <h1 class="brand-title mb-1">EcosCLM</h1>
+                    <p class="brand-subtitle">Gerenciamento seguro de certificados digitais</p>
+                </div>
+
+                <form role="form" asp-route="Login" method="POST" autocomplete="on">
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger small mb-3" })
+
+                    @if (TempData["SuccessMessage"] != null)
+                    {
+                        <div class="alert alert-success alert-dismissible fade show border-0 small" role="alert">
+                            @TempData["SuccessMessage"]
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    }
+
+                    @if (Model.LoginUserAndPassword)
+                    {
+                        <div class="mb-3">
+                            <label class="form-label-custom">E-mail corporativo</label>
+                            @Html.TextBoxFor(x => x.ModelLogin.TxUsername, new { @class = "form-control form-control-custom w-100", type = "email", placeholder = "nome@empresa.com" })
+                        </div>
+
+                        <div class="mb-4">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <label class="form-label-custom mb-0">Senha</label>
+                                <a class="text-decoration-none small fw-semibold" style="color: #2563eb;" href="./ForgotPassword">Esqueceu a senha?</a>
+                            </div>
+                            @Html.PasswordFor(x => x.ModelLogin.TxPassword, new { @class = "form-control form-control-custom w-100", id = "password-input", placeholder = "••••••••" })
+                        </div>
+
+                        <button type="submit" class="btn btn-submit-custom w-100 mb-2">Acessar painel</button>
+                    }
+
+                    @if (Model.LoginAzureSSO || Model.LoginAzureIdentity)
+                    {
+                        @if (Model.LoginUserAndPassword)
+                        {
+                            <div class="position-relative text-center my-4">
+                                <hr style="border-color: #cbd5e1;" />
+                                <span class="position-absolute top-50 start-50 translate-middle px-3 small text-muted" style="font-size: 0.75rem; background-color: #edf2f9; border-radius: 4px;">Ou continue com</span>
+                            </div>
+                        }
+
+                        <div class="d-flex flex-column gap-2">
+                            @if (Model.LoginAzureSSO)
+                            {
+                                <a class="btn-sso-custom w-100" asp-page="/Authentication/AzureLogin" asp-route-SSO="true">
+                                    <svg width="16" height="16" viewBox="0 0 23 23" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0 0H11V11H0V0Z" fill="#F25022" /><path d="M12 0H23V11H12V0Z" fill="#7FBA00" /><path d="M0 12H11V23H0V12Z" fill="#00A4EF" /><path d="M12 12H23V23H12V12Z" fill="#FFB900" /></svg>
+                                    Microsoft Azure SSO
+                                </a>
+                            }
+
+                            @if (Model.LoginAzureIdentity)
+                            {
+                                <a class="btn-sso-custom w-100"
+                                   asp-page="/Authentication/AzureLogin"
+                                   asp-route-SSO="false"
+                                   asp-route-customer="@Model.Customer"
+                                   asp-route-expired="@Model.SessionExpired"
+                                   asp-route-returnUrl="@Model.ReturnUrl">
+                                    <svg width="16" height="16" viewBox="0 0 23 23" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0 0H11V11H0V0Z" fill="#F25022" /><path d="M12 0H23V11H12V0Z" fill="#7FBA00" /><path d="M0 12H11V23H0V12Z" fill="#00A4EF" /><path d="M12 12H23V23H12V12Z" fill="#FFB900" /></svg>
+                                    Azure Identity (@Model.CustomerName)
+                                </a>
+                            }
+                        </div>
+                    }
+                </form>
+            </div>
+        </div>
+
+        <div class="col-md-7 col-lg-8 d-none d-md-flex right-side-panel"></div>
+
+    </div>
+</div>
+
+<div class="footer-version d-none d-md-block">
+    <span>Versão @version</span>
+</div>

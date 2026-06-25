@@ -1,0 +1,71 @@
+﻿@model EcosCLM.Web.EcosLoginIntegration.Model.AuthConfigAzureViewModel
+
+<div class="row g-4 px-2 pb-2">
+
+    <div class="col-12">
+        <h6 class="fw-bold mb-0 pb-2 border-bottom border-2" style="border-color: var(--bs-primary) !important; color: var(--bs-primary);">
+            Identity Provider Provider Settings
+        </h6>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="Name" class="form-label small fw-bold text-muted mb-1">Display Name</label>
+        <input asp-for="Name" class="form-control ecos-input shadow-none rounded-3 px-3 py-2" placeholder="Ex: Microsoft SSO" required />
+        <span asp-validation-for="Name" class="text-danger small mt-1"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="ClientId" class="form-label small fw-bold text-muted mb-1">Client ID</label>
+        <input asp-for="ClientId" class="form-control ecos-input shadow-none rounded-3 px-3 py-2" placeholder="00000000-0000-0000-0000-000000000000" required />
+        <span asp-validation-for="ClientId" class="text-danger small mt-1"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="ClientAuthenticationMethod" class="form-label small fw-bold text-muted mb-1">Authentication Method</label>
+        <select asp-for="ClientAuthenticationMethod" class="form-select ecos-input shadow-none rounded-3 px-3 py-2" required>
+            <option value="" disabled selected>Select an option</option>
+            <option value="Client Secret">Client Secret</option>
+        </select>
+        <span asp-validation-for="ClientAuthenticationMethod" class="text-danger small mt-1"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="ClientSecret" class="form-label small fw-bold text-muted mb-1">Client Secret</label>
+        <input asp-for="ClientSecret" type="password" class="form-control ecos-input shadow-none rounded-3 px-3 py-2" placeholder="••••••••" />
+        <span asp-validation-for="ClientSecret" class="text-danger small mt-1"></span>
+    </div>
+
+    <div class="col-12 mt-5">
+        <h6 class="fw-bold mb-0 pb-2 border-bottom border-2" style="border-color: var(--bs-primary) !important; color: var(--bs-primary);">
+            Endpoints and Claims Configuration
+        </h6>
+    </div>
+
+    <div class="col-12">
+        <label asp-for="DiscoveryUri" class="form-label small fw-bold text-muted mb-1">Discovery URI / Authority</label>
+        <input asp-for="DiscoveryUri" class="form-control ecos-input shadow-none rounded-3 px-3 py-2" placeholder="https://login.microsoftonline.com/.../v2.0" required />
+        <span asp-validation-for="DiscoveryUri" class="text-danger small mt-1"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="GrantType" class="form-label small fw-bold text-muted mb-1">Grant Type</label>
+        <select asp-for="GrantType" class="form-select ecos-input shadow-none rounded-3 px-3 py-2" required>
+            <option value="" disabled selected>Select an option</option>
+            <option value="Authorization Code">Authorization Code</option>
+        </select>
+        <span asp-validation-for="GrantType" class="text-danger small mt-1"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="EmailClaim" class="form-label small fw-bold text-muted mb-1">Email Claim Identifier</label>
+        <input asp-for="EmailClaim" class="form-control ecos-input shadow-none rounded-3 px-3 py-2" placeholder="Ex: email" />
+        <span asp-validation-for="EmailClaim" class="text-danger small mt-1"></span>
+    </div>
+
+    <div class="col-12">
+        <label asp-for="Scopes" class="form-label small fw-bold text-muted mb-1">Authorized Scopes</label>
+        <input asp-for="Scopes" class="form-control ecos-input shadow-none rounded-3 px-3 py-2" placeholder="Ex: openid profile email" />
+        <span asp-validation-for="Scopes" class="text-danger small mt-1"></span>
+    </div>
+
+</div>

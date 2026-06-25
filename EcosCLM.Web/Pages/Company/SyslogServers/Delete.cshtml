@@ -1,0 +1,48 @@
+﻿@page
+@model Ecos_Cloud_Vhsm_Dashboard.Pages.Company.SyslogServers.DeleteModel
+@{
+    ViewData["Title"] = "Company";
+    ViewData["Breadcrumb"] = "Ecos Dashboard Template";
+    ViewData["PageName"] = "Company";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card my-4">
+
+            <div class="card-header p-0 position-relative">
+                <div class="card-body d-flex align-items-center justify-content-between bg-secondary pt-4 pb-3">
+                    <h5 class="text-white text-capitalize fw-bold fs-5 mb-0">Delete Syslog Server</h5>
+                </div>
+            </div>
+
+            <div class="card-body px-4 pb-4">
+                <div class="alert alert-danger text-white fw-bold" role="alert">
+                    This action is <u>IRREVERSIBLE</u>.
+                </div>
+
+                <dl class="row">
+                    <dt class="col-sm-3">Server Address:</dt>
+                    <dd class="col-sm-9">@Model.Item.ServerAddress</dd>
+
+                    <dt class="col-sm-3">Port:</dt>
+                    <dd class="col-sm-9">@Model.Item.Port</dd>
+                </dl>
+
+                <form method="post">
+                    <input type="hidden" asp-for="Item.Id" />
+
+                    <div class="row justify-content-center mt-4">
+                        <div class="col-md-4 mb-2">
+                            <a asp-page="Index" class="btn btn-secondary w-100">Cancel</a>
+                        </div>
+                        <div class="col-md-4 mb-2">
+                            <button type="submit" class="btn btn-danger w-100">Delete</button>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>

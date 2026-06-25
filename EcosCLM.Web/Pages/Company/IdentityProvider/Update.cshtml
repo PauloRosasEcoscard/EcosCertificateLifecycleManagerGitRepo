@@ -1,0 +1,23 @@
+﻿@page
+@model EcosCLM.Web.Pages.Company.IdentityProvider.UpdateModel
+@{
+    ViewData["Title"] = "Edit Identity Provider";
+}
+
+<div class="row">
+    <div class="col-12 mt-3">
+        <ecos-form title="Edit Identity Provider"
+                   subtitle="Update the connection settings for this identity provider."
+                   handler="Save">
+
+            <input type="hidden" asp-for="Item.Id" />
+
+            <partial name="_IdentityProviderFormFields" model="Model.Item" />
+
+            <div class="d-flex justify-content-end mt-3">
+                <button type="submit" asp-page-handler="Test" class="btn btn-info px-4">Test Connection</button>
+            </div>
+
+        </ecos-form>
+    </div>
+</div>

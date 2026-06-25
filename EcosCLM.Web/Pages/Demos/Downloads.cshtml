@@ -1,0 +1,18 @@
+﻿@page
+@model EcosCLM.Web.Pages.Demos.DownloadsModel
+@{
+}
+
+
+<form method="post" class="card m-5">
+    <div class="card-body p-5">
+        <div class="row mb-3">
+            <input class="rounded border form-control px-3" required asp-for="delay" />
+        </div>
+
+        <div class="row gx-3">
+            <button asp-page-handler="NormalDownload" class="btn btn-primary col me-3">Normal Download</button>
+            <button asp-page-handler="BackgroundDownload" class="btn btn-primary col">File Downloader</button>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,32 @@
+﻿/* Roboto - peso normal (400) */
+@font-face {
+    font-family: 'Roboto';
+    src: url('/fonts/roboto/Roboto-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+}
+
+/* Roboto - negrito (700) */
+@font-face {
+    font-family: 'Roboto';
+    src: url('/fonts/roboto/Roboto-Bold.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+}
+
+/* Roboto Slab - peso normal (400) */
+@font-face {
+    font-family: 'Roboto Slab';
+    src: url('/fonts/roboto-slab/RobotoSlab-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+}
+
+/* Aplicação das fontes */
+body {
+    font-family: 'Roboto', Arial, sans-serif;
+}
+
+h1, h2, h3 {
+    font-family: 'Roboto Slab', Georgia, serif;
+}

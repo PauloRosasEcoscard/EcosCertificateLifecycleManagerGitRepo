@@ -1,0 +1,288 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+    ViewData["Breadcrumb"] = "EcosCLM";
+    ViewData["PageName"] = "Dashboard";
+}
+
+<div class="row">
+    <div class="col-12 col-sm-6 col-xl-3 d-flex mt-3">
+        <div class="ecos-card p-3 flex-fill d-flex align-items-center gap-3">
+            <div class="p-3 bg-primary bg-opacity-10 rounded text-primary d-flex align-items-center justify-content-center">
+                <i class="material-symbols-outlined fs-2">verified_user</i>
+            </div>
+            <div>
+                <h6 class="text-muted small fw-semibold text-uppercase tracking-wider mb-1">Active Certificates</h6>
+                <h3 class="fw-bold mb-0">1,248</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-sm-6 col-xl-3 d-flex mt-3">
+        <div class="ecos-card p-3 flex-fill d-flex align-items-center gap-3">
+            <div class="p-3 bg-warning bg-opacity-10 rounded text-warning d-flex align-items-center justify-content-center">
+                <i class="material-symbols-outlined fs-2">running_with_errors</i>
+            </div>
+            <div>
+                <h6 class="text-muted small fw-semibold text-uppercase tracking-wider mb-1">Expiring Soon</h6>
+                <h3 class="fw-bold mb-0 text-warning">14</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-sm-6 col-xl-3 d-flex mt-3">
+        <div class="ecos-card p-3 flex-fill d-flex align-items-center gap-3">
+            <div class="p-3 bg-danger bg-opacity-10 rounded text-danger d-flex align-items-center justify-content-center">
+                <i class="material-symbols-outlined fs-2">gpp_bad</i>
+            </div>
+            <div>
+                <h6 class="text-muted small fw-semibold text-uppercase tracking-wider mb-1">Revoked / Expired</h6>
+                <h3 class="fw-bold mb-0">32</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-sm-6 col-xl-3 d-flex mt-3">
+        <div class="ecos-card p-3 flex-fill d-flex align-items-center gap-3">
+            <div class="p-3 bg-success bg-opacity-10 rounded text-success d-flex align-items-center justify-content-center">
+                <i class="material-symbols-outlined fs-2">account_balance_wallet</i>
+            </div>
+            <div>
+                <h6 class="text-muted small fw-semibold text-uppercase tracking-wider mb-1">Current Month Cost</h6>
+                <h3 class="fw-bold mb-0">R$ 561,03</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 col-md-4 d-flex mt-3">
+        <div class="ecos-card p-4 flex-fill d-flex flex-column" style="min-width: 0;">
+            <h6 class="text-muted fw-semibold small text-uppercase tracking-wider mb-2">Invoices over time</h6>
+            <div class="position-relative flex-grow-1 w-100" style="min-height: 220px;">
+                <canvas id="invoicesOverTime"></canvas>
+            </div>
+            <div class="d-flex flex-column border-start border-primary border-3 ps-2 mt-3">
+                <small class="text-muted">Total amount</small>
+                <h4 class="fw-bold mb-0">R$ 561,03</h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-md-5 d-flex mt-3">
+        <div class="ecos-card p-4 flex-fill d-flex flex-column" style="min-width: 0;">
+            <h6 class="text-muted fw-semibold small text-uppercase tracking-wider mb-2">Spending Rate</h6>
+            <div class="position-relative flex-grow-1 w-100" style="min-height: 220px;">
+                <canvas id="spendingRate"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-md-3 d-flex mt-3">
+        <div class="ecos-card p-4 flex-fill d-flex flex-column">
+            <h6 class="text-muted fw-semibold small text-uppercase tracking-wider mb-3">Shortcuts</h6>
+            <div class="d-flex flex-column gap-2">
+                <a href="#" class="nav-link-custom d-flex align-items-center gap-2 p-2 rounded text-decoration-none">
+                    <i class="material-symbols-outlined text-primary">add_moderator</i>
+                    <span class="small text-main">Issue New Certificate</span>
+                </a>
+                <a href="#" class="nav-link-custom d-flex align-items-center gap-2 p-2 rounded text-decoration-none">
+                    <i class="material-symbols-outlined text-primary">mail</i>
+                    <span class="small text-main">Opt-in to receive notifications</span>
+                </a>
+                <a href="#" class="nav-link-custom d-flex align-items-center gap-2 p-2 rounded text-decoration-none">
+                    <i class="material-symbols-outlined text-primary">analytics</i>
+                    <span class="small text-main">View cost by service</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-12 col-md-4 d-flex mt-3">
+        <div class="ecos-card p-4 flex-fill d-flex flex-column" style="min-width: 0;">
+            <h6 class="text-muted fw-semibold small text-uppercase tracking-wider mb-3">Costs by resource</h6>
+            <div class="row align-items-center flex-grow-1 mb-3">
+                <div class="col-6 position-relative" style="height: 140px;">
+                    <canvas id="costsByResource"></canvas>
+                </div>
+                <div class="col-6 d-flex flex-column gap-2">
+                    <div class="border-start border-3 ps-2" style="border-color: #3b82f6 !important">
+                        <small class="text-muted d-block" style="font-size: 0.75rem;">SSL Certificates</small>
+                        <span class="fw-semibold small">R$ 186,00</span>
+                    </div>
+                    <div class="border-start border-3 ps-2" style="border-color: #10b981 !important">
+                        <small class="text-muted d-block" style="font-size: 0.75rem;">Domain Validation</small>
+                        <span class="fw-semibold small">R$ 150,00</span>
+                    </div>
+                </div>
+            </div>
+            <button type="button" class="btn border-color-subtle btn-sm w-100 mt-auto text-main fw-semibold">View Details</button>
+        </div>
+    </div>
+
+    <div class="col-12 col-md-4 d-flex mt-3">
+        <div class="ecos-card p-4 flex-fill d-flex flex-column" style="min-width: 0;">
+            <h6 class="text-muted fw-semibold small text-uppercase tracking-wider mb-3">Validation Type Volume</h6>
+            <div class="position-relative flex-grow-1 w-100" style="min-height: 200px;">
+                <canvas id="validationTypeChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-md-4 d-flex mt-3">
+        <div class="ecos-card p-4 flex-fill d-flex flex-column">
+            <h6 class="text-muted fw-semibold small text-uppercase tracking-wider mb-3">Recent Domain Activities</h6>
+            <div class="table-responsive flex-grow-1">
+                <table class="table table-sm table-borderless align-middle mb-0 text-main" style="font-size: 0.85rem;">
+                    <thead>
+                        <tr class="text-muted" style="font-size: 0.75rem; border-bottom: 1px solid var(--bs-border-color-translucent);">
+                            <th class="pb-2">Domain</th>
+                            <th class="pb-2">Type</th>
+                            <th class="pb-2 text-center">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="pt-2">api.ecoscard.com.br</td>
+                            <td class="pt-2 text-muted">EV SSL</td>
+                            <td class="pt-2 text-center"><span class="badge bg-success bg-opacity-10 text-success rounded-pill px-2">Issued</span></td>
+                        </tr>
+                        <tr>
+                            <td>auth.ecoscard.com.br</td>
+                            <td class="text-muted">DV Wildcard</td>
+                            <td class="text-center"><span class="badge bg-warning bg-opacity-10 text-warning rounded-pill px-2">Expiring</span></td>
+                        </tr>
+                        <tr>
+                            <td>tpe.mossoro.com.br</td>
+                            <td class="text-muted">OV Multi-Domain</td>
+                            <td class="text-center"><span class="badge bg-success bg-opacity-10 text-success rounded-pill px-2">Active</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Executa apenas quando o Chart.js estiver devidamente instanciado no escopo
+        document.addEventListener("DOMContentLoaded", function() {
+
+            const getThemeColors = () => {
+                const isDark = document.documentElement.getAttribute('data-bs-theme') === 'dark';
+                return {
+                    text: isDark ? '#94a3b8' : '#64748b',
+                    grid: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.05)',
+                    centerText: isDark ? '#f8fafc' : '#0f172a'
+                };
+            };
+
+            let colors = getThemeColors();
+            const xValues = ["04/25","05/25", "06/25", "07/25", "08/25", "09/25"];
+            const yValues = [186.05, 150.62, 126.10, 259.58, 394.12, 561.03];
+
+            // 1. Invoices Over Time
+            const chartBar = new Chart(document.getElementById("invoicesOverTime"), {
+                type: "bar",
+                data: {
+                    labels: xValues,
+                    datasets: [{
+                        backgroundColor: "#3b82f6",
+                        borderRadius: 4,
+                        data: yValues
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { grid: { display: false }, ticks: { color: colors.text } },
+                        y: { grid: { color: colors.grid }, ticks: { color: colors.text } }
+                    }
+                }
+            });
+
+            // 2. Spending Rate
+            const chartLine = new Chart(document.getElementById("spendingRate"), {
+                type: "line",
+                data: {
+                    labels: xValues,
+                    datasets: [{
+                        borderColor: "#3b82f6",
+                        backgroundColor: "rgba(59, 130, 246, 0.1)",
+                        borderWidth: 2,
+                        pointBackgroundColor: "#3b82f6",
+                        data: yValues,
+                        fill: true,
+                        tension: 0.3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { grid: { color: colors.grid }, ticks: { color: colors.text } },
+                        y: { grid: { color: colors.grid }, ticks: { color: colors.text } }
+                    }
+                }
+            });
+
+            // 3. Costs By Resource
+            const chartPie = new Chart(document.getElementById("costsByResource"), {
+                type: "doughnut",
+                data: {
+                    labels: ["SSL Certificates", "Domain Validation"],
+                    datasets: [{
+                        backgroundColor: ["#3b82f6", "#10b981"],
+                        borderWidth: 0,
+                        data: [186, 150]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: "75%",
+                    plugins: { legend: { display: false } }
+                }
+            });
+
+            // 4. Validation Type Volume
+            const chartValidation = new Chart(document.getElementById("validationTypeChart"), {
+                type: "bar",
+                data: {
+                    labels: ["DV", "OV", "EV", "Wildcard"],
+                    datasets: [{
+                        backgroundColor: ["#60a5fa", "#34d399", "#fbbf24", "#a78bfa"],
+                        borderRadius: 4,
+                        data: [720, 310, 128, 90]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { grid: { display: false }, ticks: { color: colors.text } },
+                        y: { grid: { color: colors.grid }, ticks: { color: colors.text } }
+                    }
+                }
+            });
+
+            // Escuta mutações de troca de tema
+            const observer = new MutationObserver(() => {
+                const updatedColors = getThemeColors();
+                [chartBar, chartLine, chartValidation].forEach(chart => {
+                    chart.options.scales.x.ticks.color = updatedColors.text;
+                    chart.options.scales.y.ticks.color = updatedColors.text;
+                    if(chart.options.scales.y.grid) chart.options.scales.y.grid.color = updatedColors.grid;
+                    chart.update();
+                });
+                chartPie.update();
+            });
+            observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-bs-theme'] });
+        });
+    </script>
+}

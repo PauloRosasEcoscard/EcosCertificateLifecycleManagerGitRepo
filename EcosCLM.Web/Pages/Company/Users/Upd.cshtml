@@ -1,0 +1,22 @@
+﻿@page
+@model UpdModel
+@{
+    ViewData["Title"] = "Company";
+    ViewData["Breadcrumb"] = "Ecos Dashboard Template";
+    ViewData["PageName"] = "Company";
+    ViewData["Profiles"] = Model.Profiles;
+}
+
+<div class="row">
+    <div class="col-12 mt-3">
+        <ecos-form title="Update User" subtitle="Change the access permissions, credentials, or contact information of the selected operator.">
+
+            <input type="hidden" asp-for="Item.IdCustomer" />
+            <input type="hidden" asp-for="Item.IdUser" />
+
+            @* Atualizado para o novo nome *@
+            <partial name="_UsersFormFields" model="Model.Item" />
+
+        </ecos-form>
+    </div>
+</div>

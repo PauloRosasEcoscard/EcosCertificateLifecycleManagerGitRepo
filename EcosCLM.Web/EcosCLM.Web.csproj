@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="ClosedXML" />
+		<PackageReference Include="FluentValidation.AspNetCore" />
+		<PackageReference Include="JW.Pager" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="RestSharp" />
+		<PackageReference Include="Serilog" />
+		<PackageReference Include="Serilog.AspNetCore" />
+		<PackageReference Include="TwoFactorAuth.Net" />
+		<PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\EcosCLM.Application\EcosCLM.Application.csproj" />
+		<ProjectReference Include="..\EcosCLM.Data\EcosCLM.Data.csproj" />
+		<ProjectReference Include="..\EcosCLM.Domain\EcosCLM.Domain.csproj" />
+		<ProjectReference Include="..\EcosCLM.Migrations.MYSQL\EcosCLM.Migrations.MYSQL.csproj" />
+		<ProjectReference Include="..\EcosCLM.Migrations.SQL\EcosCLM.Migrations.SQL.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="logs\" />
+	</ItemGroup>
+</Project>

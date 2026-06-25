@@ -1,0 +1,42 @@
+﻿@page
+@model Ecos_Cloud_Vhsm_Dashboard.Pages.Company.SyslogServers.UpdateModel
+@{
+    ViewData["Title"] = "Update Syslog Server";
+}
+
+<div class="row">
+    <div class="col-lg-10 mx-auto">
+        <ecos-form title="Update Syslog Server"
+                   subtitle="Modify the configuration for your external syslog server."
+                   handler="Save">
+
+            @* Chaves ocultas necessárias para o Update *@
+            <input type="hidden" asp-for="Item.Id" />
+            <input type="hidden" asp-for="Item.CustumerId" />
+
+            <partial name="_SyslogServerFormFields" model="Model.Item" />
+
+        </ecos-form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const useTlsCheckbox = document.getElementById("UseTLS");
+            const verificationCAField = document.getElementById("VerificationCAContainer");
+
+            function toggleVerificationCA() {
+                if (useTlsCheckbox.checked) {
+                    verificationCAField.style.display = "block";
+                } else {
+                    verificationCAField.style.display = "none";
+                }
+            }
+
+            toggleVerificationCA();
+            useTlsCheckbox.addEventListener("change", toggleVerificationCA);
+        });
+    </script>
+}

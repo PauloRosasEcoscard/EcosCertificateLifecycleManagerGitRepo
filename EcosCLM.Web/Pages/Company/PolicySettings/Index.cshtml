@@ -1,0 +1,57 @@
+﻿@page
+@model EcosCLM.Web.Pages.Company.PolicySettings.IndexModel
+@{
+    ViewData["Title"] = "Company";
+    ViewData["Breadcrumb"] = "Company";
+    ViewData["PageName"] = "Policy Settings";
+}
+
+<div class="row">
+    @* Ocupando col-12 para remover os espaços em branco nas laterais e alinhar com as grids *@
+    <div class="col-12 mt-3">
+        <div class="ecos-card p-0">
+
+            @* Cabeçalho moderno com descrição sutil da tela *@
+            <div class="p-4 border-bottom border-color-subtle">
+                <h4 class="fw-bold mb-0 text-main">Policy Settings</h4>
+                <p class="text-muted small mb-0 mt-1">Manage global security access controls, timeouts, and system policies.</p>
+            </div>
+
+            <form method="post" asp-page-handler="Save">
+                <div class="p-4">
+
+                    <div class="d-flex flex-column gap-2">
+
+                        @* Item de configuração estruturado em box moderno *@
+                        <div class="ecos-settings-item p-3 rounded-3 border border-color-subtle">
+                            <div class="row align-items-center">
+                                <div class="col-12 col-md-8 mb-2 mb-md-0">
+                                    <label asp-for="Item.TimeoutSession" class="fw-bold text-main d-block mb-0">Timeout Session</label>
+                                    <span class="text-muted small">The period of inactivity (in minutes) before a user session is automatically terminated.</span>
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <div class="input-group input-group-sm ms-auto" style="max-width: 150px;">
+                                        <input class="form-control border border-color-subtle bg-transparent text-main shadow-none text-center rounded" asp-for="Item.TimeoutSession" type="number" min="1" />
+                                        <span class="input-group-text bg-transparent border-0 text-muted small">min</span>
+                                    </div>
+                                    <span asp-validation-for="Item.TimeoutSession" class="text-danger d-block small mt-1 text-md-end"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                @* Rodapé com botões totalmente estilizados seguindo o padrão premium *@
+                <div class="p-4 bg-light bg-opacity-10 border-top border-color-subtle d-flex justify-content-end gap-2 rounded-bottom-3">
+                    <a asp-page="Index" class="btn btn-outline-secondary px-4 fw-semibold border-color-subtle text-main" style="min-width: 120px;">
+                        Cancel
+                    </a>
+                    <button type="submit" class="btn btn-ecos-action px-4 fw-semibold" style="min-width: 120px;">
+                        Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

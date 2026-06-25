@@ -1,0 +1,198 @@
+﻿@page
+@model EcosCLM.Web.Pages.Audit.IndexModel
+@{
+    ViewData["Title"] = "Logs";
+    ViewData["Breadcrumb"] = "EcosCLM";
+    ViewData["PageName"] = "Logs";
+}
+
+@* Modal de Verificação 2FA para Download de Segurança *@
+@if (!string.IsNullOrEmpty(Model.Secret))
+{
+    <div class="modal fade" id="Download2FAModal" tabindex="-1" aria-labelledby="Download2FAModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <form method="post" role="form">
+                    <div class="modal-header border-bottom-0 pb-0">
+                        <h5 class="modal-title fw-bold text-main" id="Download2FAModalLabel">Two factor authentication required!</h5>
+                    </div>
+                    <div class="modal-body py-3">
+                        <div class="mb-3">
+                            <label class="form-label small text-muted">Verification Code</label>
+                            <input id="verifyInput" class="form-control border border-color-subtle bg-transparent text-main shadow-none px-3" required asp-for="VerificationCode" placeholder="000000" />
+                        </div>
+                    </div>
+                    <div class="modal-footer border-top-0 pt-0">
+                        <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                        <button id="verifyButton" asp-page-handler="VerifyAndDownload" class="btn btn-ecos-action fw-semibold">Verify</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="row">
+    <div class="col-12 mt-3">
+        
+        <ecos-grid config="Model.GridConfig">
+
+            @* Filtros avançados alinhados à esquerda e exportação alinhada à direita *@
+            <search-append>
+                <div class="d-flex align-items-center gap-1 flex-wrap w-100">
+
+                    @* Inputs de pesquisa *@
+                    <div class="me-1">
+                        <input asp-for="Search.User" type="text" class="form-control form-control-sm border border-color-subtle bg-transparent text-main shadow-none px-3" style="max-width: 180px;" placeholder="User">
+                    </div>
+                    <div class="me-1">
+                        <input asp-for="Search.SearchStartDate" type="date" class="form-control form-control-sm border border-color-subtle bg-transparent text-main shadow-none px-3" style="max-width: 140px;">
+                    </div>
+                    <div class="me-1">
+                        <input asp-for="Search.SearchEndDate" type="date" class="form-control form-control-sm border border-color-subtle bg-transparent text-main shadow-none px-3" style="max-width: 140px;">
+                    </div>
+
+                    @* Botões de Ação de Pesquisa locais *@
+                    <button type="submit" formaction="~/Audit?handler=Search" class="btn btn-primary btn-sm d-flex align-items-center justify-content-center px-3" style="height: 31px;" title="Pesquisar">
+                        <i class="material-symbols-outlined fs-6">search</i>
+                    </button>
+                    <button type="submit" formaction="~/Audit?handler=Clear" class="btn btn-outline-secondary btn-sm d-flex align-items-center justify-content-center px-3" style="height: 31px;" title="Limpar filtro">
+                        <i class="material-symbols-outlined fs-6">clear</i>
+                    </button>
+
+                    @* O 'ms-auto' faz este bloco e o botão de exportar irem direto para o canto direito *@
+                    <div class="ms-auto">
+                        @if (string.IsNullOrEmpty(Model.Secret))
+                        {
+                            <button class="btn btn-outline-secondary btn-sm d-flex align-items-center gap-1 border-color-subtle text-main px-3" style="height: 31px;" title="Download" asp-page-handler="Download">
+                                <i class="material-symbols-outlined fs-6">download</i> Export
+                            </button>
+                        }
+                        else
+                        {
+                            <button class="btn btn-outline-secondary btn-sm d-flex align-items-center gap-1 border-color-subtle text-main px-3" style="height: 31px;" title="Download" data-bs-toggle="modal" data-bs-target="#Download2FAModal" type="button">
+                                <i class="material-symbols-outlined fs-6">download</i> Export
+                            </button>
+                        }
+                    </div>
+
+                </div>
+            </search-append>
+
+            @if (Model.Itens?.Any() == true)
+            {
+                @foreach (var item in Model.Itens)
+                {
+                    var modalId = $"detailsModal_{item.Id}";
+
+                    @* Listagem em Cards Premium com Borda Temática *@
+                    <div class="ecos-model-card p-3">
+                        <div class="row align-items-center w-100 m-0">
+                            
+                            <div class="col-12 col-md-3 mb-2 mb-md-0">
+                                <span class="ecos-card-label">Date</span>
+                                <span class="ecos-card-value text-muted d-block">@item.Date.ToString("dd/MM/yyyy HH:mm:ss")</span>
+                            </div>
+
+                            <div class="col-12 col-md-4 mb-2 mb-md-0">
+                                <span class="ecos-card-label">Username</span>
+                                <span class="ecos-card-value fw-semibold text-main d-block">@item.User</span>
+                            </div>
+
+                            <div class="col-12 col-md-3 mb-2 mb-md-0">
+                                <span class="ecos-card-label">Log Type</span>
+                                <span class="badge bg-secondary text-secondary bg-opacity-10 rounded-pill px-2.5 py-1">
+                                    @item.LogType
+                                </span>
+                            </div>
+
+                            <div class="col-12 col-md-2 text-end ms-auto card-action-col">
+                                <div class="d-flex justify-content-end gap-1">
+                                    <button type="button" class="btn btn-link text-primary p-1 d-inline-flex align-items-center" data-bs-toggle="modal" data-bs-target="#@modalId" title="Ver Detalhes">
+                                        <i class="material-symbols-outlined fs-5">visibility</i>
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    @* Estrutura Detalhada do Log Oculta em Modal por Item *@
+                    <div class="modal fade" id="@modalId" tabindex="-1" aria-labelledby="@($"{modalId}Label")" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-lg">
+                            @* Alterado para border e adicionado border-color-subtle para o tema escuro *@
+                            <div class="modal-content border border-color-subtle shadow-lg">
+                                <div class="modal-header border-bottom-0 pb-0">
+                                    <h5 class="modal-title fw-bold text-main" id="@($"{modalId}Label")">Log Details</h5>
+                                    @* Adicionada a classe btn-close-custom para inverter as cores no dark mode *@
+                                    <button type="button" class="btn-close btn-close-custom" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body py-3">
+                                    <div class="d-flex flex-column gap-2" style="font-size: 0.9rem;">
+                                        <div><span class="text-muted small d-block">Date</span><span class="text-main">@item.Date</span></div>
+                                        <div><span class="text-muted small d-block">User</span><strong class="text-main">@item.User</strong></div>
+                                        <div><span class="text-muted small d-block">Log Type</span><span class="text-main">@item.LogType</span></div>
+
+                                        @* O bloco de payload agora se adapta dinamicamente às cores de fundo do tema *@
+                                        <div class="p-2 rounded bg-light bg-opacity-10 border border-color-subtle mt-1">
+                                            <span class="text-muted small d-block fw-bold mb-1">Payload / Log</span>
+                                            <span class="text-main font-monospace" style="font-size: 0.85rem; word-break: break-all;">@item.Log</span>
+                                        </div>
+
+                                        <div class="row mt-1">
+                                            <div class="col-6">
+                                                <span class="text-muted small d-block">Source IP</span>
+                                                <span class="text-main">
+                                                    @(string.IsNullOrWhiteSpace(item.SourceIp) ? "Not informed" : item.SourceIp == "::1" ? "127.0.0.1" : item.SourceIp)
+                                                </span>
+                                            </div>
+                                            <div class="col-6">
+                                                <span class="text-muted small d-block">Destination IP</span>
+                                                <span class="text-main">
+                                                    @(string.IsNullOrWhiteSpace(item.DestinationIp) ? "Not informed" : item.DestinationIp == "::1" ? "127.0.0.1" : item.DestinationIp)
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer border-top-0 pt-0">
+                                    @* Botão adaptável com as bordas e fontes do tema *@
+                                    <button type="button" class="btn btn-outline-secondary btn-sm border-color-subtle text-main" data-bs-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="ecos-model-card p-4 text-center text-muted small">
+                    Sem informações disponíveis.
+                </div>
+            }
+
+        </ecos-grid>
+
+    </div>
+</div>
+
+@section Scripts
+{
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const modal = document.getElementById("Download2FAModal");
+            const verifyButton = document.getElementById("verifyButton");
+            const inputField = document.getElementById("verifyInput");
+
+            if (verifyButton && inputField && modal) {
+                 verifyButton.addEventListener("click", function (event) {
+                    setTimeout(() => {
+                        if (inputField) inputField.value = "";
+                        const bootstrapModal = bootstrap.Modal.getInstance(modal);
+                        if (bootstrapModal) bootstrapModal.hide();
+                    }, 1000);
+                });
+            }
+        });
+    </script>
+}

@@ -1,0 +1,53 @@
+﻿@using EcosCLM.Application.ViewModels
+@model SyslogServersViewModel
+
+<div class="row g-4 px-2 pb-2">
+
+    <div class="col-12">
+        <h6 class="fw-bold mb-0 pb-2 border-bottom border-2" style="border-color: var(--bs-primary) !important; color: var(--bs-primary);">
+            Server Configuration
+        </h6>
+    </div>
+
+    <div class="col-md-9">
+        <label asp-for="ServerAddress" class="form-label small fw-bold text-muted mb-1">Server Address</label>
+        <input asp-for="ServerAddress" id="ServerAddress" class="form-control ecos-input shadow-none rounded-3 px-3 py-2" placeholder="Ex: syslog.example.com or 192.168.1.50" />
+        <span asp-validation-for="ServerAddress" class="text-danger small mt-1"></span>
+    </div>
+
+    <div class="col-md-3">
+        <label asp-for="Port" class="form-label small fw-bold text-muted mb-1">Port</label>
+        <input asp-for="Port" id="Port" class="form-control ecos-input shadow-none rounded-3 px-3 py-2" placeholder="Ex: 514" />
+        <span asp-validation-for="Port" class="text-danger small mt-1"></span>
+    </div>
+
+    <div class="col-12">
+        <div class="form-check form-switch d-flex align-items-center ps-0">
+            <input class="form-check-input ms-0 me-2 mt-0" asp-for="SyslogServerEnabled" type="checkbox" id="SyslogServerEnabled">
+            <label class="form-check-label small fw-bold text-main mb-0" asp-for="SyslogServerEnabled">Enable Syslog Server Integration</label>
+        </div>
+        <span asp-validation-for="SyslogServerEnabled" class="text-danger small mt-1"></span>
+    </div>
+
+
+    <div class="col-12 mt-5">
+        <h6 class="fw-bold mb-0 pb-2 border-bottom border-2" style="border-color: var(--bs-primary) !important; color: var(--bs-primary);">
+            Security & TLS
+        </h6>
+    </div>
+
+    <div class="col-12">
+        <div class="form-check form-switch d-flex align-items-center ps-0">
+            <input class="form-check-input ms-0 me-2 mt-0" asp-for="UseTls" type="checkbox" id="UseTLS">
+            <label class="form-check-label small fw-bold text-main mb-0" asp-for="UseTls">Use TLS (Transport Layer Security)</label>
+        </div>
+        <span asp-validation-for="UseTls" class="text-danger small mt-1"></span>
+    </div>
+
+    <div class="col-12" id="VerificationCAContainer">
+        <label asp-for="VerificationCA" class="form-label small fw-bold text-muted mb-1">Verification CA (Certificate Authority)</label>
+        <textarea asp-for="VerificationCA" id="VerificationCA" class="form-control ecos-input shadow-none rounded-3 px-3 py-2" rows="5" placeholder="Paste the CA certificate here..."></textarea>
+        <span asp-validation-for="VerificationCA" class="text-danger small mt-1"></span>
+    </div>
+
+</div>

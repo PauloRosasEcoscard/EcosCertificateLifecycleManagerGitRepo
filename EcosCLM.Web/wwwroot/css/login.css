@@ -1,0 +1,131 @@
+﻿body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background-color: #cbd5e1;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    overflow-x: hidden;
+}
+
+/* O SVG agora gerencia o fundo de toda a estrutura */
+.login-container {
+    min-height: 100vh;
+    background-color: #cbd5e1;
+    background-image: url('/img/backgrounds/login-mesh.svg');
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    position: relative;
+}
+
+/* Lado Esquerdo - Painel do Formulário */
+.left-side-panel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    z-index: 10;
+}
+
+/* Efeito Glassmorphic polido para contrastar sobre o SVG global */
+.login-card {
+    background: rgba(255, 255, 255, 0.82);
+    backdrop-filter: blur(25px) saturate(180%);
+    -webkit-backdrop-filter: blur(25px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    border-radius: 24px;
+    box-shadow: 0 30px 70px rgba(15, 23, 42, 0.08);
+    width: 100%;
+    max-width: 420px;
+    padding: 3.5rem 2.5rem;
+}
+
+/* Lado Direito atua como um limitador transparente de espaço em desktops */
+.right-side-panel {
+    position: relative;
+    background: transparent;
+    overflow: hidden;
+}
+
+/* Tipografia e Controles */
+.brand-title {
+    font-size: 2.1rem;
+    font-weight: 700;
+    color: #0f172a;
+    letter-spacing: -0.03em;
+}
+
+.brand-subtitle {
+    color: #475569;
+    font-size: 0.938rem;
+    font-weight: 500;
+}
+
+.form-label-custom {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 0.4rem;
+}
+
+.form-control-custom {
+    border: 1px solid #94a3b8;
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    font-size: 0.95rem;
+    color: #0f172a;
+    background-color: #ffffff;
+    transition: all 0.2s ease;
+}
+
+    .form-control-custom:focus {
+        border-color: #2563eb;
+        box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+        outline: none;
+    }
+
+.btn-submit-custom {
+    background-color: #1e293b;
+    color: #ffffff;
+    font-weight: 600;
+    padding: 0.8rem 1rem;
+    border-radius: 8px;
+    border: none;
+    font-size: 0.95rem;
+    transition: background-color 0.2s ease;
+}
+
+    .btn-submit-custom:hover {
+        background-color: #0f172a;
+    }
+
+.btn-sso-custom {
+    background-color: #ffffff;
+    color: #1e293b;
+    border: 1px solid #cbd5e1;
+    font-weight: 600;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+    text-decoration: none;
+}
+
+    .btn-sso-custom:hover {
+        background-color: #f8fafc;
+        border-color: #94a3b8;
+    }
+
+.footer-version {
+    position: absolute;
+    bottom: 24px;
+    left: 24px;
+    font-size: 0.813rem;
+    color: #64748b;
+    font-weight: 500;
+    z-index: 20;
+}

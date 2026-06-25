@@ -1,0 +1,147 @@
+﻿@page
+@model EcosCLM.Web.Pages.Company.Users.IndexModel
+@{
+    ViewData["Title"] = "Company";
+    ViewData["Breadcrumb"] = "Ecos Dashboard Template";
+    ViewData["PageName"] = "Company";
+}
+
+<div class="row">
+    <div class="col-12 mt-3">
+
+        <ecos-grid config="Model.GridConfig">
+
+            <search-append>
+                <div class="max-width-200">
+                    <select name="Search.Profile" class="form-select form-select-sm border border-color-subtle bg-transparent text-main shadow-none">
+                        <option value="">All Profiles</option>
+                        <option value="Admin">Admin</option>
+                        <option value="User">User</option>
+                    </select>
+                </div>
+            </search-append>
+
+            @if (Model.Itens?.Any() == true)
+            {
+                @foreach (var item in Model.Itens)
+                {
+                    <div class="ecos-model-card p-3">
+                        <div class="row align-items-center w-100 m-0">
+
+                            <div class="col-12 col-md-3 mb-2 mb-md-0">
+                                <span class="ecos-card-label">Name</span>
+                                <span class="ecos-card-value fw-semibold text-main d-block">@item.TxName</span>
+                            </div>
+
+                            <div class="col-12 col-md-3 mb-2 mb-md-0">
+                                <span class="ecos-card-label">Email</span>
+                                <span class="ecos-card-value text-muted d-block">@item.TxEmail</span>
+                            </div>
+
+                            <div class="col-12 col-md-3 mb-2 mb-md-0">
+                                <span class="ecos-card-label">Profile Type</span>
+                                <span class="ecos-card-value text-main d-block">
+                                    @(Model.ProfileTitles.TryGetValue(item.IdUser, out var profileTitle) ? profileTitle : "Custom")
+                                </span>
+                            </div>
+
+                            <div class="col-12 col-md-1 mb-2 mb-md-0 text-md-center">
+                                <span class="ecos-card-label d-md-block">2FA</span>
+                                <span class="badge @(item.Auth2fa ? "bg-success text-success" : "bg-secondary text-secondary") bg-opacity-10 rounded-pill px-2.5 py-1">
+                                    @(item.Auth2fa ? "Sim" : "Não")
+                                </span>
+                            </div>
+
+                            <div class="col-12 col-md-2 text-end ms-auto card-action-col">
+                                <div class="d-flex justify-content-end gap-1">
+                                    <button type="button" class="btn btn-link text-muted p-1 d-inline-flex align-items-center" data-bs-toggle="modal" data-bs-target="#userDetailsModal-@item.IdUser" title="Ver Detalhes">
+                                        <i class="material-symbols-outlined fs-5">visibility</i>
+                                    </button>
+                                    <a asp-page="Upd" asp-route-id="@item.IdUser" class="btn btn-link text-primary p-1 d-inline-flex align-items-center" title="Editar">
+                                        <i class="material-symbols-outlined fs-5">edit</i>
+                                    </a>
+                                    <a asp-page="Delete" asp-route-id="@item.IdUser" class="btn btn-link text-danger p-1 d-inline-flex align-items-center" title="Excluir">
+                                        <i class="material-symbols-outlined fs-5">delete</i>
+                                    </a>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="modal fade" id="userDetailsModal-@item.IdUser" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            @* Adicionada a classe border e removido o border-0 para herdar a borda sutil do tema *@
+                            <div class="modal-content border border-color-subtle shadow-lg">
+                                <div class="modal-header border-bottom-0 pb-0">
+                                    <h5 class="modal-title fw-bold text-main">User Details</h5>
+                                    @* A classe btn-close-custom garante visibilidade e contraste em ambos os temas *@
+                                    <button type="button" class="btn-close btn-close-custom" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body py-3">
+                                    @if (item.IsBlocked)
+                                    {
+                                        <div class="alert alert-danger border-0 d-flex align-items-center gap-2 py-2 small" role="alert">
+                                            <i class="material-symbols-outlined fs-5">gpp_bad</i>
+                                            <span>Blocked user</span>
+                                        </div>
+                                    }
+
+                                    <div class="d-flex flex-column gap-2" style="font-size: 0.9rem;">
+                                        <div><span class="text-muted small d-block">Nome</span><strong class="text-main">@item.TxName</strong></div>
+                                        <div><span class="text-muted small d-block">Email</span><span class="text-main">@item.TxEmail</span></div>
+                                        <div><span class="text-muted small d-block">Telefone</span><span class="text-main">@item.TxPhone</span></div>
+                                        <div>
+                                            <span class="text-muted small d-block">Status</span>
+                                            <span class="badge @(item.NuStatus == 1 ? "bg-success" : (item.NuStatus == 0 ? "bg-secondary" : "bg-danger")) bg-opacity-10 @(item.NuStatus == 1 ? "text-success" : (item.NuStatus == 0 ? "text-secondary" : "text-danger")) rounded-pill small">
+                                                @(item.NuStatus == 1 ? "Ativo" : (item.NuStatus == 0 ? "Inativo" : "Bloqueado"))
+                                            </span>
+                                        </div>
+                                        <div><span class="text-muted small d-block">Tentativas Falhas de Acesso</span><span class="text-main">@item.FailedAccessAttempts</span></div>
+
+                                        @if (item.LockoutEndDate != null)
+                                        {
+                                            <div><span class="text-muted small d-block">Data de Bloqueio</span><span class="text-main">@item.LockoutEndDate?.ToString("g")</span></div>
+                                        }
+                                        <div><span class="text-muted small d-block">Autenticação de Dois Fatores (2FA)</span><span class="text-main">@(item.Auth2fa ? "Habilitada" : "Desabilitada")</span></div>
+                                    </div>
+                                </div>
+                                <div class="modal-header border-bottom-0 pt-0 pb-0">
+                                    <h6 class="fw-bold mb-0 text-main">Ações Disponíveis</h6>
+                                </div>
+                                <div class="modal-footer border-top-0 pt-2 gap-1 justify-content-start">
+                                    @if (!string.IsNullOrEmpty(item.Secret))
+                                    {
+                                        <button type="submit" class="btn btn-warning btn-sm" asp-page-handler="Reset2FA" asp-route-id="@item.IdUser">Resetar 2FA</button>
+                                    }
+                                    @if (item.Auth2fa)
+                                    {
+                                        <button type="submit" class="btn btn-danger btn-sm" asp-page-handler="Disable2FA" asp-route-id="@item.IdUser">Desabilitar 2FA</button>
+                                    }
+                                    else
+                                    {
+                                        <button type="submit" class="btn btn-info btn-sm text-white" asp-page-handler="Enable2FA" asp-route-id="@item.IdUser">Habilitar 2FA</button>
+                                    }
+                                    @if (item.IsBlocked)
+                                    {
+                                        <button type="submit" class="btn btn-success btn-sm" asp-page-handler="UnlockUser" asp-route-id="@item.IdUser">Desbloquear</button>
+                                    }
+                                    @* O botão fechar agora herda o padrão adaptável do sistema *@
+                                    <button type="button" class="btn btn-outline-secondary btn-sm border-color-subtle text-main ms-auto" data-bs-dismiss="modal">Fechar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="ecos-model-card p-4 text-center text-muted small">
+                    Sem informações disponíveis.
+                </div>
+            }
+
+        </ecos-grid>
+
+    </div>
+</div>
