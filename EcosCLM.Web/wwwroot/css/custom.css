@@ -460,3 +460,23 @@ body {
         background-color: rgba(220, 53, 69, 0.25);
         color: #ff858b;
     }
+
+/* --- CONFIGURAÇÃO PARA O LOGO SVG ECOS CLM  --- */
+.ecos-logo .logo-text-main {
+    fill: #1e293b; /* Cor escura para o título */
+    transition: fill 0.2s ease;
+}
+
+.ecos-logo .logo-text-sub {
+    fill: #64748b; /* Tom cinza médio/suave para o subtítulo */
+    transition: fill 0.2s ease;
+}
+
+/* --- ALTERAÇÃO AUTOMÁTICA PARA MODO ESCURO (NOITE) --- */
+[data-bs-theme="dark"] .ecos-logo .logo-text-main {
+    fill: #f8fafc; /* Branco suave/cinza claro para o título */
+}
+
+[data-bs-theme="dark"] .ecos-logo .logo-text-sub {
+    fill: #94a3b8; /* Cinza claro legível para o subtítulo sobre o fundo escuro */
+}
