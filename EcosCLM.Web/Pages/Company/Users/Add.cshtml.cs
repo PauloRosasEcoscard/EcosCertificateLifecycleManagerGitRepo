@@ -76,25 +76,22 @@ namespace EcosCLM.Web.Pages.Company.Users
         public async Task<IActionResult> OnPost()
         {
             await GetListProfilesAsync();
-            var teste1 = ModelState.TryGetValue("Item.TxPassword", out var entryA);
-            var teste2 = ModelState.TryGetValue("Item.TxEmail", out var entryB);
-            var login = Item.TxEmail;
-            var senha = Item.TxPassword;
+
             if (ModelState.TryGetValue("Item.TxPassword", out var entry) && entry.ValidationState == ModelValidationState.Valid
                 && ModelState.TryGetValue("Item.TxEmail", out var entry1) && entry1.ValidationState == ModelValidationState.Valid)
             {
                 try
                 {
-                    if (Item.IdProfile == "1" || Item.IdProfile == "2")
-                    {
-                        Item.Profile = int.Parse(Item.IdProfile);
-                    }
-                    else
-                    {
-                        Item.Profile = 0;
-                    }
+                    Item.Profile = (Item.IdProfile == "1" || Item.IdProfile == "2") ? int.Parse(Item.IdProfile) : 0;
 
-                    await CreateUser();
+                    Item.Secret = "";
+                    var response = await _EcosLoginService.AddPolicySystemUser(Item);
+
+                    if (!response.IsSuccessful)
+                    {
+                        TempData["warning"] = "Email already registered or invalid data provided.";
+                        return Page();
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -105,43 +102,6 @@ namespace EcosCLM.Web.Pages.Company.Users
                 return RedirectToPage("Index");
             }
             return Page();
-        }
-
-        private async Task CreateUser()
-        {
-            Item.Secret = "";
-           var response = await _EcosLoginService.AddPolicySystemUser(Item);
-
-            if (response.IsSuccessful)
-            {
-                _auditLogs.Create(new AuditLogs
-                {
-                    Date = DateTime.Now,
-                    User = Email,
-                    IdCustumer = CustumerId,
-                    Log = "User: " + Email + " created a new user",
-                    LogType = "Company Management"
-                }, _syslogService, HttpContextAccessor);
-            }
-            else
-            {
-                if (!string.IsNullOrEmpty(response.ErrorMessage) && response.ErrorMessage.Contains("errors"))
-                {
-                    try
-                    {
-                        using var doc = System.Text.Json.JsonDocument.Parse(response.ErrorMessage);
-                        if (doc.RootElement.TryGetProperty("errors", out var errorsElement) &&
-                            errorsElement.TryGetProperty("TxEmail", out var emailErrors))
-                        {
-                            TempData["warning"] = emailErrors[0].GetString();
-                            return;
-                        }
-                    }
-                    catch { }
-                }
-
-                TempData["warning"] = "Email already registered or invalid data provided.";
-            }
         }
     }
 }

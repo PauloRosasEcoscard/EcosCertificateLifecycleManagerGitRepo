@@ -7,23 +7,25 @@ namespace EcosCLM.Data.Repositories
 {
     public class BaseRepository<T, TEntity> : IBaseRepository<T, TEntity> where T : class, new()
     {
-        private IMapper _mapper;
-        private DbContext _context;
+        protected readonly IMapper _mapper;
+        protected readonly DbContext _context;
+        protected readonly DbSet<T> _dbSet;
 
         public BaseRepository(DbContext context, IMapper mapper)
         {
             _mapper = mapper;
             _context = context;
+            _dbSet = _context.Set<T>();
         }
 
         public IQueryable<T> CollectionBy(Expression<Func<T, IEnumerable<T>>> predicate, T entity)
         {
-            return _context.Entry<T>(entity).Collection<T>(predicate).Query();
+            return _context.Entry(entity).Collection(predicate).Query();
         }
 
         public IQueryable<T> IncludingAll(List<Expression<Func<T, object>>> includeProperties)
         {
-            IQueryable<T> query = GetAll();
+            IQueryable<T> query = GetAll(true);
             foreach (var includeProperty in includeProperties)
                 query = query.Include(includeProperty);
             return query;
@@ -31,67 +33,43 @@ namespace EcosCLM.Data.Repositories
 
         public IQueryable<T> FindBy(Expression<Func<T, bool>> predicate)
         {
-            return _context.Set<T>().Where(predicate);
+            return _dbSet.AsNoTracking().Where(predicate);
         }
 
-        public T FindOne(Expression<Func<T, bool>> predicate)
+        public T? FindOne(Expression<Func<T, bool>> predicate)
         {
-            return _context.Set<T>().FirstOrDefault(predicate);
+            return _dbSet.AsNoTracking().FirstOrDefault(predicate);
         }
 
         public bool Exists(Expression<Func<T, bool>> predicate)
         {
-            return _context.Set<T>().Any(predicate);
+            return _dbSet.Any(predicate);
         }
 
-        public IQueryable<T> GetAll(bool NoTracking = false)
+        public IQueryable<T> GetAll(bool noTracking = true)
         {
-            var query = _context.Set<T>();
-
-            if (NoTracking)
-                return query.AsNoTracking();
-
-            return query;
+            return noTracking ? _dbSet.AsNoTracking() : _dbSet;
         }
 
         public T Add(T entity)
         {
-            //_context.Entry<T>(entity);
-            _context.Set<T>().Add(entity);
+            _dbSet.Add(entity);
             _context.SaveChanges();
             return entity;
         }
 
         public T Upd(T entity)
         {
-            // Obtém os metadados da entidade (incluindo a chave primária) dinamicamente
-            var entityType = _context.Model.FindEntityType(typeof(T));
-            var keyProperties = entityType.FindPrimaryKey().Properties;
-            var keyValues = keyProperties.Select(p => p.PropertyInfo.GetValue(entity)).ToArray();
-
-            // Tenta localizar no contexto a instância com os mesmos valores de chave
-            var trackedEntity = _context.Set<T>().Find(keyValues);
-
-            if (trackedEntity != null)
-            {
-                // Se a entidade já estiver sendo rastreada, atualize os valores da instância existente
-                _context.Entry(trackedEntity).CurrentValues.SetValues(entity);
-            }
-            else
-            {
-                // Se não estiver sendo rastreada, anexa a entidade e marca-a como modificada
-                _context.Set<T>().Attach(entity);
-                _context.Entry(entity).State = EntityState.Modified;
-            }
-
+            _context.ChangeTracker.Clear();
+            _dbSet.Update(entity);
             _context.SaveChanges();
             return entity;
         }
 
         public void Del(T entity)
         {
-            _context.Entry<T>(entity);
-            _context.Set<T>().Remove(entity);
+            _context.ChangeTracker.Clear();
+            _dbSet.Remove(entity);
             _context.SaveChanges();
         }
 
@@ -100,33 +78,15 @@ namespace EcosCLM.Data.Repositories
             if (entities == null || !entities.Any())
                 return;
 
-            _context.Set<T>().RemoveRange(entities);
+            _context.ChangeTracker.Clear();
+            _dbSet.RemoveRange(entities);
             _context.SaveChanges();
         }
 
-
-        public TEntity ToViewModel(T entity)
-        {
-            return _mapper.Map<TEntity>(entity);
-        }
-
-        public List<TEntity> ToListViewModel(List<T> entity)
-        {
-            return _mapper.Map<List<TEntity>>(entity);
-        }
-
-        public T ToEntity(TEntity viewModel)
-        {
-            return _mapper.Map<T>(viewModel);
-        }
-
-        public List<T> ToListEntity(List<TEntity> viewModel)
-        {
-            return _mapper.Map<List<T>>(viewModel);
-        }
-        public IMapper GetMap()
-        {
-            return _mapper;
-        }
+        public TEntity ToViewModel(T entity) => _mapper.Map<TEntity>(entity);
+        public List<TEntity> ToListViewModel(List<T> entity) => _mapper.Map<List<TEntity>>(entity);
+        public T ToEntity(TEntity viewModel) => _mapper.Map<T>(viewModel);
+        public List<T> ToListEntity(List<TEntity> viewModel) => _mapper.Map<List<T>>(viewModel);
+        public IMapper GetMap() => _mapper;
     }
 }
