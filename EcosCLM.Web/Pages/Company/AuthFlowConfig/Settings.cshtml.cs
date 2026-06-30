@@ -1,7 +1,4 @@
-using EcosCLM.Application.Interfaces;
-using EcosCLM.Application.Extensions;
 using EcosCLM.Application.ViewModels;
-using EcosCLM.Domain.Entities.Base;
 using EcosCLM.Web.EcosLoginIntegration.Interfaces;
 using EcosCLM.Web.EcosLoginIntegration.Model;
 using EcosCLM.Web.Infrastructure.Core;
@@ -11,8 +8,6 @@ namespace EcosCLM.Web.Pages.Company.AuthFlowConfig
 {
     public class SettingsModel : BasePageModel<AuthFlowConfigViewModel>
     {
-        private readonly IAuditLogsRepository _auditLogs;
-        private readonly ISyslogService _syslogService;
         private readonly ILogger<SettingsModel> _logger;
         private readonly IEcosLoginService _ecosLoginService;
 
@@ -21,14 +16,10 @@ namespace EcosCLM.Web.Pages.Company.AuthFlowConfig
         public SettingsModel(
             ILogger<SettingsModel> logger,
             IConfiguration configuration,
-            IEcosLoginService ecosLoginService,
-            IAuditLogsRepository auditLogs,
-            ISyslogService syslogService)
+            IEcosLoginService ecosLoginService)
             : base(ecosLoginService, configuration)
         {
             _logger = logger;
-            _auditLogs = auditLogs;
-            _syslogService = syslogService;
             _ecosLoginService = ecosLoginService;
 
             Customers = new Dictionary<Guid, string>();
@@ -123,15 +114,6 @@ namespace EcosCLM.Web.Pages.Company.AuthFlowConfig
 
             if (result.IsSuccessful)
             {
-                _auditLogs.Create(new AuditLogs
-                {
-                    Date = DateTime.Now,
-                    User = Email,
-                    IdCustumer = CustumerId,
-                    Log = $"User: {Email} edited the Authentication Flow Configuration",
-                    LogType = "Company Management"
-                }, _syslogService, HttpContextAccessor);
-
                 TempData["success"] = "Authentication Flow updated successfully!";
             }
             else

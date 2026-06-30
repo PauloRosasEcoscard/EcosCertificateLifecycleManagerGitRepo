@@ -1,7 +1,4 @@
-using EcosCLM.Application.Interfaces;
-using EcosCLM.Application.Extensions;
 using EcosCLM.Application.ViewModels;
-using EcosCLM.Domain.Entities.Base;
 using EcosCLM.Web.EcosLoginIntegration.Interfaces;
 using EcosCLM.Web.EcosLoginIntegration.Model;
 using EcosCLM.Web.Infrastructure.Core;
@@ -13,9 +10,7 @@ namespace EcosCLM.Web.Pages.Company.Users
 {
     public class UpdModel : BasePageModel<PolicySystemUserViewModel>
     {
-        private readonly IAuditLogsRepository _auditLogs;
         private readonly ILogger<UpdModel> _logger;
-        private readonly ISyslogService _syslogService;
         private readonly IEcosLoginService _ecosLoginService;
 
         public Dictionary<string, string> ProfilesDict { get; set; } = new();
@@ -24,14 +19,10 @@ namespace EcosCLM.Web.Pages.Company.Users
         public UpdModel(
             ILogger<UpdModel> logger,
             IConfiguration configuration,
-            IEcosLoginService ecosLoginService,
-            IAuditLogsRepository auditLogs,
-            ISyslogService syslogService)
+            IEcosLoginService ecosLoginService)
             : base(ecosLoginService, configuration)
         {
             _logger = logger;
-            _auditLogs = auditLogs;
-            _syslogService = syslogService;
             _ecosLoginService = ecosLoginService;
         }
 
@@ -92,18 +83,7 @@ namespace EcosCLM.Web.Pages.Company.Users
         {
             var result = await _ecosLoginService.EditPolicySystemUserProfile(Item.IdUser, Item);
 
-            if (result.IsSuccessful)
-            {
-                _auditLogs.Create(new AuditLogs
-                {
-                    Date = DateTime.Now,
-                    User = Email,
-                    IdCustumer = CustumerId,
-                    Log = $"User: {Email} Update user",
-                    LogType = "Company Management"
-                }, _syslogService, HttpContextAccessor);
-            }
-            else
+            if (!result.IsSuccessful)
             {
                 TempData["warning"] = $"Status Code: {result.StatusCode} - {result.ErrorMessage}|";
             }

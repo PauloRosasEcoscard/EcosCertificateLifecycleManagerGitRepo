@@ -188,7 +188,7 @@ public class Program
             else
                 optionsBuilder.UseSqlServer(connectionString, opt => opt.MigrationsAssembly("EcosCLM.Migrations.SQL"));
 
-            return new EcosDashboardContext(optionsBuilder.Options);
+            return new EcosDashboardContext(optionsBuilder.Options, null, null);
         }
     }
 }
