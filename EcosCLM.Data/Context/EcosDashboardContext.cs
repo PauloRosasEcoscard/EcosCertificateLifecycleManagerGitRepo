@@ -6,6 +6,7 @@ using EcosCLM.Domain.Entities.Base;
 using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -14,7 +15,7 @@ namespace EcosCLM.Data.Context
     public class EcosDashboardContext : DbContext, IDataProtectionKeyContext
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly ISyslogService _syslogService;
+        private readonly IServiceProvider _serviceProvider;
 
         public DbSet<AuditLogs> AuditLogs { get; set; }
         public DbSet<Notifications> Notifications { get; set; }
@@ -25,12 +26,12 @@ namespace EcosCLM.Data.Context
         public DbSet<SessionEntry> SessionEntry { get; set; }
 
         public EcosDashboardContext(
-            DbContextOptions<EcosDashboardContext> options,
-            IHttpContextAccessor httpContextAccessor,
-            ISyslogService syslogService) : base(options)
+        DbContextOptions<EcosDashboardContext> options,
+        IHttpContextAccessor? httpContextAccessor = null,
+        IServiceProvider? serviceProvider = null) : base(options)
         {
             _httpContextAccessor = httpContextAccessor;
-            _syslogService = syslogService;
+            _serviceProvider = serviceProvider;
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -96,8 +97,13 @@ namespace EcosCLM.Data.Context
                 // Disparo opcional e assíncrono para o Syslog
                 try
                 {
-                    _syslogService.Initialize(log.IdCustumer);
-                    _syslogService.SendLog("Ecos Dashboard", log, SyslogSeverity.Information);
+                    // Resolve o serviço apenas na hora de usar, quebrando o loop infinito
+                    var syslogService = _serviceProvider.GetService<ISyslogService>();
+                    if (syslogService != null)
+                    {
+                        syslogService.Initialize(log.IdCustumer);
+                        syslogService.SendLog("Ecos Dashboard", log, SyslogSeverity.Information);
+                    }
                 }
                 catch { }
             }

@@ -1,11 +1,8 @@
-using EcosCLM.Application.Extensions;
-using EcosCLM.Application.Interfaces;
+using EcosCLM.Application.ViewModels;
 using EcosCLM.Data.Services;
 using EcosCLM.Domain.DataTypes;
-using EcosCLM.Domain.Entities.Base;
 using EcosCLM.Web.EcosLoginIntegration.Interfaces;
 using EcosCLM.Web.EcosLoginIntegration.Model;
-using EcosCLM.Web.EcosLoginIntegration.Services;
 using EcosCLM.Web.Infrastructure.Core;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -15,39 +12,28 @@ namespace EcosCLM.Web.Pages.Company.IdentityProvider
 {
     public class UpdateModel : BasePageModel<AuthConfigAzureViewModel>
     {
-        private readonly IAuditLogsRepository _auditLogs;
-        private readonly ISyslogService _syslogService;
         private readonly IEcosLoginService _ecosLoginService;
-        ILogger<UpdateModel> _logger;
-        IConfiguration _configuration;
-        public SelectList Profiles { get; set; }
-        private Dictionary<string, string> ProfilesDict;
+        private readonly ILogger<UpdateModel> _logger;
+        private readonly IConfiguration _configuration;
 
-        // Esta é a lista privada que recebe os dados do banco de dados em GetItem
-        List<AzureGroupRoleMappingViewModel> azureRoleMappings { get; set; } = null;
+        public SelectList Profiles { get; set; }
+        private Dictionary<string, string> ProfilesDict = new();
+        private List<AzureGroupRoleMappingViewModel> azureRoleMappings { get; set; } = null;
 
         [BindProperty]
-        public string AzureRoleMappingsJson { get; set; } // Esta é a propriedade pública que o Razor Page usa para o JSON
+        public string AzureRoleMappingsJson { get; set; }
 
-        public Dictionary<Guid, string> Customers;
+        public Dictionary<Guid, string> Customers { get; set; } = new();
 
         public UpdateModel(
             ILogger<UpdateModel> logger,
             IConfiguration config,
-            IAuditLogsRepository auditLogs,
-            IEcosLoginService ecosLoginService,
-            IHttpContextAccessor httpContextAccessor,
-            ISyslogService syslogService)
+            IEcosLoginService ecosLoginService)
             : base(ecosLoginService, config)
         {
             _logger = logger;
-            _auditLogs = auditLogs;
             _configuration = config;
-            _syslogService = syslogService;
             _ecosLoginService = ecosLoginService;
-
-            _syslogService = syslogService;
-
         }
 
         public async Task<IActionResult> OnGet(int id)
@@ -68,17 +54,9 @@ namespace EcosCLM.Web.Pages.Company.IdentityProvider
                 return RedirectToPage("Index");
             }
 
-            if (azureRoleMappings != null)
-            {
-                AzureRoleMappingsJson = System.Text.Json.JsonSerializer.Serialize(azureRoleMappings, new System.Text.Json.JsonSerializerOptions
-                {
-                    PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase // Ensure camelCase for JavaScript
-                });
-            }
-            else
-            {
-                AzureRoleMappingsJson = "[]"; // Ensure it's an empty JSON array if no mappings exist
-            }
+            AzureRoleMappingsJson = azureRoleMappings != null
+                ? JsonSerializer.Serialize(azureRoleMappings, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase })
+                : "[]";
 
             _logger.LogInformation($"[OnGet] Final AzureRoleMappingsJson content prepared: {AzureRoleMappingsJson}");
 
@@ -107,7 +85,6 @@ namespace EcosCLM.Web.Pages.Company.IdentityProvider
 
         private async Task GetListProfilesAsync()
         {
-            // Inicializa o dicionário com os perfis fixos/internos
             ProfilesDict.Clear();
             ProfilesDict.Add("1", "Admin");
             ProfilesDict.Add("2", "Audit");
@@ -127,7 +104,6 @@ namespace EcosCLM.Web.Pages.Company.IdentityProvider
             }
 
             Profiles = new SelectList(ProfilesDict, "Key", "Value");
-
         }
 
         public async Task<IActionResult> OnPostSave()
@@ -146,16 +122,11 @@ namespace EcosCLM.Web.Pages.Company.IdentityProvider
                 }
             }
 
-            if (string.IsNullOrEmpty(AzureRoleMappingsJson) && azureRoleMappings != null)
+            if (string.IsNullOrEmpty(AzureRoleMappingsJson))
             {
-                AzureRoleMappingsJson = System.Text.Json.JsonSerializer.Serialize(azureRoleMappings, new System.Text.Json.JsonSerializerOptions
-                {
-                    PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase
-                });
-            }
-            else if (string.IsNullOrEmpty(AzureRoleMappingsJson)) // Ensure it's not null if there are no mappings
-            {
-                AzureRoleMappingsJson = "[]";
+                AzureRoleMappingsJson = azureRoleMappings != null
+                    ? JsonSerializer.Serialize(azureRoleMappings, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase })
+                    : "[]";
             }
 
             _logger.LogInformation($"[OnPostSave] AzureRoleMappingsJson content after failed post: {AzureRoleMappingsJson}");
@@ -176,20 +147,14 @@ namespace EcosCLM.Web.Pages.Company.IdentityProvider
                     _logger.LogError(ex.Message);
                 }
             }
-            // *******************************************************************
-            // CRITICAL FIX: Re-populate AzureRoleMappingsJson for test post
-            // *******************************************************************
-            if (string.IsNullOrEmpty(AzureRoleMappingsJson) && azureRoleMappings != null)
+
+            if (string.IsNullOrEmpty(AzureRoleMappingsJson))
             {
-                AzureRoleMappingsJson = System.Text.Json.JsonSerializer.Serialize(azureRoleMappings, new System.Text.Json.JsonSerializerOptions
-                {
-                    PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase
-                });
+                AzureRoleMappingsJson = azureRoleMappings != null
+                    ? JsonSerializer.Serialize(azureRoleMappings, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase })
+                    : "[]";
             }
-            else if (string.IsNullOrEmpty(AzureRoleMappingsJson))
-            {
-                AzureRoleMappingsJson = "[]";
-            }
+
             _logger.LogInformation($"[OnPostTest] AzureRoleMappingsJson content after test post: {AzureRoleMappingsJson}");
             return Page();
         }
@@ -218,7 +183,7 @@ namespace EcosCLM.Web.Pages.Company.IdentityProvider
             }
         }
 
-        async Task GetData(int id)
+        private async Task GetData(int id)
         {
             try
             {
@@ -248,11 +213,7 @@ namespace EcosCLM.Web.Pages.Company.IdentityProvider
                 TempData["warning"] = $"Status Code: {(int)response.StatusCode} - {response.ReasonPhrase}.\n{responseContentHttp}|";
             }
 
-            // *******************************************************************
-            // CRITICAL FIX: Ensure Item?.Id is included in the URI for Azure Group Role Mapping
-            // This is crucial for fetching mappings specific to the current Identity Provider.
-            // *******************************************************************
-            string uriAzureGroupRole = string.Format(PolicySystemUris.getAzureGroupRoleMapping, CustumerId, Item?.Id); // Added Item?.Id
+            string uriAzureGroupRole = string.Format(PolicySystemUris.getAzureGroupRoleMapping, CustumerId, Item?.Id);
 
             _logger.LogInformation($"[GetItem] Fetching Azure Group Role Mappings from: {string.Concat(url, uriAzureGroupRole)}");
             HttpResponseMessage responseAzureGroupRole = await HttpRequestService.GetAsync(string.Concat(url, uriAzureGroupRole), _logger);
@@ -260,7 +221,6 @@ namespace EcosCLM.Web.Pages.Company.IdentityProvider
 
             if (responseAzureGroupRole.IsSuccessStatusCode)
             {
-                // This line populates the private 'azureRoleMappings' list
                 azureRoleMappings = Newtonsoft.Json.JsonConvert.DeserializeObject<List<AzureGroupRoleMappingViewModel>>(responseContentHttpAzureGroupRole);
                 _logger.LogInformation($"[GetItem] Azure Group Role Mappings loaded successfully. Count: {azureRoleMappings?.Count ?? 0}");
             }
@@ -292,7 +252,7 @@ namespace EcosCLM.Web.Pages.Company.IdentityProvider
                 {
                     try
                     {
-                        azureRoleMappingsToSave = System.Text.Json.JsonSerializer.Deserialize<List<AzureGroupRoleMappingViewModel>>(AzureRoleMappingsJson, new System.Text.Json.JsonSerializerOptions
+                        azureRoleMappingsToSave = JsonSerializer.Deserialize<List<AzureGroupRoleMappingViewModel>>(AzureRoleMappingsJson, new JsonSerializerOptions
                         {
                             PropertyNameCaseInsensitive = true
                         });
@@ -305,10 +265,7 @@ namespace EcosCLM.Web.Pages.Company.IdentityProvider
                     }
                 }
 
-                if (azureRoleMappingsToSave == null)
-                {
-                    azureRoleMappingsToSave = new List<AzureGroupRoleMappingViewModel>();
-                }
+                azureRoleMappingsToSave ??= new List<AzureGroupRoleMappingViewModel>();
 
                 var interpretationTasks = azureRoleMappingsToSave.Select(async mapping =>
                 {
@@ -338,15 +295,6 @@ namespace EcosCLM.Web.Pages.Company.IdentityProvider
                 {
                     TempData["success"] = "Identity provider and role mappings updated successfully!";
                 }
-
-                _auditLogs.Create(new AuditLogs
-                {
-                    Date = DateTime.Now,
-                    User = Email,
-                    IdCustumer = CustumerId,
-                    Log = $"User: {Email} edited the Identity Provider Configuration",
-                    LogType = "Company Management"
-                }, _syslogService, HttpContextAccessor);
             }
             else
             {

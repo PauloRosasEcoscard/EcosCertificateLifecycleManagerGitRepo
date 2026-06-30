@@ -1,10 +1,6 @@
-using AutoMapper;
-using EcosCLM.Application.Extensions;
-using EcosCLM.Application.Interfaces;
 using EcosCLM.Application.ViewModels;
 using EcosCLM.Data.Services;
 using EcosCLM.Domain.DataTypes;
-using EcosCLM.Domain.Entities.Base;
 using EcosCLM.Web.EcosLoginIntegration.Interfaces;
 using EcosCLM.Web.EcosLoginIntegration.Model;
 using EcosCLM.Web.Infrastructure.Core;
@@ -15,29 +11,20 @@ namespace EcosCLM.Web.Pages.Company.IdentityProvider
 {
     public class DeleteModel : BasePageModel<AuthConfigAzureViewModel>
     {
-        private readonly IAuditLogsRepository _auditLogs;
         private readonly ILogger<DeleteModel> _logger;
         private readonly IConfiguration _configuration;
-        private readonly ISyslogService _syslogService;
 
-        public Dictionary<Guid, string> Customers;
+        public Dictionary<Guid, string> Customers { get; set; } = new();
 
         public DeleteModel(
             ILogger<DeleteModel> logger,
             IConfiguration configuration,
-            IConfiguration config,
-            IAuditLogsRepository auditLogs,
-            IHttpContextAccessor httpContextAccessor,
-            IEcosLoginService ecosLoginService,
-            ISyslogService syslogService)
-            : base(ecosLoginService, config)
+            IEcosLoginService ecosLoginService)
+            : base(ecosLoginService, configuration)
         {
             _logger = logger;
-            _auditLogs = auditLogs;
             _configuration = configuration;
-            _syslogService = syslogService;
         }
-
 
         public async Task<IActionResult> OnGet(int id)
         {
@@ -45,7 +32,6 @@ namespace EcosCLM.Web.Pages.Company.IdentityProvider
 
             if (Item == null)
                 return RedirectToPage("Index");
-
 
             if (Item.IdCustomer != CustumerId)
             {
@@ -66,18 +52,7 @@ namespace EcosCLM.Web.Pages.Company.IdentityProvider
                 HttpResponseMessage response = await HttpRequestService.DeleteAsync(string.Concat(url, uri), _logger);
                 string responseContentHttp = await response.Content.ReadAsStringAsync();
 
-                if (response.IsSuccessStatusCode)
-                {
-                    _auditLogs.Create(new AuditLogs
-                    {
-                        Date = DateTime.Now,
-                        User = Email,
-                        IdCustumer = CustumerId,
-                        Log = "User: " + Email + " deleted an Identity Provider",
-                        LogType = "Company Management"
-                    }, _syslogService, HttpContextAccessor);
-                }
-                else
+                if (!response.IsSuccessStatusCode)
                 {
                     TempData["warning"] = $"Status Code: {(int)response.StatusCode} - {response.ReasonPhrase}.\n{responseContentHttp}|";
                     return Page();
@@ -89,10 +64,11 @@ namespace EcosCLM.Web.Pages.Company.IdentityProvider
                 _logger.LogError(ex.Message);
                 return Page();
             }
+
             return RedirectToPage("Index");
         }
 
-        async Task GetData(int id)
+        private async Task GetData(int id)
         {
             try
             {

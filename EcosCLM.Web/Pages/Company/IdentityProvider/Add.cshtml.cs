@@ -1,7 +1,4 @@
-using EcosCLM.Application.Interfaces;
-using EcosCLM.Application.Extensions;
 using EcosCLM.Application.ViewModels;
-using EcosCLM.Domain.Entities.Base;
 using EcosCLM.Web.EcosLoginIntegration.Interfaces;
 using EcosCLM.Web.EcosLoginIntegration.Model;
 using EcosCLM.Web.Infrastructure.Core;
@@ -13,8 +10,6 @@ namespace EcosCLM.Web.Pages.Company.IdentityProvider
 {
     public class AddModel : BasePageModel<AuthConfigAzureViewModel>
     {
-        private readonly IAuditLogsRepository _auditLogs;
-        private readonly ISyslogService _syslogService;
         private readonly IEcosLoginService _ecosLoginService;
         private readonly ILogger<AddModel> _logger;
 
@@ -28,14 +23,10 @@ namespace EcosCLM.Web.Pages.Company.IdentityProvider
         public AddModel(
             ILogger<AddModel> logger,
             IConfiguration configuration,
-            IEcosLoginService ecosLoginService,
-            IAuditLogsRepository auditLogs,
-            ISyslogService syslogService)
+            IEcosLoginService ecosLoginService)
             : base(ecosLoginService, configuration)
         {
             _logger = logger;
-            _auditLogs = auditLogs;
-            _syslogService = syslogService;
             _ecosLoginService = ecosLoginService;
         }
 
@@ -183,15 +174,6 @@ namespace EcosCLM.Web.Pages.Company.IdentityProvider
                         _logger.LogError("Failed to save role mappings for Identity Provider ID: {ProviderId}", createdModels.Id);
                     }
                 }
-
-                _auditLogs.Create(new AuditLogs
-                {
-                    Date = DateTime.Now,
-                    User = Email,
-                    IdCustumer = CustumerId,
-                    Log = $"User: {Email} edited the Identity Provider Configuration",
-                    LogType = "Company Management"
-                }, _syslogService, HttpContextAccessor);
 
                 TempData["success"] = "Identity provider updated successfully!";
             }
