@@ -36,14 +36,14 @@ namespace EcosCLM.Data.Repositories
             return _dbSet.AsNoTracking().Where(predicate);
         }
 
-        public T? FindOne(Expression<Func<T, bool>> predicate)
+        public async Task<T?> FindOneAsync(Expression<Func<T, bool>> predicate)
         {
-            return _dbSet.AsNoTracking().FirstOrDefault(predicate);
+            return await _dbSet.AsNoTracking().FirstOrDefaultAsync(predicate);
         }
 
-        public bool Exists(Expression<Func<T, bool>> predicate)
+        public async Task<bool> ExistsAsync(Expression<Func<T, bool>> predicate)
         {
-            return _dbSet.Any(predicate);
+            return await _dbSet.AnyAsync(predicate);
         }
 
         public IQueryable<T> GetAll(bool noTracking = true)
@@ -51,36 +51,36 @@ namespace EcosCLM.Data.Repositories
             return noTracking ? _dbSet.AsNoTracking() : _dbSet;
         }
 
-        public T Add(T entity)
+        public async Task<T> AddAsync(T entity)
         {
-            _dbSet.Add(entity);
-            _context.SaveChanges();
+            await _dbSet.AddAsync(entity);
+            await _context.SaveChangesAsync();
             return entity;
         }
 
-        public T Upd(T entity)
+        public async Task<T> UpdAsync(T entity)
         {
             _context.ChangeTracker.Clear();
             _dbSet.Update(entity);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return entity;
         }
 
-        public void Del(T entity)
+        public async Task DelAsync(T entity)
         {
             _context.ChangeTracker.Clear();
             _dbSet.Remove(entity);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public void DelMany(List<T> entities)
+        public async Task DelManyAsync(List<T> entities)
         {
             if (entities == null || !entities.Any())
                 return;
 
             _context.ChangeTracker.Clear();
             _dbSet.RemoveRange(entities);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
         public TEntity ToViewModel(T entity) => _mapper.Map<TEntity>(entity);

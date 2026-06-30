@@ -1,29 +1,32 @@
 ﻿using EcosCLM.Application.Extensions;
 using EcosCLM.Application.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
 using System.Net.Sockets;
 using System.Text;
 
 namespace EcosCLM.Application.Services
 {
-
     public class SyslogService : ISyslogService
     {
         private string _syslogServer;
         private int _syslogPort;
         private bool _syslogEnable;
-        private readonly ISyslogServersRepository _syslogService;
+        private readonly IServiceProvider _serviceProvider;
 
-        public SyslogService(ISyslogServersRepository syslogService)
+        public SyslogService(IServiceProvider serviceProvider)
         {
-            _syslogService = syslogService;
+            _serviceProvider = serviceProvider;
         }
 
-        public void Initialize(Guid IdCustumer)
+        public async Task InitializeAsync(Guid idCustomer)
         {
-            var SysLogData = _syslogService.GetByIdCustumer(IdCustumer);
-            _syslogServer = SysLogData.ServerAddress;
-            _syslogPort = int.Parse(SysLogData.Port);
-            _syslogEnable = SysLogData.SyslogServerEnabled;
+            using var scope = _serviceProvider.CreateScope();
+            var repository = scope.ServiceProvider.GetRequiredService<ISyslogServersRepository>();
+
+            var syslogData = await repository.GetByIdCustomerAsync(idCustomer);
+            _syslogServer = syslogData.ServerAddress;
+            _syslogPort = int.Parse(syslogData.Port);
+            _syslogEnable = syslogData.SyslogServerEnabled;
         }
 
         public string SendLog(string appName, string message, SyslogSeverity severity = SyslogSeverity.Notice)
@@ -50,7 +53,7 @@ namespace EcosCLM.Application.Services
                 return $"Erro ao enviar log: {ex.Message}";
             }
         }
-        //$"Date: {auditLog.Date}, User: {auditLog.User}, IdCustomer: {auditLog.IdCustumer}, Log: {auditLog.Log}, LogType: {auditLog.LogType}"
+
         public string SendLog(string appName, object messege, SyslogSeverity severity = SyslogSeverity.Notice)
         {
             if (!_syslogEnable)
@@ -93,13 +96,11 @@ namespace EcosCLM.Application.Services
                 sb.AppendFormat("{0}: {1}, ", propName, propValue);
             }
 
-            // Remove a última vírgula e espaço
             if (sb.Length > 2)
                 sb.Length -= 2;
 
             return sb.ToString();
         }
-
 
         public string TestConnection()
         {
@@ -129,14 +130,14 @@ namespace EcosCLM.Application.Services
 
     public enum SyslogSeverity
     {
-        Emergency = 0,   // Sistema inoperável
-        Alert = 1,       // Ação imediata necessária
-        Critical = 2,    // Condição crítica
-        Error = 3,       // Erro
-        Warning = 4,     // Aviso
-        Notice = 5,      // Notificação normal
-        Information = 6, // Informação
-        Debug = 7        // Mensagens de depuração
+        Emergency = 0,
+        Alert = 1,
+        Critical = 2,
+        Error = 3,
+        Warning = 4,
+        Notice = 5,
+        Information = 6,
+        Debug = 7
     }
 
     public enum SyslogFacility

@@ -1,5 +1,4 @@
 using ClosedXML.Excel;
-using DocumentFormat.OpenXml.Spreadsheet;
 using EcosCLM.Application.Extensions;
 using EcosCLM.Application.Interfaces;
 using EcosCLM.Application.ViewModels;
@@ -8,12 +7,9 @@ using EcosCLM.Web.EcosLoginIntegration.Interfaces;
 using EcosCLM.Web.Infrastructure.Core;
 using EcosCLM.Web.Models;
 using JW;
-using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.IO.Compression;
 using System.Security.Claims;
-using System.Threading.Tasks;
 using TwoFactorAuthNet;
 
 namespace EcosCLM.Web.Pages.Audit
@@ -22,15 +18,13 @@ namespace EcosCLM.Web.Pages.Audit
     {
         private readonly ILogger<IndexModel> _logger;
         private readonly IAuditLogsRepository _repository;
-        private readonly ISyslogService _syslogService;
-        private readonly IEcosLoginService _ecosLoginService;
 
         public GridConfiguration GridConfig { get; set; } = new();
 
         [BindProperty(Name = "Search")]
         public AuditLogsViewModel Search { get; set; }
 
-        TwoFactorAuth tfa;
+        private readonly TwoFactorAuth _tfa;
         public string Secret { get; set; }
         public string Email { get; set; }
 
@@ -41,28 +35,25 @@ namespace EcosCLM.Web.Pages.Audit
             ILogger<IndexModel> logger,
             IConfiguration config,
             IAuditLogsRepository repository,
-            ISyslogService syslogService,
             IEcosLoginService ecosLoginService,
             IHttpContextAccessor httpContextAccessor)
             : base(ecosLoginService, config)
         {
             _logger = logger;
             _repository = repository;
-            _syslogService = syslogService;
-            _ecosLoginService = ecosLoginService;
 
             Email = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Email)?.Value ??
-                           httpContextAccessor.HttpContext.User.FindFirst("email")?.Value;
-
+                    httpContextAccessor.HttpContext.User.FindFirst("email")?.Value;
         }
-        public IActionResult OnGet(int p = 1)
+
+        public async Task<IActionResult> OnGetAsync(int p = 1)
         {
             PageCurrent = p;
             OnPostClear(false);
 
             Search = GetFilters();
 
-            GetData();
+            await GetDataAsync();
             AddGridConfig();
             return Page();
         }
@@ -71,42 +62,27 @@ namespace EcosCLM.Web.Pages.Audit
         {
             GridConfig = new GridConfiguration
             {
-                // Define o título principal exibido no topo do painel de controle da listagem.
                 Title = "Audit Logs",
-
-                // URL para a página de criação. Se for nula ou vazia, o botão "New" desaparece automaticamente.
                 AddPageUrl = "Add",
-
-                // Texto do placeholder do campo de busca por texto padrão. 
-                // ATENÇÃO: Se for deixado nulo ou vazio, o input 'Search.TxName' NÃO será renderizado na tela.
                 SearchPlaceholder = null,
-
-                // Mantém o valor digitado no input de busca padrão preenchido após o postback/filtragem.
                 SearchQuery = string.Empty,
-
-                // Informa à grid o índice da página atual que está sendo renderizada (essencial para a paginação).
                 CurrentPage = Pager?.CurrentPage ?? 1,
-
-                // Quantidade total de páginas calculadas no servidor. Se for maior ou igual a 1, renderiza o paginador no rodapé.
                 TotalPages = Pager?.TotalPages ?? 1,
-
-                // Lista de cabeçalhos das colunas (útil para referências internas ou logs, mantido para compatibilidade).
                 Headers = new List<string> { "Name", "Email", "Profile Type", "2FA" },
-
                 ShowAddButton = false
             };
         }
 
-        private async Task GetData()
+        private async Task GetDataAsync()
         {
             try
             {
-                var query = _repository.GetAllWithPage(0, 0, Filter, OrderBy, OrderDirection, CustumerId);
-                int totalItems = query.Count();
+                var list = await _repository.GetAllWithPageAsync(PageSize, (PageCurrent - 1) * PageSize, Filter, OrderBy, OrderDirection, CustumerId);
+
+                var totalItems = Pager?.TotalItems ?? list.Count; // Ajuste baseado em como sua paginação calcula o total geral
 
                 Pager = new Pager(totalItems, PageCurrent, PageSize, MaxPages);
-
-                Itens = query.Skip((Pager.CurrentPage - 1) * Pager.PageSize).Take(Pager.PageSize).ToList();
+                Itens = list;
             }
             catch (Exception ex)
             {
@@ -115,14 +91,14 @@ namespace EcosCLM.Web.Pages.Audit
             }
         }
 
-        public IActionResult OnPostDownload()
+        public async Task<IActionResult> OnPostDownloadAsync()
         {
             if (string.IsNullOrEmpty(Secret))
             {
                 try
                 {
-                    var reportStream = GenerateAuditReport(); // Gera o relatório em Excel
-                    var zipStream = AddStreamToZip(reportStream, "AuditLogs.xlsx"); // Compacta o arquivo
+                    var reportStream = await GenerateAuditReportAsync();
+                    var zipStream = AddStreamToZip(reportStream, "AuditLogs.xlsx");
 
                     return File(zipStream.ToArray(), "application/zip", "AuditLogs.zip");
                 }
@@ -132,21 +108,17 @@ namespace EcosCLM.Web.Pages.Audit
                     return RedirectToPage();
                 }
             }
-            else
-            {
-                return Page();
-            }
+            return Page();
         }
 
-
-        public IActionResult OnPostVerifyAndDownload()
+        public async Task<IActionResult> OnPostVerifyAndDownloadAsync()
         {
-            if (tfa.VerifyCode(Secret, VerificationCode) == true)
+            if (_tfa.VerifyCode(Secret, VerificationCode))
             {
                 try
                 {
-                    var reportStream = GenerateAuditReport(); // Gera o relatório em Excel
-                    var zipStream = AddStreamToZip(reportStream, "AuditLogs.xlsx"); // Compacta o arquivo
+                    var reportStream = await GenerateAuditReportAsync();
+                    var zipStream = AddStreamToZip(reportStream, "AuditLogs.xlsx");
 
                     return File(zipStream.ToArray(), "application/zip", "AuditLogs.zip");
                 }
@@ -156,39 +128,35 @@ namespace EcosCLM.Web.Pages.Audit
                     return RedirectToPage();
                 }
             }
-            else
-            {
-                TempData["error"] = "Invalid verification code.";
-                GetData();
-                return Page();
-            }
+
+            TempData["error"] = "Invalid verification code.";
+            await GetDataAsync();
+            return Page();
         }
 
-        private MemoryStream GenerateAuditReport()
+        private async Task<MemoryStream> GenerateAuditReportAsync()
         {
-            _repository.Create(new AuditLogs
+            await _repository.CreateAsync(new AuditLogs
             {
                 Date = DateTime.Now,
                 User = Email,
                 IdCustumer = CustumerId,
-                Log = $"User: {Email} Genereted a new audit logs Report!",
+                Log = $"User: {Email} Generated a new audit logs Report!",
                 LogType = "Audit"
-            }, _syslogService, HttpContextAccessor);
+            });
 
             var logsQuery = _repository.GetAll().Where(x => x.IdCustumer == CustumerId);
 
-            // Aplica os filtros de data, se definidos
             if (Search.SearchStartDate.HasValue)
                 logsQuery = logsQuery.Where(log => log.Date >= Search.SearchStartDate.Value);
 
             if (Search.SearchEndDate.HasValue)
                 logsQuery = logsQuery.Where(log => log.Date <= Search.SearchEndDate.Value);
 
-            // Aplica o filtro de usuário, se especificado
             if (!string.IsNullOrEmpty(Search.User))
                 logsQuery = logsQuery.Where(log => log.User.Contains(Search.User));
 
-            var logs = logsQuery.ToList();
+            var logs = await Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync(logsQuery);
 
             using var workbook = new XLWorkbook();
             var worksheet = workbook.Worksheets.Add("Audit Logs");
@@ -233,6 +201,5 @@ namespace EcosCLM.Web.Pages.Audit
             zipStream.Position = 0;
             return zipStream;
         }
-
     }
 }

@@ -1,27 +1,28 @@
 ﻿using EcosCLM.Application.Interfaces;
 using EcosCLM.Application.ViewModels;
 using EcosCLM.Domain.Entities.Base;
+using Microsoft.EntityFrameworkCore;
 
 namespace EcosCLM.Application.Extensions
 {
     public static class NotificationsExtension
     {
-
-        public static NotificationsViewModel Create(this INotificationsRepository repository, NotificationsViewModel model)
+        public static async Task<NotificationsViewModel> CreateAsync(this INotificationsRepository repository, NotificationsViewModel model)
         {
             var entity = repository.ToEntity(model);
-            var query = repository.Add(entity);
-            return repository.ToViewModel(query);
-        }
-        public static NotificationsViewModel Create(this INotificationsRepository repository, Notifications entity)
-        {
-            var query = repository.Add(entity);
+            var query = await repository.AddAsync(entity);
             return repository.ToViewModel(query);
         }
 
-        public static List<NotificationsViewModel> CreateMultiple(this INotificationsRepository repository, List<string> Emails, Notifications notification)
+        public static async Task<NotificationsViewModel> CreateAsync(this INotificationsRepository repository, Notifications entity)
         {
-            List<NotificationsViewModel> addedNotifications = new List<NotificationsViewModel>();
+            var query = await repository.AddAsync(entity);
+            return repository.ToViewModel(query);
+        }
+
+        public static async Task<List<NotificationsViewModel>> CreateMultipleAsync(this INotificationsRepository repository, List<string> Emails, Notifications notification)
+        {
+            var addedNotifications = new List<NotificationsViewModel>();
 
             foreach (var email in Emails)
             {
@@ -34,17 +35,16 @@ namespace EcosCLM.Application.Extensions
                     Icon = notification.Icon
                 };
 
-                var query = repository.Add(entity);
-
+                var query = await repository.AddAsync(entity);
                 addedNotifications.Add(repository.ToViewModel(query));
             }
 
             return addedNotifications;
         }
 
-        public static List<NotificationsViewModel> CreateMultiple(this INotificationsRepository repository, List<string> Emails, NotificationsViewModel notification)
+        public static async Task<List<NotificationsViewModel>> CreateMultipleAsync(this INotificationsRepository repository, List<string> Emails, NotificationsViewModel notification)
         {
-            List<NotificationsViewModel> addedNotifications = new List<NotificationsViewModel>();
+            var addedNotifications = new List<NotificationsViewModel>();
 
             foreach (var email in Emails)
             {
@@ -57,22 +57,26 @@ namespace EcosCLM.Application.Extensions
                     Icon = notification.Icon
                 };
 
-                var query = repository.Add(entity);
-
+                var query = await repository.AddAsync(entity);
                 addedNotifications.Add(repository.ToViewModel(query));
             }
 
             return addedNotifications;
         }
 
-        public static bool DeleteOldNotifications(this INotificationsRepository repository)
+        public static async Task<bool> DeleteOldNotificationsAsync(this INotificationsRepository repository)
         {
-            var DateThreshold = DateTime.Now.AddDays(-30);
-            var query = repository.GetAll()
-                                  .Where(x => x.Timestamp < DateThreshold)
-                                  .ToList();
+            var dateThreshold = DateTime.Now.AddDays(-30);
 
-            repository.DelMany(query);
+            var query = await repository.GetAll()
+                .Where(x => x.Timestamp < dateThreshold)
+                .ToListAsync();
+
+            if (query.Any())
+            {
+                await repository.DelManyAsync(query);
+            }
+
             return true;
         }
     }

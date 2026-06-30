@@ -10,8 +10,8 @@ namespace EcosCLM.Application.Services
         private readonly IBackgroundTaskQueue _queue;
 
         public DownloadManager(
-        IServiceScopeFactory scopeFactory,
-        IBackgroundTaskQueue queue)
+            IServiceScopeFactory scopeFactory,
+            IBackgroundTaskQueue queue)
         {
             _scopeFactory = scopeFactory;
             _queue = queue;
@@ -39,12 +39,12 @@ namespace EcosCLM.Application.Services
                 CreatedAt = DateTime.UtcNow
             };
 
-            _repository.Add(job);
+            await _repository.AddAsync(job);
 
             await _queue.QueueBackgroundWorkItemAsync(async token =>
             {
-                using var scope = _scopeFactory.CreateScope();
-                var manager = scope.ServiceProvider.GetRequiredService<IDownloadManager>();
+                using var innerScope = _scopeFactory.CreateScope();
+                var manager = innerScope.ServiceProvider.GetRequiredService<IDownloadManager>();
 
                 await manager.ProcessAsync(job.Id, generator, token);
             });
@@ -65,10 +65,14 @@ namespace EcosCLM.Application.Services
             var _notifications =
                 scope.ServiceProvider.GetRequiredService<INotificationsRepository>();
 
-            var job = _repository.FindOne(x => x.Id == jobId);
-            job.Status = DownloadStatus.Processing;
+            var job = await _repository.FindOneAsync(x => x.Id == jobId);
 
-            _repository.Upd(job);
+            if (job == null)
+                return;
+
+            job.Status = DownloadStatus.Processing;
+            await _repository.UpdAsync(job);
+
             try
             {
                 var file = await generator(ct);
@@ -85,7 +89,7 @@ namespace EcosCLM.Application.Services
                 job.Status = DownloadStatus.Ready;
                 job.FinishedAt = DateTime.UtcNow;
 
-                _notifications.Add(new Notifications
+                await _notifications.AddAsync(new Notifications
                 {
                     Timestamp = DateTime.Now,
                     User = job.User,
@@ -94,13 +98,13 @@ namespace EcosCLM.Application.Services
                     Icon = "download"
                 });
 
-                _repository.Upd(job);
+                await _repository.UpdAsync(job);
             }
             catch (Exception ex)
             {
                 job.Status = DownloadStatus.Error;
                 job.Error = ex.Message;
-                _repository.Upd(job);
+                await _repository.UpdAsync(job);
             }
         }
     }
