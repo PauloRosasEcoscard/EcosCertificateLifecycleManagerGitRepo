@@ -21,11 +21,11 @@ namespace Ecos_Cloud_Vhsm_Dashboard.Pages.Company.SyslogServers
             _repository = repository;
         }
 
-        public IActionResult OnGet(int id)
+        public async Task<IActionResult> OnGet(int id)
         {
             try
             {
-                Item = _repository.GetById(id, CustumerId);
+                Item = await _repository.GetByIdAsync(id, CustumerId);
             }
             catch (NotFoundException)
             {
@@ -35,11 +35,11 @@ namespace Ecos_Cloud_Vhsm_Dashboard.Pages.Company.SyslogServers
             return Page();
         }
 
-        public IActionResult OnPost()
+        public async Task<IActionResult> OnPostAsync()
         {
             try
             {
-                _repository.Delete(Item.Id);
+                await _repository.DeleteAsync(Item.Id);
                 return RedirectToPage("Index");
             }
             catch

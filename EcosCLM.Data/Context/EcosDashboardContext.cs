@@ -1,7 +1,5 @@
 ﻿using EcosCLM.Application.Interfaces;
 using EcosCLM.Application.Services;
-using EcosCLM.Data.Configurations;
-using EcosCLM.Data.Services;
 using EcosCLM.Domain.Entities.Base;
 using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
@@ -15,7 +13,7 @@ namespace EcosCLM.Data.Context
     public class EcosDashboardContext : DbContext, IDataProtectionKeyContext
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly IServiceProvider _serviceProvider;
+        private readonly IServiceProvider? _serviceProvider;
 
         public DbSet<AuditLogs> AuditLogs { get; set; }
         public DbSet<Notifications> Notifications { get; set; }
@@ -26,9 +24,9 @@ namespace EcosCLM.Data.Context
         public DbSet<SessionEntry> SessionEntry { get; set; }
 
         public EcosDashboardContext(
-        DbContextOptions<EcosDashboardContext> options,
-        IHttpContextAccessor? httpContextAccessor = null,
-        IServiceProvider? serviceProvider = null) : base(options)
+            DbContextOptions<EcosDashboardContext> options,
+            IHttpContextAccessor? httpContextAccessor = null,
+            IServiceProvider? serviceProvider = null) : base(options)
         {
             _httpContextAccessor = httpContextAccessor;
             _serviceProvider = serviceProvider;
@@ -41,25 +39,42 @@ namespace EcosCLM.Data.Context
 
         public override int SaveChanges()
         {
-            OnBeforeSaveChanges();
+            var auditEntries = CreateAuditEntries();
+
+            if (auditEntries.Any())
+            {
+                AuditLogs.AddRange(auditEntries);
+
+                // Disparo síncrono controlado (safeguard)
+                _ = DispatchSyslogEntriesAsync(auditEntries);
+            }
+
             return base.SaveChanges();
         }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            OnBeforeSaveChanges();
+            var auditEntries = CreateAuditEntries();
+
+            if (auditEntries.Any())
+            {
+                await AuditLogs.AddRangeAsync(auditEntries, cancellationToken);
+
+                // Disparo assíncrono correto no pipeline
+                await DispatchSyslogEntriesAsync(auditEntries);
+            }
+
             return await base.SaveChangesAsync(cancellationToken);
         }
 
-        private void OnBeforeSaveChanges()
+        private List<AuditLogs> CreateAuditEntries()
         {
             ChangeTracker.DetectChanges();
             var auditEntries = new List<AuditLogs>();
 
-            var httpContext = _httpContextAccessor.HttpContext;
+            var httpContext = _httpContextAccessor?.HttpContext;
             var userEmail = httpContext?.User?.Identity?.Name ?? "System";
 
-            // Substitua pela lógica real de extração do Tenant/Customer do seu token JWT ou Session
             var customerIdClaim = httpContext?.User?.FindFirst("CustomerId")?.Value;
             Guid.TryParse(customerIdClaim, out Guid customerId);
 
@@ -93,24 +108,31 @@ namespace EcosCLM.Data.Context
 
                 log.Hash = GenerateAuditHash(log);
                 auditEntries.Add(log);
+            }
 
-                // Disparo opcional e assíncrono para o Syslog
-                try
+            return auditEntries;
+        }
+
+        private async Task DispatchSyslogEntriesAsync(List<AuditLogs> entries)
+        {
+            if (_serviceProvider == null) return;
+
+            try
+            {
+                var syslogService = _serviceProvider.GetService<ISyslogService>();
+                if (syslogService != null)
                 {
-                    // Resolve o serviço apenas na hora de usar, quebrando o loop infinito
-                    var syslogService = _serviceProvider.GetService<ISyslogService>();
-                    if (syslogService != null)
+                    foreach (var log in entries)
                     {
-                        syslogService.Initialize(log.IdCustumer);
+                        // await adicionado corretamente para a nova assinatura assíncrona
+                        await syslogService.InitializeAsync(log.IdCustumer);
                         syslogService.SendLog("Ecos Dashboard", log, SyslogSeverity.Information);
                     }
                 }
-                catch { }
             }
-
-            if (auditEntries.Any())
+            catch
             {
-                AuditLogs.AddRange(auditEntries);
+                // Ignora falhas de rede no Syslog para não quebrar a persistência principal
             }
         }
 

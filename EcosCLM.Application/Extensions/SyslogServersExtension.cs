@@ -2,17 +2,18 @@
 using EcosCLM.Application.Interfaces;
 using EcosCLM.Application.ViewModels;
 using EcosCLM.Domain.Entities.Base;
+using Microsoft.EntityFrameworkCore;
 
 namespace EcosCLM.Application.Extensions
 {
     public static class SyslogServersExtension
     {
-        public static SyslogServersViewModel GetById(this ISyslogServersRepository repository, int id, Guid customerId)
+        public static async Task<SyslogServersViewModel> GetByIdAsync(this ISyslogServersRepository repository, int id, Guid customerId)
         {
-            var entity = repository?.GetAll()
+            var entity = await repository.GetAll()
                 .Where(x => x.Id == id)
                 .Where(x => x.CustumerId == customerId)
-                .SingleOrDefault();
+                .SingleOrDefaultAsync();
 
             if (entity == null)
                 throw new NotFoundException(nameof(SyslogServers), id);
@@ -20,11 +21,11 @@ namespace EcosCLM.Application.Extensions
             return repository.ToViewModel(entity);
         }
 
-        public static SyslogServersViewModel GetByIdCustumer(this ISyslogServersRepository repository, Guid customerId)
+        public static async Task<SyslogServersViewModel> GetByIdCustomerAsync(this ISyslogServersRepository repository, Guid customerId)
         {
-            var entity = repository?.GetAll()
+            var entity = await repository.GetAll()
                 .Where(x => x.CustumerId == customerId)
-                .SingleOrDefault();
+                .SingleOrDefaultAsync();
 
             if (entity == null)
                 throw new NotFoundException(nameof(SyslogServers), customerId);
@@ -32,39 +33,45 @@ namespace EcosCLM.Application.Extensions
             return repository.ToViewModel(entity);
         }
 
-
-        public static List<SyslogServersViewModel> GetAllWithPage(this ISyslogServersRepository repository, Guid? Customer = null, int page = 0, int offset = 0, string filter = null)
+        public static async Task<List<SyslogServersViewModel>> GetAllWithPageAsync(this ISyslogServersRepository repository, Guid? Customer = null, int page = 0, int offset = 0, string filter = null)
         {
-            var query = repository?.GetAll();
+            var query = repository.GetAll();
 
             query = query.Where(x => x.CustumerId == Customer);
-
-            if (page > 0)
-                query = query.Take(page);
 
             if (offset > 0)
                 query = query.Skip(offset);
 
-            return repository.ToListViewModel(query.ToList());
+            if (page > 0)
+                query = query.Take(page);
+
+            var list = await query.ToListAsync();
+            return repository.ToListViewModel(list);
         }
 
-        public static SyslogServersViewModel Create(this ISyslogServersRepository repository, SyslogServersViewModel model)
+        public static async Task<SyslogServersViewModel> CreateAsync(this ISyslogServersRepository repository, SyslogServersViewModel model)
         {
             var entity = repository.ToEntity(model);
-            var query = repository.Add(entity);
-            return repository.ToViewModel(query);
-        }
-        public static SyslogServersViewModel Edit(this ISyslogServersRepository repository, SyslogServersViewModel model)
-        {
-            var entity = repository.ToEntity(model);
-            var query = repository.Upd(entity);
+            var query = await repository.AddAsync(entity);
             return repository.ToViewModel(query);
         }
 
-        public static bool Delete(this ISyslogServersRepository repository, int id)
+        public static async Task<SyslogServersViewModel> EditAsync(this ISyslogServersRepository repository, SyslogServersViewModel model)
         {
-            var entity = repository.FindOne(x => x.Id == id);
-            repository.Del(entity);
+            var entity = repository.ToEntity(model);
+            var query = await repository.UpdAsync(entity);
+            return repository.ToViewModel(query);
+        }
+
+        public static async Task<bool> DeleteAsync(this ISyslogServersRepository repository, int id)
+        {
+            var entity = await repository.FindOneAsync(x => x.Id == id);
+
+            if (entity != null)
+            {
+                await repository.DelAsync(entity);
+            }
+
             return true;
         }
     }

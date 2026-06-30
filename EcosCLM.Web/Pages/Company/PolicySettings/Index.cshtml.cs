@@ -1,5 +1,5 @@
-using EcosCLM.Application.Interfaces;
 using EcosCLM.Application.Extensions;
+using EcosCLM.Application.Interfaces;
 using EcosCLM.Application.ViewModels;
 using EcosCLM.Web.EcosLoginIntegration.Interfaces;
 using EcosCLM.Web.Infrastructure.Core;
@@ -23,13 +23,13 @@ namespace EcosCLM.Web.Pages.Company.PolicySettings
             _policySettingsRepository = policySettingsRepository;
         }
 
-        public async Task<IActionResult> OnGet()
+        public async Task<IActionResult> OnGetAsync()
         {
-            Item = _policySettingsRepository.GetByIdCustumer(CustumerId);
+            Item = await _policySettingsRepository.GetByIdCustomerAsync(CustumerId);
 
             if (Item == null)
             {
-                Item = _policySettingsRepository.Create(new PolicySettingsViewModel
+                Item = await _policySettingsRepository.CreateAsync(new PolicySettingsViewModel
                 {
                     CustumerId = CustumerId,
                     TimeoutSession = 30
@@ -47,11 +47,11 @@ namespace EcosCLM.Web.Pages.Company.PolicySettings
             return Page();
         }
 
-        public async Task<IActionResult> OnPostSave()
+        public async Task<IActionResult> OnPostSaveAsync()
         {
             if (ModelState.IsValid)
             {
-                _policySettingsRepository.Edit(Item);
+                await _policySettingsRepository.EditAsync(Item);
                 return RedirectToPage("Index");
             }
             return Page();

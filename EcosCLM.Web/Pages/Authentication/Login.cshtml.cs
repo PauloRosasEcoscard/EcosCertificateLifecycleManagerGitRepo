@@ -317,9 +317,9 @@ namespace EcosCLM.Web.Pages.Authentication
                 LogType = "Authentication"
             };
 
-            _auditLogs.Create(auditLog, _syslogService, _httpContextAccessor);
+            await _auditLogs.CreateAsync(auditLog);
 
-            _notificationsRepository.Create(new Notifications
+            await _notificationsRepository.CreateAsync(new Notifications
             {
                 Timestamp = DateTime.Now,
                 User = userEmail,

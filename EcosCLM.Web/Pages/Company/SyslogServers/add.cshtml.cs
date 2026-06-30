@@ -30,14 +30,14 @@ namespace Ecos_Cloud_Vhsm_Dashboard.Pages.Company.SyslogServers
             return Page();
         }
 
-        public IActionResult OnPost()
+        public async Task<IActionResult> OnPostAsync()
         {
             if (ModelState.IsValid)
             {
                 Item.CustumerId = CustumerId;
 
                 var entity = _repository.ToEntity(Item);
-                _repository.Add(entity);
+                await _repository.AddAsync(entity);
 
                 return RedirectToPage("Index");
             }

@@ -20,9 +20,9 @@ namespace EcosCLM.Web.Pages
             _repository = repository;
         }
 
-        public IActionResult OnGet(Guid id)
+        public async Task<IActionResult> OnGet(Guid id)
         {
-            var job = _repository.FindOne(x => x.Id == id && x.User == Email);
+            var job = await _repository.FindOneAsync(x => x.Id == id && x.User == Email);
             var referer = Request.Headers["Referer"].ToString();
             string location = (!string.IsNullOrEmpty(referer)) ? referer : "/Index";
 

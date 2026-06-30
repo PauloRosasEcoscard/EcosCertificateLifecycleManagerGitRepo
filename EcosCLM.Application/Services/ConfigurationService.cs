@@ -20,16 +20,18 @@ namespace EcosCLM.Application.Services
         public async Task<int> GetSessionTimeoutMinutesAsync(string customerName)
         {
             var cacheKey = $"{CacheKeyBase}_{customerName}";
-            PolicySettingsViewModel policySettings = null;
 
             if (_cache.TryGetValue(cacheKey, out int timeout))
             {
                 return timeout;
             }
 
+            PolicySettingsViewModel? policySettings = null;
+
             if (Guid.TryParse(customerName, out Guid customerGuid))
             {
-                policySettings = _policySettingsRepository.GetByIdCustumer(customerGuid);
+                // Adicionado o await para a nova extensão assíncrona
+                policySettings = await _policySettingsRepository.GetByIdCustomerAsync(customerGuid);
             }
 
             if (policySettings != null)
@@ -39,7 +41,6 @@ namespace EcosCLM.Application.Services
                 return timeoutMinutes;
             }
 
-            // Return a default value if not found
             return 30;
         }
     }
