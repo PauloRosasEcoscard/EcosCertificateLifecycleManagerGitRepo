@@ -8,7 +8,7 @@ namespace EcosCLM.Data.Repositories
 {
     public class PolicySettingsRepository : BaseRepository<PolicySettings, PolicySettingsViewModel>, IPolicySettingsRepository
     {
-        public PolicySettingsRepository(EcosDashboardContext dbContext, IMapper mapper)
+        public PolicySettingsRepository(EcosCLMContext dbContext, IMapper mapper)
             : base(dbContext, mapper)
         {
         }

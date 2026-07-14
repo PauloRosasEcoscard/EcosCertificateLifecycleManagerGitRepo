@@ -24,13 +24,13 @@ namespace EcosCLM.Domain.Entities.Certificates
         public string Status { get; set; } = "DRAFT";
 
         /// <summary>ID da aplicação (ManagedApp) associada a esta solicitação.</summary>
-        public Guid? ApplicationId { get; set; }
+        public Guid? CertificateRequestCLMApplicationId { get; set; }
 
         /// <summary>ID do domínio (ManagedDomain) que será incluído no certificado.</summary>
-        public Guid? DomainId { get; set; }
+        public Guid? CertificateRequestDomainId { get; set; }
 
         /// <summary>Perfil de segurança (CertificateProfile) utilizado para aplicar as regras de emissão.</summary>
-        public Guid? ProfileId { get; set; }
+        public Guid? CertificateRequestProfileId { get; set; }
 
         /// <summary>ID da Autoridade Certificadora (CertificateAuthority) que processará o pedido.</summary>
         public Guid? CaId { get; set; }
@@ -68,13 +68,13 @@ namespace EcosCLM.Domain.Entities.Certificates
         // --- Navegação (Relacionamentos) ---
 
         /// <summary>Navegação para a Aplicação relacionada.</summary>
-        public virtual CLMApplication? Application { get; set; }
+        public virtual CLMApplication? CertificateRequestCLMApplication { get; set; }
 
         /// <summary>Navegação para o Domínio relacionado.</summary>
-        public virtual ManagedDomain? Domain { get; set; }
+        public virtual ManagedDomain? CertificateRequestDomain { get; set; }
 
         /// <summary>Navegação para o Perfil de emissão utilizado.</summary>
-        public virtual CertificateProfile? Profile { get; set; }
+        public virtual CertificateProfile? CertificateRequestProfile { get; set; }
 
         /// <summary>Navegação para a CA (Autoridade Certificadora) que processará o pedido.</summary>
         public virtual CertificateAuthority? CertificateAuthority { get; set; }

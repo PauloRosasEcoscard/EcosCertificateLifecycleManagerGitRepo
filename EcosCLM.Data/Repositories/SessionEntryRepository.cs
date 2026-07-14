@@ -8,7 +8,7 @@ namespace EcosCLM.Data.Repositories
 {
     public class SessionEntryRepository : BaseRepository<SessionEntry, SessionEntryViewModel>, ISessionEntryRepository
     {
-        public SessionEntryRepository(EcosDashboardContext dbContext, IMapper mapper)
+        public SessionEntryRepository(EcosCLMContext dbContext, IMapper mapper)
             : base(dbContext, mapper)
         {
         }

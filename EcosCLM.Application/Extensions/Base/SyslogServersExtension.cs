@@ -4,7 +4,7 @@ using EcosCLM.Application.ViewModels;
 using EcosCLM.Domain.Entities.Base;
 using Microsoft.EntityFrameworkCore;
 
-namespace EcosCLM.Application.Extensions
+namespace EcosCLM.Application.Extensions.Base
 {
     public static class SyslogServersExtension
     {

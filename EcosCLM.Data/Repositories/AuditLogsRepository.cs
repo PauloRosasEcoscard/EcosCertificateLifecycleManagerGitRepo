@@ -8,7 +8,7 @@ namespace EcosCLM.Data.Repositories
 {
     public class AuditLogsRepository : BaseRepository<AuditLogs, AuditLogsViewModel>, IAuditLogsRepository
     {
-        public AuditLogsRepository(EcosDashboardContext dbContext, IMapper mapper)
+        public AuditLogsRepository(EcosCLMContext dbContext, IMapper mapper)
             : base(dbContext, mapper)
         {
         }

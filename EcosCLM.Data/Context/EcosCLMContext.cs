@@ -1,6 +1,11 @@
 ﻿using EcosCLM.Application.Interfaces;
 using EcosCLM.Application.Services;
 using EcosCLM.Domain.Entities.Base;
+using EcosCLM.Domain.Entities.Catalog;
+using EcosCLM.Domain.Entities.Certificates;
+using EcosCLM.Domain.Entities.Deployment;
+using EcosCLM.Domain.Entities.Integration;
+using EcosCLM.Domain.Entities.Security;
 using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -10,7 +15,7 @@ using System.Text;
 
 namespace EcosCLM.Data.Context
 {
-    public class EcosDashboardContext : DbContext, IDataProtectionKeyContext
+    public class EcosCLMContext : DbContext, IDataProtectionKeyContext
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IServiceProvider? _serviceProvider;
@@ -23,8 +28,28 @@ namespace EcosCLM.Data.Context
         public DbSet<DataProtectionKey> DataProtectionKeys { get; set; }
         public DbSet<SessionEntry> SessionEntry { get; set; }
 
-        public EcosDashboardContext(
-            DbContextOptions<EcosDashboardContext> options,
+        // CLM Domain DbSets
+        public DbSet<CLMApplication> CLMApplications { get; set; }
+        public DbSet<DeploymentEnvironment> DeploymentEnvironments { get; set; }
+        public DbSet<ManagedDomain> ManagedDomains { get; set; }
+        public DbSet<ApprovalTask> ApprovalTasks { get; set; }
+        public DbSet<CaOrder> CaOrders { get; set; }
+        public DbSet<Certificate> Certificates { get; set; }
+        public DbSet<CertificateRequest> CertificateRequests { get; set; }
+        public DbSet<CertificateRequestSanDns> CertificateRequestSanDns { get; set; }
+        public DbSet<CertificateRequestSanIp> CertificateRequestSanIps { get; set; }
+        public DbSet<RenewalJob> RenewalJobs { get; set; }
+        public DbSet<CertificateDeployment> CertificateDeployments { get; set; }
+        public DbSet<DeploymentTarget> DeploymentTargets { get; set; }
+        public DbSet<ApiIdempotencyKey> ApiIdempotencyKeys { get; set; }
+        public DbSet<EventOutbox> EventOutboxes { get; set; }
+        public DbSet<CertificateAuthority> CertificateAuthorities { get; set; }
+        public DbSet<CertificateProfile> CertificateProfiles { get; set; }
+        public DbSet<HsmCluster> HsmClusters { get; set; }
+        public DbSet<HsmKeyRef> HsmKeyRefs { get; set; }
+
+        public EcosCLMContext(
+            DbContextOptions<EcosCLMContext> options,
             IHttpContextAccessor? httpContextAccessor = null,
             IServiceProvider? serviceProvider = null) : base(options)
         {
@@ -34,7 +59,7 @@ namespace EcosCLM.Data.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfigurationsFromAssembly(typeof(EcosDashboardContext).Assembly);
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(EcosCLMContext).Assembly);
         }
 
         public override int SaveChanges()

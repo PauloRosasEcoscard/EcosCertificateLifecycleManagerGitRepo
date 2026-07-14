@@ -16,4 +16,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\EcosCLM.Domain\EcosCLM.Domain.csproj" />
 	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="Extensions\Security\" />
+	</ItemGroup>
 </Project>

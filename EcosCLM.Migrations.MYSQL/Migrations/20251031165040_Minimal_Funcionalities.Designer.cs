@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EcosCLM.Migrations.MYSQL.Migrations
 {
-    [DbContext(typeof(EcosDashboardContext))]
+    [DbContext(typeof(EcosCLMContext))]
     [Migration("20251031165040_Minimal_Funcionalities")]
     partial class Minimal_Funcionalities
     {

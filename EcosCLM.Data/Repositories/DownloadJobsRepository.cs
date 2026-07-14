@@ -8,7 +8,7 @@ namespace EcosCLM.Data.Repositories
 {
     public class DownloadJobsRepository : BaseRepository<DownloadJobs, DownloadJobsViewModel>, IDownloadJobsRepository
     {
-        public DownloadJobsRepository(EcosDashboardContext dbContext, IMapper mapper)
+        public DownloadJobsRepository(EcosCLMContext dbContext, IMapper mapper)
             : base(dbContext, mapper)
         {
         }

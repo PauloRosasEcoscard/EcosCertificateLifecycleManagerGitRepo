@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EcosCLM.Migrations.MYSQL.Migrations
 {
-    [DbContext(typeof(EcosDashboardContext))]
+    [DbContext(typeof(EcosCLMContext))]
     partial class EcosDashboardContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
