@@ -8,7 +8,7 @@ namespace EcosCLM.Data.Repositories
 {
     public class NotificationsRepository : BaseRepository<Notifications, NotificationsViewModel>, INotificationsRepository
     {
-        public NotificationsRepository(EcosDashboardContext dbContext, IMapper mapper)
+        public NotificationsRepository(EcosCLMContext dbContext, IMapper mapper)
             : base(dbContext, mapper)
         {
         }

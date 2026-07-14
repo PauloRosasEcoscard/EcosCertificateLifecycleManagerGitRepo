@@ -46,17 +46,32 @@ public class GlobalExceptionHandler : IExceptionHandler
 
         try
         {
-            var tempData = _tempDataFactory.GetTempData(httpContext);
+            // 1. Verifique se o recurso de sessão está presente antes de tentar usar o TempData
+            var sessionFeature = httpContext.Features.Get<Microsoft.AspNetCore.Http.Features.ISessionFeature>();
 
-            string friendlyMessage = statusCode == StatusCodes.Status401Unauthorized
-                ? "Insufficient permissions."
-                : "Server instability.";
-
-            tempData["modal"] = $"<div class='text-center'><p>{friendlyMessage}</p><p class='mb-0 small text-muted font-monospace'>Protocol: <strong>{errorTraceId}</strong></p></div>";
-
-            if (httpContext.Request.Path != "/")
+            if (sessionFeature != null)
             {
-                httpContext.Response.Redirect("/");
+                var tempData = _tempDataFactory.GetTempData(httpContext);
+
+                string friendlyMessage = statusCode == StatusCodes.Status401Unauthorized
+                    ? "Insufficient permissions."
+                    : "Server instability.";
+
+                tempData["modal"] = $"<div class='text-center'><p>{friendlyMessage}</p><p class='mb-0 small text-muted font-monospace'>Protocol: <strong>{errorTraceId}</strong></p></div>";
+
+                if (httpContext.Request.Path != "/")
+                {
+                    httpContext.Response.Redirect("/");
+                    return true;
+                }
+            }
+            else
+            {
+                // 2. Se a sessão não existir (fallback), renderize uma resposta simples de erro
+                // Isso evita que a aplicação quebre tentando acessar algo que não existe.
+                httpContext.Response.StatusCode = statusCode;
+                httpContext.Response.ContentType = "text/html; charset=utf-8";
+                await httpContext.Response.WriteAsync($"<h1>Error</h1><p>Protocol: {errorTraceId}</p>");
                 return true;
             }
         }

@@ -5,7 +5,7 @@ using EcosCLM.Domain.Entities.Base;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
-namespace EcosCLM.Application.Extensions
+namespace EcosCLM.Application.Extensions.Base
 {
     public static class AuditLogsExtension
     {

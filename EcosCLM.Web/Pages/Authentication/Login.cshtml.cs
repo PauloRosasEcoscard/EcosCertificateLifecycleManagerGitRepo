@@ -16,6 +16,7 @@ using EcosCLM.Web.EcosLoginIntegration.Interfaces;
 using EcosCLM.Web.EcosLoginIntegration.Model;
 using System.Threading.Tasks;
 using EcosCLM.Web.EcosLoginIntegration.Extensions;
+using EcosCLM.Application.Extensions.Base;
 
 namespace EcosCLM.Web.Pages.Authentication
 {
@@ -121,6 +122,14 @@ namespace EcosCLM.Web.Pages.Authentication
             };
 
             var tokenServiceResponse = await _EcosLoginService.Login(loginRequest);
+
+            if (tokenServiceResponse?.Data == null)
+            {
+                _logger.LogError("API de login retornou uma resposta nula ou vazia.");
+                ModelState.AddModelError(string.Empty, "O serviço de autenticação está offline. Tente novamente mais tarde.");
+                return Page();
+            }
+
             var userToken = JsonConvert.DeserializeObject<UserToken>(tokenServiceResponse.Data);
 
             if (string.IsNullOrEmpty(userToken?.token))

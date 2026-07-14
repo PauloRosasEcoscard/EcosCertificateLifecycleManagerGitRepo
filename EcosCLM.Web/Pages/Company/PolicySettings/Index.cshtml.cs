@@ -1,4 +1,5 @@
 using EcosCLM.Application.Extensions;
+using EcosCLM.Application.Extensions.Base;
 using EcosCLM.Application.Interfaces;
 using EcosCLM.Application.ViewModels;
 using EcosCLM.Web.EcosLoginIntegration.Interfaces;

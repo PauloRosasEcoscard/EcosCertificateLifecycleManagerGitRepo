@@ -27,7 +27,7 @@ namespace EcosCLM.Domain.Entities.Catalog
         public DateTime UpdatedAt { get; set; }
 
         public virtual ICollection<ManagedDomain> Domains { get; set; } = new List<ManagedDomain>();
-        public virtual ICollection<CertificateRequest> CertificateRequests { get; set; } = new List<CertificateRequest>();
+        public virtual ICollection<CertificateRequest> CLMApplicationCertificateRequests { get; set; } = new List<CertificateRequest>();
         public virtual ICollection<DeploymentTarget> DeploymentTargets { get; set; } = new List<DeploymentTarget>();
     }
 }

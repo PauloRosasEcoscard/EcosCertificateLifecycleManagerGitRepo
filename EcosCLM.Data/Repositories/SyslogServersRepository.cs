@@ -8,7 +8,7 @@ namespace EcosCLM.Data.Repositories
 {
     public class SyslogServersRepository : BaseRepository<SyslogServers, SyslogServersViewModel>, ISyslogServersRepository
     {
-        public SyslogServersRepository(EcosDashboardContext dbContext, IMapper mapper)
+        public SyslogServersRepository(EcosCLMContext dbContext, IMapper mapper)
             : base(dbContext, mapper)
         {
         }

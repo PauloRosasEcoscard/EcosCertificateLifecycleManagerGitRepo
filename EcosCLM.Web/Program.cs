@@ -40,7 +40,7 @@ public class Program
             builder.Services.AddProblemDetails();
 
             builder.Services.AddHealthChecks()
-                .AddDbContextCheck<EcosDashboardContext>("Database_Check")
+                .AddDbContextCheck<EcosCLMContext>("Database_Check")
                 .AddAsyncCheck("EcosLogin_API_Check", async () =>
                 {
                     try
@@ -60,7 +60,7 @@ public class Program
                 });
 
             builder.Services.AddDataProtection()
-                .PersistKeysToDbContext<EcosDashboardContext>()
+                .PersistKeysToDbContext<EcosCLMContext>()
                 .SetApplicationName("EcosDashboard");
 
             builder.Services.Configure<ForwardedHeadersOptions>(options =>
@@ -169,9 +169,9 @@ public class Program
         }
     }
 
-    public class EcosDashboardContextFactory : IDesignTimeDbContextFactory<EcosDashboardContext>
+    public class EcosDashboardContextFactory : IDesignTimeDbContextFactory<EcosCLMContext>
     {
-        public EcosDashboardContext CreateDbContext(string[] args)
+        public EcosCLMContext CreateDbContext(string[] args)
         {
             var config = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
@@ -180,7 +180,7 @@ public class Program
                 .Build();
 
             var provider = config["RepositoryType"]?.ToUpper();
-            var optionsBuilder = new DbContextOptionsBuilder<EcosDashboardContext>();
+            var optionsBuilder = new DbContextOptionsBuilder<EcosCLMContext>();
             string connectionString = config.GetConnectionString("EcosCLM")!;
 
             if (provider == "MYSQL")
@@ -188,7 +188,7 @@ public class Program
             else
                 optionsBuilder.UseSqlServer(connectionString, opt => opt.MigrationsAssembly("EcosCLM.Migrations.SQL"));
 
-            return new EcosDashboardContext(optionsBuilder.Options, null, null);
+            return new EcosCLMContext(optionsBuilder.Options, null, null);
         }
     }
 }

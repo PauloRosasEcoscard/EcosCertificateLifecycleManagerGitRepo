@@ -24,7 +24,7 @@ namespace EcosCLM.Data.Extensions
 
             if (repositoryType == "SQL")
             {
-                services.AddDbContext<EcosDashboardContext>(opts =>
+                services.AddDbContext<EcosCLMContext>(opts =>
                     opts.UseSqlServer(
                         dashboardConnectionString,
                         sql => sql.MigrationsAssembly("EcosCLM.Migrations.SQL")
@@ -40,7 +40,7 @@ namespace EcosCLM.Data.Extensions
             }
             else if (repositoryType == "MYSQL")
             {
-                services.AddDbContext<EcosDashboardContext>(opts =>
+                services.AddDbContext<EcosCLMContext>(opts =>
                     opts.UseMySql(
                         dashboardConnectionString,
                         ServerVersion.AutoDetect(dashboardConnectionString),
@@ -72,7 +72,7 @@ namespace EcosCLM.Data.Extensions
             #endregion
 
             #region DependencyInjection
-            services.AddTransient<EcosDashboardContext>();
+            services.AddTransient<EcosCLMContext>();
             services.AddScoped<IAuditLogsRepository, AuditLogsRepository>();
             services.AddScoped<ISyslogServersRepository, SyslogServersRepository>();
             services.AddScoped<INotificationsRepository, NotificationsRepository>();
@@ -81,6 +81,24 @@ namespace EcosCLM.Data.Extensions
             services.AddScoped<ISessionEntryRepository, SessionEntryRepository>();
             services.AddScoped<ISyslogService, SyslogService>();
             services.AddScoped<IConfigurationService, ConfigurationService>();
+
+            services.AddScoped<ICLMApplicationRepository, CLMApplicationRepository>();
+            services.AddScoped<IDeploymentEnvironmentRepository, DeploymentEnvironmentRepository>();
+            services.AddScoped<IManagedDomainRepository, ManagedDomainRepository>();
+            services.AddScoped<ICertificateAuthorityRepository, CertificateAuthorityRepository>();
+            services.AddScoped<ICertificateProfileRepository, CertificateProfileRepository>();
+            services.AddScoped<IHsmClusterRepository, HsmClusterRepository>();
+            services.AddScoped<IHsmKeyRefRepository, HsmKeyRefRepository>();
+            services.AddScoped<ICertificateDeploymentRepository, CertificateDeploymentRepository>();
+            services.AddScoped<IDeploymentTargetRepository, DeploymentTargetRepository>();
+            services.AddScoped<IApiIdempotencyKeyRepository, ApiIdempotencyKeyRepository>();
+            services.AddScoped<IEventOutboxRepository, EventOutboxRepository>();
+            services.AddScoped<IApprovalTaskRepository, ApprovalTaskRepository>();
+            services.AddScoped<ICaOrderRepository, CaOrderRepository>();
+            services.AddScoped<ICertificateRepository, CertificateRepository>();
+            services.AddScoped<ICertificateRequestRepository, CertificateRequestRepository>();
+            services.AddScoped<ICertificateRequestSanDnsRepository, CertificateRequestSanDnsRepository>();
+            services.AddScoped<IRenewalJobRepository, RenewalJobRepository>();
             #endregion
         }
 

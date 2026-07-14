@@ -1,10 +1,10 @@
 using EcosCLM.Application.Exceptions;
 using EcosCLM.Application.Interfaces;
-using EcosCLM.Application.Extensions;
 using EcosCLM.Application.ViewModels;
 using EcosCLM.Web.EcosLoginIntegration.Interfaces;
 using EcosCLM.Web.Infrastructure.Core;
 using Microsoft.AspNetCore.Mvc;
+using EcosCLM.Application.Extensions.Base;
 
 namespace Ecos_Cloud_Vhsm_Dashboard.Pages.Company.SyslogServers
 {

@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EcosCLM.Migrations.SQL.Migrations
 {
-    [DbContext(typeof(EcosDashboardContext))]
+    [DbContext(typeof(EcosCLMContext))]
     [Migration("20260121180947_DownloadQueue")]
     partial class DownloadQueue
     {

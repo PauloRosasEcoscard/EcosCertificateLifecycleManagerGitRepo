@@ -1,4 +1,4 @@
-﻿using EcosCLM.Application.Extensions;
+﻿using EcosCLM.Application.Extensions.Base;
 using EcosCLM.Application.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using System.Net.Sockets;
