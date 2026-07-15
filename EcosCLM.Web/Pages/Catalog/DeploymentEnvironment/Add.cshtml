@@ -1,0 +1,17 @@
+﻿@page
+@model EcosCLM.Web.Pages.Catalog.DeploymentEnvironment.AddModel
+@{
+    ViewData["Title"] = "Add Deployment Environment";
+}
+
+<div class="row">
+    <div class="col-12 mt-3">
+        <ecos-form title="Add Deployment Environment"
+                   subtitle="Define the stage parameters for the certificate delivery pipeline."
+                   handler="Save">
+
+            <partial name="_DeploymentEnvironmentFormFields" model="Model.Item" />
+
+        </ecos-form>
+    </div>
+</div>

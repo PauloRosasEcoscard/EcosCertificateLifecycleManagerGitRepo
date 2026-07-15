@@ -97,6 +97,262 @@
             </li>
         }
 
+        <!-- 1. Catalog -->
+        @if (IsAdmin || ShowPage(ContextRoles, "Catalog"))
+        {
+            <li>
+                <a class="nav-link nav-link-custom d-flex align-items-center @(IsActivePage("/Catalog") ? "active" : "")"
+                   data-bs-toggle="collapse" href="#collapseCatalog" role="button"
+                   aria-expanded="@(IsActivePage("/Catalog") ? "true" : "false")"
+                   aria-controls="collapseCatalog">
+                    <i class="material-symbols-outlined me-2">folder_open</i>
+                    <span>Catalog</span>
+                    <i class="material-symbols-outlined ms-auto fs-6 text-muted dropdown-arrow">expand_more</i>
+                </a>
+            </li>
+
+            <div class="collapse @(IsActivePage("/Catalog") ? "show" : "")" id="collapseCatalog">
+                <ul class="submenu-list nav flex-column ms-3 gap-1">
+                    @if (IsAdmin || ShowPage(ContextRoles, "Catalog/CLMApplication"))
+                    {
+                        <li>
+                            <a class="nav-link nav-link-custom @(IsActivePage("/Catalog/CLMApplication") ? "active" : "")" asp-page="/Catalog/CLMApplication/Index">
+                                <i class="material-symbols-outlined me-2">apps</i>
+                                <span>Applications</span>
+                            </a>
+                        </li>
+                    }
+
+                    @if (IsAdmin || ShowPage(ContextRoles, "Catalog/DeploymentEnvironment"))
+                    {
+                        <li>
+                            <a class="nav-link nav-link-custom @(IsActivePage("/Catalog/DeploymentEnvironment") ? "active" : "")" asp-page="/Catalog/DeploymentEnvironment/Index">
+                                <i class="material-symbols-outlined me-2">lan</i>
+                                <span>Environments</span>
+                            </a>
+                        </li>
+                    }
+
+                    @if (IsAdmin || ShowPage(ContextRoles, "Catalog/ManagedDomain"))
+                    {
+                        <li>
+                            <a class="nav-link nav-link-custom @(IsActivePage("/Catalog/ManagedDomain") ? "active" : "")" asp-page="/Catalog/ManagedDomain/Index">
+                                <i class="material-symbols-outlined me-2">dns</i>
+                                <span>Managed Domains</span>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        }
+
+        <!-- 2. Certificates -->
+        @if (IsAdmin || ShowPage(ContextRoles, "Certificates"))
+        {
+            <li>
+                <a class="nav-link nav-link-custom d-flex align-items-center @(IsActivePage("/Certificates") ? "active" : "")"
+                   data-bs-toggle="collapse" href="#collapseCertificates" role="button"
+                   aria-expanded="@(IsActivePage("/Certificates") ? "true" : "false")"
+                   aria-controls="collapseCertificates">
+                    <i class="material-symbols-outlined me-2">workspace_premium</i>
+                    <span>Certificates</span>
+                    <i class="material-symbols-outlined ms-auto fs-6 text-muted dropdown-arrow">expand_more</i>
+                </a>
+            </li>
+
+            <div class="collapse @(IsActivePage("/Certificates") ? "show" : "")" id="collapseCertificates">
+                <ul class="submenu-list nav flex-column ms-3 gap-1">
+                    @if (IsAdmin || ShowPage(ContextRoles, "Certificates/CertificateRequest"))
+                    {
+                        <li>
+                            <a class="nav-link nav-link-custom @(IsActivePage("/Certificates/CertificateRequest") ? "active" : "")" asp-page="/Certificates/CertificateRequest/Index">
+                                <i class="material-symbols-outlined me-2">assignment_late</i>
+                                <span>Requests</span>
+                            </a>
+                        </li>
+                    }
+
+                    @if (IsAdmin || ShowPage(ContextRoles, "Certificates/Certificate"))
+                    {
+                        <li>
+                            <a class="nav-link nav-link-custom @(IsActivePage("/Certificates/Certificate") ? "active" : "")" asp-page="/Certificates/Certificate/Index">
+                                <i class="material-symbols-outlined me-2">verified</i>
+                                <span>Certificates</span>
+                            </a>
+                        </li>
+                    }
+
+                    @if (IsAdmin || ShowPage(ContextRoles, "Certificates/ApprovalTask"))
+                    {
+                        <li>
+                            <a class="nav-link nav-link-custom @(IsActivePage("/Certificates/ApprovalTask") ? "active" : "")" asp-page="/Certificates/ApprovalTask/Index">
+                                <i class="material-symbols-outlined me-2">fact_check</i>
+                                <span>Approvals</span>
+                            </a>
+                        </li>
+                    }
+
+                    @if (IsAdmin || ShowPage(ContextRoles, "Certificates/RenewalJob"))
+                    {
+                        <li>
+                            <a class="nav-link nav-link-custom @(IsActivePage("/Certificates/RenewalJob") ? "active" : "")" asp-page="/Certificates/RenewalJob/Index">
+                                <i class="material-symbols-outlined me-2">autorenew</i>
+                                <span>Renewal Jobs</span>
+                            </a>
+                        </li>
+                    }
+
+                    @if (IsAdmin || ShowPage(ContextRoles, "Certificates/CaOrder"))
+                    {
+                        <li>
+                            <a class="nav-link nav-link-custom @(IsActivePage("/Certificates/CaOrder") ? "active" : "")" asp-page="/Certificates/CaOrder/Index">
+                                <i class="material-symbols-outlined me-2">shopping_cart</i>
+                                <span>CA Orders</span>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        }
+
+        <!-- 3. Deployment -->
+        @if (IsAdmin || ShowPage(ContextRoles, "Deployment"))
+        {
+            <li>
+                <a class="nav-link nav-link-custom d-flex align-items-center @(IsActivePage("/Deployment") ? "active" : "")"
+                   data-bs-toggle="collapse" href="#collapseDeployment" role="button"
+                   aria-expanded="@(IsActivePage("/Deployment") ? "true" : "false")"
+                   aria-controls="collapseDeployment">
+                    <i class="material-symbols-outlined me-2">publish</i>
+                    <span>Deployment</span>
+                    <i class="material-symbols-outlined ms-auto fs-6 text-muted dropdown-arrow">expand_more</i>
+                </a>
+            </li>
+
+            <div class="collapse @(IsActivePage("/Deployment") ? "show" : "")" id="collapseDeployment">
+                <ul class="submenu-list nav flex-column ms-3 gap-1">
+                    @if (IsAdmin || ShowPage(ContextRoles, "Deployment/DeploymentTarget"))
+                    {
+                        <li>
+                            <a class="nav-link nav-link-custom @(IsActivePage("/Deployment/DeploymentTarget") ? "active" : "")" asp-page="/Deployment/DeploymentTarget/Index">
+                                <i class="material-symbols-outlined me-2">router</i>
+                                <span>Targets</span>
+                            </a>
+                        </li>
+                    }
+
+                    @if (IsAdmin || ShowPage(ContextRoles, "Deployment/CertificateDeployment"))
+                    {
+                        <li>
+                            <a class="nav-link nav-link-custom @(IsActivePage("/Deployment/CertificateDeployment") ? "active" : "")" asp-page="/Deployment/CertificateDeployment/Index">
+                                <i class="material-symbols-outlined me-2">install_desktop</i>
+                                <span>Deploy History</span>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        }
+
+        <!-- 4. Security -->
+        @if (IsAdmin || ShowPage(ContextRoles, "Security"))
+        {
+            <li>
+                <a class="nav-link nav-link-custom d-flex align-items-center @(IsActivePage("/Security") ? "active" : "")"
+                   data-bs-toggle="collapse" href="#collapseSecurity" role="button"
+                   aria-expanded="@(IsActivePage("/Security") ? "true" : "false")"
+                   aria-controls="collapseSecurity">
+                    <i class="material-symbols-outlined me-2">security</i>
+                    <span>Security</span>
+                    <i class="material-symbols-outlined ms-auto fs-6 text-muted dropdown-arrow">expand_more</i>
+                </a>
+            </li>
+
+            <div class="collapse @(IsActivePage("/Security") ? "show" : "")" id="collapseSecurity">
+                <ul class="submenu-list nav flex-column ms-3 gap-1">
+                    @if (IsAdmin || ShowPage(ContextRoles, "Security/CertificateProfile"))
+                    {
+                        <li>
+                            <a class="nav-link nav-link-custom @(IsActivePage("/Security/CertificateProfile") ? "active" : "")" asp-page="/Security/CertificateProfile/Index">
+                                <i class="material-symbols-outlined me-2">admin_panel_settings</i>
+                                <span>Profiles</span>
+                            </a>
+                        </li>
+                    }
+
+                    @if (IsAdmin || ShowPage(ContextRoles, "Security/CertificateAuthority"))
+                    {
+                        <li>
+                            <a class="nav-link nav-link-custom @(IsActivePage("/Security/CertificateAuthority") ? "active" : "")" asp-page="/Security/CertificateAuthority/Index">
+                                <i class="material-symbols-outlined me-2">gavel</i>
+                                <span>CAs</span>
+                            </a>
+                        </li>
+                    }
+
+                    @if (IsAdmin || ShowPage(ContextRoles, "Security/HsmCluster"))
+                    {
+                        <li>
+                            <a class="nav-link nav-link-custom @(IsActivePage("/Security/HsmCluster") ? "active" : "")" asp-page="/Security/HsmCluster/Index">
+                                <i class="material-symbols-outlined me-2">storage</i>
+                                <span>HSM Clusters</span>
+                            </a>
+                        </li>
+                    }
+
+                    @if (IsAdmin || ShowPage(ContextRoles, "Security/HsmKeyRef"))
+                    {
+                        <li>
+                            <a class="nav-link nav-link-custom @(IsActivePage("/Security/HsmKeyRef") ? "active" : "")" asp-page="/Security/HsmKeyRef/Index">
+                                <i class="material-symbols-outlined me-2">vpn_key</i>
+                                <span>HSM Keys</span>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        }
+
+        <!-- 5. Integration (Para administradores ou escuta de barramento) -->
+        @if (IsAdmin || ShowPage(ContextRoles, "Integration"))
+        {
+            <li>
+                <a class="nav-link nav-link-custom d-flex align-items-center @(IsActivePage("/Integration") ? "active" : "")"
+                   data-bs-toggle="collapse" href="#collapseIntegration" role="button"
+                   aria-expanded="@(IsActivePage("/Integration") ? "true" : "false")"
+                   aria-controls="collapseIntegration">
+                    <i class="material-symbols-outlined me-2">integration_instructions</i>
+                    <span>Integration</span>
+                    <i class="material-symbols-outlined ms-auto fs-6 text-muted dropdown-arrow">expand_more</i>
+                </a>
+            </li>
+
+            <div class="collapse @(IsActivePage("/Integration") ? "show" : "")" id="collapseIntegration">
+                <ul class="submenu-list nav flex-column ms-3 gap-1">
+                    @if (IsAdmin || ShowPage(ContextRoles, "Integration/EventOutbox"))
+                    {
+                        <li>
+                            <a class="nav-link nav-link-custom @(IsActivePage("/Integration/EventOutbox") ? "active" : "")" asp-page="/Integration/EventOutbox/Index">
+                                <i class="material-symbols-outlined me-2">outbox</i>
+                                <span>Event Outbox</span>
+                            </a>
+                        </li>
+                    }
+
+                    @if (IsAdmin || ShowPage(ContextRoles, "Integration/ApiIdempotencyKey"))
+                    {
+                        <li>
+                            <a class="nav-link nav-link-custom @(IsActivePage("/Integration/ApiIdempotencyKey") ? "active" : "")" asp-page="/Integration/ApiIdempotencyKey/Index">
+                                <i class="material-symbols-outlined me-2">lock_reset</i>
+                                <span>Idempotency Keys</span>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        }
+
+        <!-- 6. Company -->
         @if (IsAdmin || ShowPage(ContextRoles, "Company"))
         {
             <li>

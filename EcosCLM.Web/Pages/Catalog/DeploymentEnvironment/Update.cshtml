@@ -1,0 +1,20 @@
+﻿@page "{id:Guid}"
+@model EcosCLM.Web.Pages.Catalog.DeploymentEnvironment.UpdateModel
+@{
+    ViewData["Title"] = "Edit Deployment Environment";
+}
+
+<div class="row">
+    <div class="col-12 mt-3">
+        <ecos-form title="Edit Deployment Environment"
+                   subtitle="Modify stage descriptors or restrictions."
+                   handler="Save">
+
+            <input type="hidden" asp-for="Item.Id" />
+            <input type="hidden" asp-for="Item.CreatedAt" />
+
+            <partial name="_DeploymentEnvironmentFormFields" model="Model.Item" />
+
+        </ecos-form>
+    </div>
+</div>

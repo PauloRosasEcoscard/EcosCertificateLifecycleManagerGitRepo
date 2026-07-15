@@ -22,9 +22,9 @@ namespace EcosCLM.Application.ViewModels.Catalog
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
 
-        public virtual ICollection<ManagedDomainViewModel> Domains { get; set; } = new List<ManagedDomainViewModel>();
-        public virtual ICollection<CertificateRequest> CLMApplicationCertificateRequests { get; set; } = new List<CertificateRequest>();
-        public virtual ICollection<DeploymentTargetViewModel> DeploymentTargets { get; set; } = new List<DeploymentTargetViewModel>();
+        public virtual IEnumerable<ManagedDomainViewModel> Domains { get; set; } = new List<ManagedDomainViewModel>();
+        public virtual IEnumerable<CertificateRequest> CLMApplicationCertificateRequests { get; set; } = new List<CertificateRequest>();
+        public virtual IEnumerable<DeploymentTargetViewModel> DeploymentTargets { get; set; } = new List<DeploymentTargetViewModel>();
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
