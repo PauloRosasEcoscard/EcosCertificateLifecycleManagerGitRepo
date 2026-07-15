@@ -1,0 +1,29 @@
+﻿@model EcosCLM.Application.ViewModels.Catalog.DeploymentEnvironmentViewModel
+
+<div class="row g-4 px-2 pb-2">
+
+    <div class="col-12">
+        <h6 class="fw-bold mb-0 pb-2 border-bottom border-2" style="border-color: var(--bs-primary) !important; color: var(--bs-primary);">
+            Environment Specifications
+        </h6>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="Code" class="form-label small fw-bold text-muted mb-1">Mnemonic Code</label>
+        <input asp-for="Code" class="form-control ecos-input shadow-none rounded-3 px-3 py-2" placeholder="Ex: PROD, STG, DEV" required />
+        <span asp-validation-for="Code" class="text-danger small mt-1"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="Name" class="form-label small fw-bold text-muted mb-1">Friendly Name</label>
+        <input asp-for="Name" class="form-control ecos-input shadow-none rounded-3 px-3 py-2" placeholder="Ex: Production Environment" required />
+        <span asp-validation-for="Name" class="text-danger small mt-1"></span>
+    </div>
+
+    <div class="col-12">
+        <label asp-for="Description" class="form-label small fw-bold text-muted mb-1">Description / Restrictions</label>
+        <textarea asp-for="Description" class="form-control ecos-input shadow-none rounded-3 px-3 py-2" rows="3" placeholder="Describe the purpose, SLA, or restrictions of this environment..."></textarea>
+        <span asp-validation-for="Description" class="text-danger small mt-1"></span>
+    </div>
+
+</div>
