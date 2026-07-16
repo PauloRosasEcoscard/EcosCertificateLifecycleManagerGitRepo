@@ -1,0 +1,40 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.NET.Test.Sdk" />
+		<PackageReference Include="xunit" />
+		<PackageReference Include="xunit.runner.visualstudio" />
+		<PackageReference Include="FluentAssertions" />
+		<PackageReference Include="AutoMapper" />
+		<PackageReference Include="Testcontainers.MsSql" />
+		<PackageReference Include="NSubstitute" />
+	</ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\EcosCLM.Application\EcosCLM.Application.csproj" />
+    <ProjectReference Include="..\..\EcosCLM.Data\EcosCLM.Data.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Integration\Repositories\Deployment\" />
+    <Folder Include="Integration\Repositories\Integration\" />
+    <Folder Include="Integration\Repositories\Security\" />
+    <Folder Include="Validators\Deployment\" />
+    <Folder Include="Validators\Integration\" />
+    <Folder Include="Validators\Security\" />
+  </ItemGroup>
+
+</Project>

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
-VisualStudioVersion = 18.8.12009.203 stable
+VisualStudioVersion = 18.8.12009.203
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 EndProject
@@ -23,6 +23,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EcosCLM.Application", "EcosCLM.Application\EcosCLM.Application.csproj", "{1756F1DE-E636-FB3B-980C-D55F6E61E7AC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EcosCLM.Web", "EcosCLM.Web\EcosCLM.Web.csproj", "{F4DEEF5A-D227-7040-6A6D-D8AF55029A83}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{E64B1365-E7D3-4CC6-ACCC-E003C1CC9814}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EcosCLM.Tests", "EcosCLM.Test\EcosCLM.Tests\EcosCLM.Tests.csproj", "{8B6DE068-8A5F-4D97-B078-ED260E8B7928}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -54,6 +58,10 @@ Global
 		{F4DEEF5A-D227-7040-6A6D-D8AF55029A83}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F4DEEF5A-D227-7040-6A6D-D8AF55029A83}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F4DEEF5A-D227-7040-6A6D-D8AF55029A83}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B6DE068-8A5F-4D97-B078-ED260E8B7928}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B6DE068-8A5F-4D97-B078-ED260E8B7928}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B6DE068-8A5F-4D97-B078-ED260E8B7928}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B6DE068-8A5F-4D97-B078-ED260E8B7928}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -66,6 +74,7 @@ Global
 		{F304C787-48A5-CF8B-5F8B-A4731F5B8106} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{1756F1DE-E636-FB3B-980C-D55F6E61E7AC} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{F4DEEF5A-D227-7040-6A6D-D8AF55029A83} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{8B6DE068-8A5F-4D97-B078-ED260E8B7928} = {E64B1365-E7D3-4CC6-ACCC-E003C1CC9814}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F9348AF2-E22A-4F99-9D13-A9C58C3BB93A}
