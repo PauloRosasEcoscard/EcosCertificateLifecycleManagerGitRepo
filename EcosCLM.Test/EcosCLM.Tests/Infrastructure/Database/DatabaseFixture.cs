@@ -15,20 +15,20 @@ namespace EcosCLM.Tests.Infrastructure.Database
 
         public async Task InitializeAsync()
         {
-            await _dbContainer.StartAsync();
+            await _dbContainer.StartAsync().ConfigureAwait(false);
 
             var options = new DbContextOptionsBuilder<EcosCLMContext>()
                 .UseSqlServer(ConnectionString)
                 .Options;
 
             using var context = new EcosCLMContext(options);
-            await context.Database.MigrateAsync();
+            await context.Database.MigrateAsync().ConfigureAwait(false);
         }
 
         public async Task DisposeAsync()
         {
-            await _dbContainer.StopAsync();
-            await _dbContainer.DisposeAsync();
+            await _dbContainer.StopAsync().ConfigureAwait(false);
+            await _dbContainer.DisposeAsync().ConfigureAwait(false);
         }
     }
 

@@ -8,6 +8,7 @@ namespace EcosCLM.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<DeploymentEnvironment> builder)
         {
+            ArgumentNullException.ThrowIfNull(builder);
             builder.ToTable("DeploymentEnvironment");
 
             builder.HasKey(x => x.Id);

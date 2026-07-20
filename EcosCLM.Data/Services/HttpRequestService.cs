@@ -6,11 +6,11 @@ namespace EcosCLM.Data.Services
 {
     public static class HttpRequestService
     {
-        public static async Task<HttpResponseMessage> PostAsync<T>(string postUrl, T body, Dictionary<string, string> headers = null, ILogger logger = null)
+        public static async Task<HttpResponseMessage> PostAsync<T>(string postUrl, T body, Dictionary<string, string>? headers = null, ILogger? logger = null)
         {
             string requestBodyJson;
             StringContent requestContent;
-            HttpResponseMessage response = null;
+            HttpResponseMessage? response = null;
 
             try
             {
@@ -27,36 +27,43 @@ namespace EcosCLM.Data.Services
                     }
                 }
 
-                logger?.LogInformation("--------------Request--------------");
-                logger?.LogInformation("HttpRequestService: Request URL: {PostUrl}", postUrl);
-                logger?.LogInformation("HttpRequestService: Request Headers: {Headers}", JsonConvert.SerializeObject(httpClient.DefaultRequestHeaders));
-                logger?.LogInformation("HttpRequestService: Request Body: {RequestBody}", requestBodyJson);
+                if (logger != null && logger.IsEnabled(LogLevel.Information))
+                {
+                    logger.LogInformation("--------------Request--------------");
+                    logger.LogInformation("HttpRequestService: Request URL: {PostUrl}", postUrl);
+                    logger.LogInformation("HttpRequestService: Request Headers: {Headers}", JsonConvert.SerializeObject(httpClient.DefaultRequestHeaders));
+                    logger.LogInformation("HttpRequestService: Request Body: {RequestBody}", requestBodyJson);
+                }
 
-                response = await httpClient.PostAsync(postUrl, requestContent);
+                response = await httpClient.PostAsync(postUrl, requestContent).ConfigureAwait(false);
 
-                string responseBody = await response.Content.ReadAsStringAsync();
-                logger?.LogInformation("--------------Response--------------");
-                logger?.LogInformation("HttpRequestService: Response Status: {StatusCode}", response.StatusCode);
-                logger?.LogInformation("HttpRequestService: Response Headers: {Headers}", JsonConvert.SerializeObject(response.Headers));
-                logger?.LogInformation("HttpRequestService: Response Body: {ResponseBody}", responseBody);
+                string responseBody = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+                if (logger != null && logger.IsEnabled(LogLevel.Information))
+                {
+                    logger.LogInformation("--------------Response--------------");
+                    logger.LogInformation("HttpRequestService: Response Status: {StatusCode}", response.StatusCode);
+                    logger.LogInformation("HttpRequestService: Response Headers: {Headers}", JsonConvert.SerializeObject(response.Headers));
+                    logger.LogInformation("HttpRequestService: Response Body: {ResponseBody}", responseBody);
+                }
             }
             catch (Exception ex)
             {
-                logger?.LogError(ex, "!!!!!!!!!!!!!!!!!!!!!!! Exception trying to POST at {PostUrl} !!!!!!!!!!!!!!!!!!!!!!!", postUrl);
+                logger?.LogError(ex, "Exception trying to POST at {PostUrl}", postUrl);
 
                 if (ex.InnerException != null)
                 {
-                    logger?.LogError("Inner Exception: {InnerException}", ex.InnerException.Message);
+                    logger?.LogError("Inner Exception: {Message}", ex.InnerException.Message);
                     logger?.LogError("Inner Exception StackTrace: {StackTrace}", ex.InnerException.StackTrace);
                 }
 
-                throw; // Rejoga a exceção, ou trate conforme necessário
+                throw;
             }
 
             return response;
         }
 
-        public static async Task<HttpResponseMessage> PostAsync<T>(string postUrl, T body, ILogger logger = null)
+        public static async Task<HttpResponseMessage> PostAsync<T>(string postUrl, T body, ILogger? logger = null)
         {
             string requestBodyJson;
             StringContent requestContent;
@@ -67,7 +74,7 @@ namespace EcosCLM.Data.Services
 
             using HttpClient httpClient = new HttpClient();
 
-            if (logger != null)
+            if (logger != null && logger.IsEnabled(LogLevel.Information))
             {
                 logger.LogInformation("--------------Request--------------");
                 logger.LogInformation("HttpRequestService: Request URL: {PostUrl}", postUrl);
@@ -75,11 +82,11 @@ namespace EcosCLM.Data.Services
                 logger.LogInformation("HttpRequestService: Request Body: {RequestBody}", requestBodyJson);
             }
 
-            response = await httpClient.PostAsync(postUrl, requestContent);
+            response = await httpClient.PostAsync(postUrl, requestContent).ConfigureAwait(false);
 
-            if (logger != null)
+            if (logger != null && logger.IsEnabled(LogLevel.Information))
             {
-                string responseBody = await response.Content.ReadAsStringAsync();
+                string responseBody = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                 logger.LogInformation("--------------Response--------------");
                 logger.LogInformation("HttpRequestService: Response Status: {StatusCode}", response.StatusCode);
                 logger.LogInformation("HttpRequestService: Response Headers: {Headers}", JsonConvert.SerializeObject(response.Headers));
@@ -89,13 +96,12 @@ namespace EcosCLM.Data.Services
             return response;
         }
 
-        public static async Task<HttpResponseMessage> GetAsync(string getUrl, Dictionary<string, string> headers = null, ILogger logger = null)
+        public static async Task<HttpResponseMessage> GetAsync(string getUrl, Dictionary<string, string>? headers = null, ILogger? logger = null)
         {
             HttpResponseMessage response;
 
             using HttpClient httpClient = new HttpClient();
 
-            // Adiciona os cabeçalhos, se existirem
             if (headers != null)
             {
                 foreach (var header in headers)
@@ -104,21 +110,18 @@ namespace EcosCLM.Data.Services
                 }
             }
 
-            // Log da requisição, se o logger for fornecido
-            if (logger != null)
+            if (logger != null && logger.IsEnabled(LogLevel.Information))
             {
                 logger.LogInformation("--------------Request--------------");
                 logger.LogInformation("HttpRequestService: Request URL: {GetUrl}", getUrl);
                 logger.LogInformation("HttpRequestService: Request Headers: {Headers}", JsonConvert.SerializeObject(httpClient.DefaultRequestHeaders));
             }
 
-            // Envia a requisição GET
-            response = await httpClient.GetAsync(getUrl);
+            response = await httpClient.GetAsync(getUrl).ConfigureAwait(false);
 
-            // Log da resposta, se o logger for fornecido
-            if (logger != null)
+            if (logger != null && logger.IsEnabled(LogLevel.Information))
             {
-                string responseBody = await response.Content.ReadAsStringAsync();
+                string responseBody = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                 logger.LogInformation("--------------Response--------------");
                 logger.LogInformation("HttpRequestService: Response Status: {StatusCode}", response.StatusCode);
                 logger.LogInformation("HttpRequestService: Response Headers: {Headers}", JsonConvert.SerializeObject(response.Headers));
@@ -128,27 +131,24 @@ namespace EcosCLM.Data.Services
             return response;
         }
 
-        public static async Task<HttpResponseMessage> GetAsync(string getUrl, ILogger logger = null)
+        public static async Task<HttpResponseMessage> GetAsync(string getUrl, ILogger? logger = null)
         {
             HttpResponseMessage response;
 
             using HttpClient httpClient = new HttpClient();
 
-            // Log da requisição, se o logger for fornecido
-            if (logger != null)
+            if (logger != null && logger.IsEnabled(LogLevel.Information))
             {
                 logger.LogInformation("--------------Request--------------");
                 logger.LogInformation("HttpRequestService: Request URL: {GetUrl}", getUrl);
                 logger.LogInformation("HttpRequestService: Request Headers: {Headers}", JsonConvert.SerializeObject(httpClient.DefaultRequestHeaders));
             }
 
-            // Envia a requisição GET
-            response = await httpClient.GetAsync(getUrl);
+            response = await httpClient.GetAsync(getUrl).ConfigureAwait(false);
 
-            // Log da resposta, se o logger for fornecido
-            if (logger != null)
+            if (logger != null && logger.IsEnabled(LogLevel.Information))
             {
-                string responseBody = await response.Content.ReadAsStringAsync();
+                string responseBody = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                 logger.LogInformation("--------------Response--------------");
                 logger.LogInformation("HttpRequestService: Response Status: {StatusCode}", response.StatusCode);
                 logger.LogInformation("HttpRequestService: Response Headers: {Headers}", JsonConvert.SerializeObject(response.Headers));
@@ -158,7 +158,7 @@ namespace EcosCLM.Data.Services
             return response;
         }
 
-        public static async Task<HttpResponseMessage> PutAsync<T>(string putUrl, T body, Dictionary<string, string> headers = null, ILogger logger = null)
+        public static async Task<HttpResponseMessage> PutAsync<T>(string putUrl, T body, Dictionary<string, string>? headers = null, ILogger? logger = null)
         {
             string requestBodyJson;
             StringContent requestContent;
@@ -177,7 +177,7 @@ namespace EcosCLM.Data.Services
                 }
             }
 
-            if (logger != null)
+            if (logger != null && logger.IsEnabled(LogLevel.Information))
             {
                 logger.LogInformation("--------------Request--------------");
                 logger.LogInformation("HttpRequestService: Request URL: {PutUrl}", putUrl);
@@ -185,11 +185,11 @@ namespace EcosCLM.Data.Services
                 logger.LogInformation("HttpRequestService: Request Body: {RequestBody}", requestBodyJson);
             }
 
-            response = await httpClient.PutAsync(putUrl, requestContent);
+            response = await httpClient.PutAsync(putUrl, requestContent).ConfigureAwait(false);
 
-            if (logger != null)
+            if (logger != null && logger.IsEnabled(LogLevel.Information))
             {
-                string responseBody = await response.Content.ReadAsStringAsync();
+                string responseBody = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                 logger.LogInformation("--------------Response--------------");
                 logger.LogInformation("HttpRequestService: Response Status: {StatusCode}", response.StatusCode);
                 logger.LogInformation("HttpRequestService: Response Headers: {Headers}", JsonConvert.SerializeObject(response.Headers));
@@ -199,7 +199,7 @@ namespace EcosCLM.Data.Services
             return response;
         }
 
-        public static async Task<HttpResponseMessage> PutAsync<T>(string putUrl, T body, ILogger logger = null)
+        public static async Task<HttpResponseMessage> PutAsync<T>(string putUrl, T body, ILogger? logger = null)
         {
             string requestBodyJson;
             StringContent requestContent;
@@ -210,7 +210,7 @@ namespace EcosCLM.Data.Services
 
             using HttpClient httpClient = new HttpClient();
 
-            if (logger != null)
+            if (logger != null && logger.IsEnabled(LogLevel.Information))
             {
                 logger.LogInformation("--------------Request--------------");
                 logger.LogInformation("HttpRequestService: Request URL: {PutUrl}", putUrl);
@@ -218,11 +218,11 @@ namespace EcosCLM.Data.Services
                 logger.LogInformation("HttpRequestService: Request Body: {RequestBody}", requestBodyJson);
             }
 
-            response = await httpClient.PutAsync(putUrl, requestContent);
+            response = await httpClient.PutAsync(putUrl, requestContent).ConfigureAwait(false);
 
-            if (logger != null)
+            if (logger != null && logger.IsEnabled(LogLevel.Information))
             {
-                string responseBody = await response.Content.ReadAsStringAsync();
+                string responseBody = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                 logger.LogInformation("--------------Response--------------");
                 logger.LogInformation("HttpRequestService: Response Status: {StatusCode}", response.StatusCode);
                 logger.LogInformation("HttpRequestService: Response Headers: {Headers}", JsonConvert.SerializeObject(response.Headers));
@@ -232,13 +232,12 @@ namespace EcosCLM.Data.Services
             return response;
         }
 
-        public static async Task<HttpResponseMessage> DeleteAsync(string deleteUrl, Dictionary<string, string> headers = null, ILogger logger = null)
+        public static async Task<HttpResponseMessage> DeleteAsync(string deleteUrl, Dictionary<string, string>? headers = null, ILogger? logger = null)
         {
             HttpResponseMessage response;
 
             using HttpClient httpClient = new HttpClient();
 
-            // Adiciona os cabeçalhos, se existirem
             if (headers != null)
             {
                 foreach (var header in headers)
@@ -247,21 +246,18 @@ namespace EcosCLM.Data.Services
                 }
             }
 
-            // Log da requisição, se o logger for fornecido
-            if (logger != null)
+            if (logger != null && logger.IsEnabled(LogLevel.Information))
             {
                 logger.LogInformation("--------------Request--------------");
                 logger.LogInformation("HttpRequestService: Request URL: {DeleteUrl}", deleteUrl);
                 logger.LogInformation("HttpRequestService: Request Headers: {Headers}", JsonConvert.SerializeObject(httpClient.DefaultRequestHeaders));
             }
 
-            // Envia a requisição GET
-            response = await httpClient.DeleteAsync(deleteUrl);
+            response = await httpClient.DeleteAsync(deleteUrl).ConfigureAwait(false);
 
-            // Log da resposta, se o logger for fornecido
-            if (logger != null)
+            if (logger != null && logger.IsEnabled(LogLevel.Information))
             {
-                string responseBody = await response.Content.ReadAsStringAsync();
+                string responseBody = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                 logger.LogInformation("--------------Response--------------");
                 logger.LogInformation("HttpRequestService: Response Status: {StatusCode}", response.StatusCode);
                 logger.LogInformation("HttpRequestService: Response Headers: {Headers}", JsonConvert.SerializeObject(response.Headers));
@@ -271,27 +267,24 @@ namespace EcosCLM.Data.Services
             return response;
         }
 
-        public static async Task<HttpResponseMessage> DeleteAsync(string deleteUrl, ILogger logger = null)
+        public static async Task<HttpResponseMessage> DeleteAsync(string deleteUrl, ILogger? logger = null)
         {
             HttpResponseMessage response;
 
             using HttpClient httpClient = new HttpClient();
 
-            // Log da requisição, se o logger for fornecido
-            if (logger != null)
+            if (logger != null && logger.IsEnabled(LogLevel.Information))
             {
                 logger.LogInformation("--------------Request--------------");
                 logger.LogInformation("HttpRequestService: Request URL: {DeleteUrl}", deleteUrl);
                 logger.LogInformation("HttpRequestService: Request Headers: {Headers}", JsonConvert.SerializeObject(httpClient.DefaultRequestHeaders));
             }
 
-            // Envia a requisição GET
-            response = await httpClient.DeleteAsync(deleteUrl);
+            response = await httpClient.DeleteAsync(deleteUrl).ConfigureAwait(false);
 
-            // Log da resposta, se o logger for fornecido
-            if (logger != null)
+            if (logger != null && logger.IsEnabled(LogLevel.Information))
             {
-                string responseBody = await response.Content.ReadAsStringAsync();
+                string responseBody = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                 logger.LogInformation("--------------Response--------------");
                 logger.LogInformation("HttpRequestService: Response Status: {StatusCode}", response.StatusCode);
                 logger.LogInformation("HttpRequestService: Response Headers: {Headers}", JsonConvert.SerializeObject(response.Headers));

@@ -8,6 +8,7 @@ namespace EcosCLM.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<CaOrder> builder)
         {
+            ArgumentNullException.ThrowIfNull(builder);
             builder.ToTable("CaOrder");
 
             builder.HasKey(x => x.Id);

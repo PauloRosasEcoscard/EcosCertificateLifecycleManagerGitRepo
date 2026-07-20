@@ -21,7 +21,7 @@ namespace EcosCLM.Data.Services
             using var scope = _scopeFactory.CreateScope();
             var _repository = scope.ServiceProvider.GetRequiredService<IAuditLogsRepository>();
 
-            await Task.Delay(delay * 1000);
+            await Task.Delay(delay * 1000, ct).ConfigureAwait(false);
             var logs = _repository.GetAll().ToList();
 
             MemoryStream stream = new MemoryStream();
@@ -29,8 +29,7 @@ namespace EcosCLM.Data.Services
             ExcelPackage.License.SetNonCommercialOrganization("My Noncommercial organization");
             using (ExcelPackage package = new ExcelPackage(stream))
             {
-                // Adiciona uma nova planilha ao arquivo
-                ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("Planilha1");
+                ExcelWorksheet worksheet = package.Workbook!.Worksheets.Add("Planilha1");
 
                 int lineAux = 0;
 
@@ -48,7 +47,7 @@ namespace EcosCLM.Data.Services
 
                 package.Save();
             }
-            // Defina a posição do MemoryStream para o início
+
             stream.Position = 0;
 
             return new GeneratedFile

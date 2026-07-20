@@ -27,7 +27,7 @@ namespace EcosCLM.Web.Pages.Catalog.DeploymentEnvironment
         {
             try
             {
-                Item = await _repository.GetByIdAsync(id);
+                Item = await _repository.GetByIdAsync(id).ConfigureAwait(false);
 
                 if (Item == null)
                 {
@@ -57,7 +57,7 @@ namespace EcosCLM.Web.Pages.Catalog.DeploymentEnvironment
             {
                 try
                 {
-                    var existingEntity = await _repository.FindOneAsync(x => x.Id == Item.Id);
+                    var existingEntity = await _repository.FindOneAsync(x => x.Id == Item.Id).ConfigureAwait(false);
                     if (existingEntity == null || existingEntity.CustomerId != CustumerId)
                     {
                         TempData["warning"] = "Operation not allowed.";
@@ -69,7 +69,7 @@ namespace EcosCLM.Web.Pages.Catalog.DeploymentEnvironment
                     existingEntity.Description = Item.Description;
                     existingEntity.UpdatedAt = DateTime.UtcNow;
 
-                    await _repository.UpdAsync(existingEntity);
+                    await _repository.UpdAsync(existingEntity).ConfigureAwait(false);
 
                     TempData["success"] = "Deployment Environment updated successfully!";
                     return RedirectToPage("Index");

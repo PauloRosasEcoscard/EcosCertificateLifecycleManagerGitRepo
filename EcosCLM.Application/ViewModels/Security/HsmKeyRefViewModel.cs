@@ -18,7 +18,7 @@ namespace EcosCLM.Application.ViewModels.Security
         public string Algorithm { get; set; } = string.Empty;
         public int? KeySize { get; set; }
         public string? CurveName { get; set; }
-        public short Extractable { get; set; } = 0;
+        public short Extractable { get; set; }
         public string Status { get; set; } = "ACTIVE";
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
@@ -31,6 +31,7 @@ namespace EcosCLM.Application.ViewModels.Security
             return result.Errors.Select(error => new ValidationResult(error.ErrorMessage, [error.PropertyName]));
         }
     }
+
     public class HsmKeyRefProfile : Profile
     {
         public HsmKeyRefProfile()

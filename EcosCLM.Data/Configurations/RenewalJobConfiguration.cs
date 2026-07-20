@@ -8,6 +8,8 @@ namespace EcosCLM.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<RenewalJob> builder)
         {
+            ArgumentNullException.ThrowIfNull(builder);
+
             builder.ToTable("RenewalJob");
 
             builder.HasKey(x => x.Id);

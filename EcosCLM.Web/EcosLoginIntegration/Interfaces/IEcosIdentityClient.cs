@@ -5,15 +5,15 @@ namespace EcosCLM.Web.EcosLoginIntegration.Interfaces
     public interface IEcosIdentityClient
     {
         // AuthController
-        Task<string?> LoginAsync(LoginViewModel model);
+        public Task<string?> LoginAsync(LoginViewModel model);
 
         // PolicySystemUserController
-        Task<UserIntegrationDto?> GetUserByEmailAsync(string email);
+        public Task<UserIntegrationDto?> GetUserByEmailAsync(string email);
 
         // AzureAuthConfigController
-        Task<AuthFlowConfigViewModel?> GetAuthConfigAsync(Guid customerId);
+        public Task<AuthFlowConfigViewModel?> GetAuthConfigAsync(Guid customerId);
 
         // CustomerController
-        Task<CustomerIntegrationDto?> GetCustomerByIdAsync(Guid customerId);
+        public Task<CustomerIntegrationDto?> GetCustomerByIdAsync(Guid customerId);
     }
 }

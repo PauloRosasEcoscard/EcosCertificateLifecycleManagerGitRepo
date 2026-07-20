@@ -23,11 +23,11 @@ namespace EcosCLM.Application.Services
             while (!stoppingToken.IsCancellationRequested)
             {
                 var workItem =
-                    await _taskQueue.DequeueAsync(stoppingToken);
+                    await _taskQueue.DequeueAsync(stoppingToken).ConfigureAwait(false);
 
                 using var scope = _scopeFactory.CreateScope();
 
-                await workItem(stoppingToken);
+                await workItem(stoppingToken).ConfigureAwait(false);
             }
         }
     }

@@ -9,7 +9,7 @@ namespace EcosCLM.Web.Pages
 {
     public class DownloadModel : BasePageModel<AuditLogsViewModel>
     {
-        readonly IDownloadJobsRepository _repository;
+        private readonly IDownloadJobsRepository _repository;
 
         public DownloadModel(
             IEcosLoginService ecosLoginService,
@@ -22,24 +22,24 @@ namespace EcosCLM.Web.Pages
 
         public async Task<IActionResult> OnGet(Guid id)
         {
-            var job = await _repository.FindOneAsync(x => x.Id == id && x.User == Email);
+            var job = await _repository.FindOneAsync(x => x.Id == id && x.User == Email).ConfigureAwait(false);
             var referer = Request.Headers["Referer"].ToString();
             string location = (!string.IsNullOrEmpty(referer)) ? referer : "/Index";
 
-            if (job == null) 
+            if (job == null)
             {
                 TempData["warning"] = "File Not found!";
                 return RedirectToPage(location);
             }
 
-            if (job.Status != DownloadStatus.Ready) 
+            if (job.Status != DownloadStatus.Ready)
             {
-                if(job.Status == DownloadStatus.Error)
+                if (job.Status == DownloadStatus.Error)
                 {
                     TempData["error"] = "An error ocurred while generating your file, please try again!";
                 }
 
-                if(job.Status == DownloadStatus.Pending || job.Status == DownloadStatus.Processing)
+                if (job.Status == DownloadStatus.Pending || job.Status == DownloadStatus.Processing)
                 {
                     TempData["warning"] = "Your file is not ready yet!";
                 }

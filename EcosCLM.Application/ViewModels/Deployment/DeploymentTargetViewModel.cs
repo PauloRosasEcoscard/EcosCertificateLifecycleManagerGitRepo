@@ -17,7 +17,7 @@ namespace EcosCLM.Application.ViewModels.Deployment
         public string TargetType { get; set; } = string.Empty;
         public string? EndpointRef { get; set; }
         public string? SecretRef { get; set; }
-        public short AutomationEnabled { get; set; } = 0;
+        public short AutomationEnabled { get; set; }
         public string Status { get; set; } = "ACTIVE";
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
@@ -29,6 +29,7 @@ namespace EcosCLM.Application.ViewModels.Deployment
             return result.Errors.Select(error => new ValidationResult(error.ErrorMessage, [error.PropertyName]));
         }
     }
+
     public class DeploymentTargetProfile : Profile
     {
         public DeploymentTargetProfile()

@@ -39,7 +39,7 @@ namespace EcosCLM.Web.Pages.Company.Users
 
             Search = GetFilters();
 
-            await GetData();
+            await GetData().ConfigureAwait(false);
 
             AddGridConfig();
 
@@ -64,7 +64,7 @@ namespace EcosCLM.Web.Pages.Company.Users
         {
             try
             {
-                await GetItens();
+                await GetItens().ConfigureAwait(false);
 
                 if (Itens != null && Itens.Any())
                 {
@@ -78,17 +78,17 @@ namespace EcosCLM.Web.Pages.Company.Users
 
                     var enrichmentTasks = usersList.Select(async user =>
                     {
-                        string title = await ResolveProfileTitleAsync(user.Profile, user.TxEmail);
+                        string title = await ResolveProfileTitleAsync(user.Profile, user.TxEmail).ConfigureAwait(false);
                         lock (ProfileTitles)
                         {
                             ProfileTitles[user.IdUser] = title;
                         }
 
-                        var blockResult = await _ecosLoginService.GetUserIsBlocked(user);
+                        var blockResult = await _ecosLoginService.GetUserIsBlocked(user).ConfigureAwait(false);
                         user.IsBlocked = blockResult.IsSuccessful && blockResult.Data;
                     });
 
-                    await Task.WhenAll(enrichmentTasks);
+                    await Task.WhenAll(enrichmentTasks).ConfigureAwait(false);
 
                     Pager = new Pager(usersList.Count, PageCurrent, PageSize, MaxPages);
                     Itens = usersList.Skip((Pager.CurrentPage - 1) * Pager.PageSize).Take(Pager.PageSize).ToList();
@@ -108,7 +108,7 @@ namespace EcosCLM.Web.Pages.Company.Users
 
         private async Task GetItens()
         {
-            var result = await _ecosLoginService.GetPolicySystemCompanyUsers(CustumerId);
+            var result = await _ecosLoginService.GetPolicySystemCompanyUsers(CustumerId).ConfigureAwait(false);
 
             if (result.IsSuccessful && result.Data != null)
             {
@@ -126,7 +126,7 @@ namespace EcosCLM.Web.Pages.Company.Users
             if (profileType == 1) return "Admin";
             if (profileType == 2) return "Audit";
 
-            var response = await _ecosLoginService.GetProfile(email);
+            var response = await _ecosLoginService.GetProfile(email).ConfigureAwait(false);
             if (response.IsSuccessful && !string.IsNullOrEmpty(response.Data))
             {
                 return response.Data;
@@ -137,13 +137,13 @@ namespace EcosCLM.Web.Pages.Company.Users
 
         public async Task<IActionResult> OnPostReset2FAAsync(Guid id)
         {
-            var userResult = await _ecosLoginService.GetPolicySystemUserById(id);
+            var userResult = await _ecosLoginService.GetPolicySystemUserById(id).ConfigureAwait(false);
             if (userResult.IsSuccessful && userResult.Data != null)
             {
                 var user = userResult.Data;
                 user.Secret = "";
 
-                var updateResult = await _ecosLoginService.EditPolicySystemUserProfile(user.IdUser, user);
+                var updateResult = await _ecosLoginService.EditPolicySystemUserProfile(user.IdUser, user).ConfigureAwait(false);
                 TempData[updateResult.IsSuccessful ? "success" : "warning"] = updateResult.IsSuccessful ? "2FA reseted successfully" : "Oops, something happened, please try again!";
             }
 
@@ -152,13 +152,13 @@ namespace EcosCLM.Web.Pages.Company.Users
 
         public async Task<IActionResult> OnPostDisable2FAAsync(Guid id)
         {
-            var userResult = await _ecosLoginService.GetPolicySystemUserById(id);
+            var userResult = await _ecosLoginService.GetPolicySystemUserById(id).ConfigureAwait(false);
             if (userResult.IsSuccessful && userResult.Data != null)
             {
                 var user = userResult.Data;
                 user.Auth2fa = false;
 
-                var updateResult = await _ecosLoginService.EditPolicySystemUserProfile(user.IdUser, user);
+                var updateResult = await _ecosLoginService.EditPolicySystemUserProfile(user.IdUser, user).ConfigureAwait(false);
                 TempData[updateResult.IsSuccessful ? "success" : "warning"] = updateResult.IsSuccessful ? "2FA Disabled successfully" : "Oops, something happened, please try again!";
             }
 
@@ -167,13 +167,13 @@ namespace EcosCLM.Web.Pages.Company.Users
 
         public async Task<IActionResult> OnPostUnlockUserAsync(Guid id)
         {
-            var userResult = await _ecosLoginService.GetPolicySystemUserById(id);
+            var userResult = await _ecosLoginService.GetPolicySystemUserById(id).ConfigureAwait(false);
             if (userResult.IsSuccessful && userResult.Data != null)
             {
                 var user = userResult.Data;
                 user.FailedAccessAttempts = 0;
 
-                var updateResult = await _ecosLoginService.EditPolicySystemUserProfile(user.IdUser, user);
+                var updateResult = await _ecosLoginService.EditPolicySystemUserProfile(user.IdUser, user).ConfigureAwait(false);
                 TempData[updateResult.IsSuccessful ? "success" : "warning"] = updateResult.IsSuccessful ? "User unlocked successfully" : "Oops, something happened, please try again!";
             }
 
@@ -182,13 +182,13 @@ namespace EcosCLM.Web.Pages.Company.Users
 
         public async Task<IActionResult> OnPostEnable2FAAsync(Guid id)
         {
-            var userResult = await _ecosLoginService.GetPolicySystemUserById(id);
+            var userResult = await _ecosLoginService.GetPolicySystemUserById(id).ConfigureAwait(false);
             if (userResult.IsSuccessful && userResult.Data != null)
             {
                 var user = userResult.Data;
                 user.Auth2fa = true;
 
-                var updateResult = await _ecosLoginService.EditPolicySystemUserProfile(user.IdUser, user);
+                var updateResult = await _ecosLoginService.EditPolicySystemUserProfile(user.IdUser, user).ConfigureAwait(false);
                 TempData[updateResult.IsSuccessful ? "success" : "warning"] = updateResult.IsSuccessful ? "2FA Enabled successfully" : "Oops, something happened, please try again!";
             }
 

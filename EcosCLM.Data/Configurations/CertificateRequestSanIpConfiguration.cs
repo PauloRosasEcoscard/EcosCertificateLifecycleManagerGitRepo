@@ -8,6 +8,7 @@ namespace EcosCLM.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<CertificateRequestSanIp> builder)
         {
+            ArgumentNullException.ThrowIfNull(builder);
             builder.ToTable("CertificateRequestSanIp");
 
             builder.HasKey(x => x.Id);

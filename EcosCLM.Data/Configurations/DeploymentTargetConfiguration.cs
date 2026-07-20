@@ -8,6 +8,7 @@ namespace EcosCLM.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<DeploymentTarget> builder)
         {
+            ArgumentNullException.ThrowIfNull(builder);
             builder.ToTable("DeploymentTarget");
 
             builder.HasKey(x => x.Id);
@@ -23,7 +24,6 @@ namespace EcosCLM.Data.Configurations
             builder.Property(x => x.Status).IsRequired().HasMaxLength(50).HasDefaultValue("ACTIVE");
             builder.Property(x => x.CreatedAt).IsRequired();
             builder.Property(x => x.UpdatedAt).IsRequired();
-
         }
     }
 }

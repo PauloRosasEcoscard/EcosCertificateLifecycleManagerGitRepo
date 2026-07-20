@@ -32,7 +32,7 @@ namespace EcosCLM.Web.Infrastructure.Middlewares
                 }
             }
 
-            await _next(context);
+            await _next(context).ConfigureAwait(false);
         }
     }
 }

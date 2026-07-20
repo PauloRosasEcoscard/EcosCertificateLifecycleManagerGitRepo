@@ -44,7 +44,7 @@ namespace EcosCLM.Web.Infrastructure.TagHelpers
             output.TagName = "div";
             output.Attributes.SetAttribute("class", "ecos-grid-wrapper");
 
-            var childContent = await output.GetChildContentAsync();
+            var childContent = await output.GetChildContentAsync().ConfigureAwait(false);
             var completeContent = childContent.GetContent();
 
             var searchAppendHtml = string.Empty;

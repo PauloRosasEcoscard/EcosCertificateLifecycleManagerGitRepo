@@ -2,8 +2,8 @@
 {
     /// <summary>
     /// Define a configuração de uma Autoridade Certificadora (CA) externa.
-    /// Esta entidade armazena os parâmetros necessários para que o Ecos CLM interaja 
-    /// com provedores de certificados (como Let's Encrypt, DigiCert, Entrust, etc.) 
+    /// Esta entidade armazena os parâmetros necessários para que o Ecos CLM interaja
+    /// com provedores de certificados (como Let's Encrypt, DigiCert, Entrust, etc.)
     /// para solicitar, validar e emitir certificados.
     /// </summary>
     public class CertificateAuthority
@@ -27,7 +27,7 @@
         public string? AccountRef { get; set; }
 
         /// <summary>Flag que indica se a autoridade suporta o protocolo ACME (1 = Sim, 0 = Não).</summary>
-        public short SupportsAcme { get; set; } = 0;
+        public short SupportsAcme { get; set; }
 
         /// <summary>Status atual da configuração (ex: 'ACTIVE', 'MAINTENANCE', 'DISABLED').</summary>
         public string Status { get; set; } = "ACTIVE";

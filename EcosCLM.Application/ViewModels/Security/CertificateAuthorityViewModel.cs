@@ -16,7 +16,7 @@ namespace EcosCLM.Application.ViewModels.Security
         public string ProviderType { get; set; } = string.Empty;
         public string? BaseUrl { get; set; }
         public string? AccountRef { get; set; }
-        public short SupportsAcme { get; set; } = 0;
+        public short SupportsAcme { get; set; }
         public string Status { get; set; } = "ACTIVE";
         public string MetadataJson { get; set; } = "{}";
         public DateTime CreatedAt { get; set; }
@@ -29,6 +29,7 @@ namespace EcosCLM.Application.ViewModels.Security
             return result.Errors.Select(error => new ValidationResult(error.ErrorMessage, [error.PropertyName]));
         }
     }
+
     public class CertificateAuthorityProfile : Profile
     {
         public CertificateAuthorityProfile()

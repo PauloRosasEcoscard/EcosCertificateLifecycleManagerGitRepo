@@ -25,7 +25,7 @@ namespace EcosCLM.Web.Pages.Company.Users
 
         public async Task<IActionResult> OnGetAsync(Guid id)
         {
-            await GetData(id);
+            await GetData(id).ConfigureAwait(false);
 
             if (Item == null)
                 return RedirectToPage("Index");
@@ -49,7 +49,7 @@ namespace EcosCLM.Web.Pages.Company.Users
         {
             try
             {
-                var result = await _ecosLoginService.DeletePolicySystemUser(Item.IdUser);
+                var result = await _ecosLoginService.DeletePolicySystemUser(Item.IdUser).ConfigureAwait(false);
 
                 if (!result.IsSuccessful)
                 {
@@ -71,7 +71,7 @@ namespace EcosCLM.Web.Pages.Company.Users
         {
             try
             {
-                var result = await _ecosLoginService.GetPolicySystemUserById(id);
+                var result = await _ecosLoginService.GetPolicySystemUserById(id).ConfigureAwait(false);
 
                 if (result.IsSuccessful && result.Data != null)
                 {

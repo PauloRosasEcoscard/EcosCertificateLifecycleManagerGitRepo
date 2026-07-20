@@ -11,9 +11,12 @@ namespace EcosCLM.Application.Extensions.Integration
     {
         public static async Task<EventOutboxViewModel> GetByIdAsync(this IEventOutboxRepository repository, Guid id)
         {
+            ArgumentNullException.ThrowIfNull(repository);
+
             var entity = await repository.GetAll()
                 .Where(x => x.Id == id)
-                .SingleOrDefaultAsync();
+                .SingleOrDefaultAsync()
+                .ConfigureAwait(false);
 
             if (entity == null)
                 throw new NotFoundException(nameof(EventOutbox), id);
@@ -21,8 +24,10 @@ namespace EcosCLM.Application.Extensions.Integration
             return repository.ToViewModel(entity);
         }
 
-        public static async Task<List<EventOutboxViewModel>> GetAllWithPageAsync(this IEventOutboxRepository repository, int page = 0, int offset = 0, string filter = null, string oderBy = null, string orderDirection = null, Guid? customer = null)
+        public static async Task<List<EventOutboxViewModel>> GetAllWithPageAsync(this IEventOutboxRepository repository, int page = 0, int offset = 0, string? filter = null, string? oderBy = null, string? orderDirection = null, Guid? customer = null)
         {
+            ArgumentNullException.ThrowIfNull(repository);
+
             var query = repository.GetAll();
 
             if (!string.IsNullOrEmpty(oderBy))
@@ -32,6 +37,7 @@ namespace EcosCLM.Application.Extensions.Integration
                     case "type":
                         query = orderDirection == "desc" ? query.OrderByDescending(i => i.EventType) : query.OrderBy(i => i.EventType);
                         break;
+
                     default:
                         query = query.OrderByDescending(x => x.CreatedAt);
                         break;
@@ -52,7 +58,7 @@ namespace EcosCLM.Application.Extensions.Integration
                         query = query.Where(x => x.Status == search.Status);
 
                     if (!string.IsNullOrEmpty(search.EventType))
-                        query = query.Where(x => x.EventType.Contains(search.EventType));
+                        query = query.Where(x => x.EventType!.Contains(search.EventType));
                 }
             }
 
@@ -62,13 +68,16 @@ namespace EcosCLM.Application.Extensions.Integration
             if (page > 0)
                 query = query.Take(page);
 
-            var list = await query.ToListAsync();
+            var list = await query.ToListAsync().ConfigureAwait(false);
             return repository.ToListViewModel(list);
         }
 
         public static async Task<EventOutboxViewModel> CreateAsync(this IEventOutboxRepository repository, EventOutbox entity)
         {
-            var query = await repository.AddAsync(entity);
+            ArgumentNullException.ThrowIfNull(repository);
+            ArgumentNullException.ThrowIfNull(entity);
+
+            var query = await repository.AddAsync(entity).ConfigureAwait(false);
             return repository.ToViewModel(query);
         }
     }

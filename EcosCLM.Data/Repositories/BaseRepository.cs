@@ -25,6 +25,8 @@ namespace EcosCLM.Data.Repositories
 
         public IQueryable<T> IncludingAll(List<Expression<Func<T, object>>> includeProperties)
         {
+            ArgumentNullException.ThrowIfNull(includeProperties);
+
             IQueryable<T> query = GetAll(true);
             foreach (var includeProperty in includeProperties)
                 query = query.Include(includeProperty);
@@ -38,12 +40,12 @@ namespace EcosCLM.Data.Repositories
 
         public async Task<T?> FindOneAsync(Expression<Func<T, bool>> predicate)
         {
-            return await _dbSet.AsNoTracking().FirstOrDefaultAsync(predicate);
+            return await _dbSet.AsNoTracking().FirstOrDefaultAsync(predicate).ConfigureAwait(false);
         }
 
         public async Task<bool> ExistsAsync(Expression<Func<T, bool>> predicate)
         {
-            return await _dbSet.AnyAsync(predicate);
+            return await _dbSet.AnyAsync(predicate).ConfigureAwait(false);
         }
 
         public IQueryable<T> GetAll(bool noTracking = true)
@@ -53,8 +55,8 @@ namespace EcosCLM.Data.Repositories
 
         public async Task<T> AddAsync(T entity)
         {
-            await _dbSet.AddAsync(entity);
-            await _context.SaveChangesAsync();
+            await _dbSet.AddAsync(entity).ConfigureAwait(false);
+            await _context.SaveChangesAsync().ConfigureAwait(false);
             return entity;
         }
 
@@ -62,7 +64,7 @@ namespace EcosCLM.Data.Repositories
         {
             _context.ChangeTracker.Clear();
             _dbSet.Update(entity);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync().ConfigureAwait(false);
             return entity;
         }
 
@@ -70,23 +72,27 @@ namespace EcosCLM.Data.Repositories
         {
             _context.ChangeTracker.Clear();
             _dbSet.Remove(entity);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync().ConfigureAwait(false);
         }
 
-        public async Task DelManyAsync(List<T> entities)
+        public async Task DelManyAsync(List<T> entity)
         {
-            if (entities == null || !entities.Any())
+            if (entity == null || entity.Count == 0)
                 return;
 
             _context.ChangeTracker.Clear();
-            _dbSet.RemoveRange(entities);
-            await _context.SaveChangesAsync();
+            _dbSet.RemoveRange(entity);
+            await _context.SaveChangesAsync().ConfigureAwait(false);
         }
 
         public TEntity ToViewModel(T entity) => _mapper.Map<TEntity>(entity);
+
         public List<TEntity> ToListViewModel(List<T> entity) => _mapper.Map<List<TEntity>>(entity);
+
         public T ToEntity(TEntity viewModel) => _mapper.Map<T>(viewModel);
+
         public List<T> ToListEntity(List<TEntity> viewModel) => _mapper.Map<List<T>>(viewModel);
+
         public IMapper GetMap() => _mapper;
     }
 }

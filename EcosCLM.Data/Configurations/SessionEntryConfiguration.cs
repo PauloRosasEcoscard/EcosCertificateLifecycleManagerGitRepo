@@ -4,10 +4,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace EcosCLM.Data.Configurations
 {
-    class SessionEntryConfiguration : IEntityTypeConfiguration<SessionEntry>
+    public class SessionEntryConfiguration : IEntityTypeConfiguration<SessionEntry>
     {
         public void Configure(EntityTypeBuilder<SessionEntry> builder)
         {
+            ArgumentNullException.ThrowIfNull(builder);
             builder.ToTable("SessionEntry");
 
             builder.HasKey(x => x.Id);

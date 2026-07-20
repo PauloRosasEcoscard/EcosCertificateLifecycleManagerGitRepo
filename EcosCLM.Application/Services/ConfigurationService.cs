@@ -32,7 +32,7 @@ namespace EcosCLM.Application.Services
             if (Guid.TryParse(customerName, out Guid customerGuid))
             {
                 // Adicionado o await para a nova extensão assíncrona
-                policySettings = await _policySettingsRepository.GetByIdCustomerAsync(customerGuid);
+                policySettings = await _policySettingsRepository.GetByIdCustomerAsync(customerGuid).ConfigureAwait(false);
             }
 
             if (policySettings != null)

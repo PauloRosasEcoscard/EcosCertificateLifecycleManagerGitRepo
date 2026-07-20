@@ -10,10 +10,10 @@ namespace EcosCLM.Web.Pages.Demos
     public class DownloadsModel : BasePageModel<AuditLogs>
     {
 
-        readonly IDownloadManager _downloadManager;
-        readonly FileGenerator _fileGenerator;
+        private readonly IDownloadManager _downloadManager;
+        private readonly FileGenerator _fileGenerator;
         [BindProperty]
-        public int delay {  get; set; }
+        public int delay { get; set; }
 
         public DownloadsModel(
             IEcosLoginService ecosLoginService,
@@ -27,9 +27,9 @@ namespace EcosCLM.Web.Pages.Demos
         }
 
         public async Task<IActionResult> OnPostNormalDownload()
-        {   
-            var stream = await _fileGenerator.GenerateFile(delay, new CancellationToken());
-            
+        {
+            var stream = await _fileGenerator.GenerateFile(delay, new CancellationToken()).ConfigureAwait(false);
+
             return File(stream.Content, stream.ContentType, stream.FileName);
         }
 
@@ -37,8 +37,8 @@ namespace EcosCLM.Web.Pages.Demos
         {
             Console.WriteLine(">>> Processo iniciado");
             await _downloadManager.EnqueueAsync(Email, ct =>
-                _fileGenerator.GenerateFile(delay, ct));
-            
+                _fileGenerator.GenerateFile(delay, ct)).ConfigureAwait(false);
+
             return Page();
         }
     }

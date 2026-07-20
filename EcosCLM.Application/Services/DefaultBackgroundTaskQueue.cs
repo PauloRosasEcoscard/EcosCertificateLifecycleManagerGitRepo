@@ -26,14 +26,14 @@ namespace EcosCLM.Application.Services
         {
             ArgumentNullException.ThrowIfNull(workItem);
 
-            await _queue.Writer.WriteAsync(workItem);
+            await _queue.Writer.WriteAsync(workItem).ConfigureAwait(false);
         }
 
         public async ValueTask<Func<CancellationToken, ValueTask>> DequeueAsync(
             CancellationToken cancellationToken)
         {
             Func<CancellationToken, ValueTask>? workItem =
-                await _queue.Reader.ReadAsync(cancellationToken);
+                await _queue.Reader.ReadAsync(cancellationToken).ConfigureAwait(false);
 
             return workItem;
         }

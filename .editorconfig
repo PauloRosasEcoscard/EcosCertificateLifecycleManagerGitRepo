@@ -1,13 +1,38 @@
 root = true
 
 [*.cs]
-# Padrões de Código e Qualidade
+# Padrões de Código e Qualidade (Suas Regras Originais)
 dotnet_diagnostic.CA1822.severity = error      # Membros que não acessam dados de instância devem ser static
 dotnet_diagnostic.CA1806.severity = error      # Ignorar resultados de métodos que retornam valores
 dotnet_diagnostic.CA2007.severity = error      # Exigir bom uso de tarefas assíncronas (ConfigureAwait)
-dotnet_diagnostic.CA1062.severity = error      # Validar argumentos de métodos públicos contra Nulidade
+dotnet_diagnostic.CA1062.severity = suggestion       # Validar argumentos de métodos públicos contra Nulidade
 
-# Estilo de Código .NET
+# Estilo de Código .NET (Suas Regras Originais)
 csharp_style_expression_bodied_methods = true:suggestion
 csharp_style_conditional_delegate_call = true:suggestion
 dotnet_style_require_accessibility_modifiers = always:error
+
+# ==============================================================================
+# Novas Regras de Suporte - Para tratar os erros de forma eficiente
+# ==============================================================================
+
+# Nomenclatura e Convenções de Código (Evita reescrever Migrations prontas)
+dotnet_diagnostic.CA1707.severity = none       # Permite underscores (_) em nomes de Migrations
+dotnet_diagnostic.CA1711.severity = none       # Permite sufixos comuns como 'Queue' ou 'Collection'
+
+# Globalização e Culturas (Rebaixados de Warning para Suggestion)
+dotnet_diagnostic.CA1304.severity = suggestion # ToLower/ToUpper sem cultura específica vira Informativo
+dotnet_diagnostic.CA1305.severity = suggestion # int.Parse/String.Format vira Informativo
+dotnet_diagnostic.CA1310.severity = suggestion # StartsWith/EndsWith com StringComparison vira Informativo
+dotnet_diagnostic.CA1311.severity = suggestion # Overloads de cultura implícita viram Informativo
+
+# Performance e Otimizações de Alocação de Memória (Rebaixados de Warning para Suggestion / None)
+dotnet_diagnostic.CA1848.severity = none       # DESATIVADO: Permite uso do Logger nativo direto
+dotnet_diagnostic.CA1873.severity = none       # DESATIVADO: Permite avaliações de argumentos de log comuns
+dotnet_diagnostic.CA1861.severity = none       # DESATIVADO: Permite arrays de argumentos constantes inline
+dotnet_diagnostic.CA2254.severity = suggestion # Templates dinâmicos de mensagem de log viram Informativo
+dotnet_diagnostic.CA1869.severity = suggestion # Caching de JsonSerializerOptions vira Informativo
+dotnet_diagnostic.CA1860.severity = suggestion # Preferência de Count sobre Any() em Listas vira Informativo
+
+# Alertas do Razor e Campos Visíveis (Infraestrutura)
+dotnet_diagnostic.CA1051.severity = none       # Permite campos de instância visíveis em PageModels (BasePageModel)

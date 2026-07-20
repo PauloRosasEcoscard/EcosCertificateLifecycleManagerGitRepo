@@ -8,6 +8,7 @@ namespace EcosCLM.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<CertificateDeployment> builder)
         {
+            ArgumentNullException.ThrowIfNull(builder);
             builder.ToTable("CertificateDeployment");
 
             builder.HasKey(x => x.Id);

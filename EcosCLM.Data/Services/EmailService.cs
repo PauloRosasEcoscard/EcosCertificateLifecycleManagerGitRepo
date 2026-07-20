@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+
 namespace EcosCLM.Data.Services
 {
     public class EmailService
@@ -13,7 +14,7 @@ namespace EcosCLM.Data.Services
 
         public async Task ApiSendAuditEmailAsync(string userEmail, string userIpAddress)
         {
-            string url = _configuration.GetSection("AppSettings:Clients:Login").Value;
+            string url = _configuration.GetSection("AppSettings:Clients:Login").Value ?? string.Empty;
             string uri = $"/auth/SendEmail";
 
             string emailBody = "<h1 style=\"color: #e63572; font-family: Arial;\">Ecos Cloud VHSM</h1>" +
@@ -28,8 +29,8 @@ namespace EcosCLM.Data.Services
                 Body = emailBody
             };
 
-            ILogger logger = null;
-            HttpResponseMessage response = await HttpRequestService.PostAsync(string.Concat(url, uri), body, logger);
+            ILogger? logger = null;
+            HttpResponseMessage response = await HttpRequestService.PostAsync(string.Concat(url, uri), body, logger).ConfigureAwait(false);
         }
     }
 }

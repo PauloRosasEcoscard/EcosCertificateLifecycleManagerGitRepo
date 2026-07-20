@@ -7,11 +7,10 @@ namespace EcosCLM.Application.ViewModels
     {
         public Guid Id { get; set; }
         public DateTime Timestamp { get; set; }
-        public string User { get; set; }
-        public string Message { get; set; }
-        public string Link { get; set; }
-        public string Icon { get; set; }
-
+        public string User { get; set; } = string.Empty;
+        public string Message { get; set; } = string.Empty;
+        public string Link { get; set; } = string.Empty;
+        public string Icon { get; set; } = string.Empty;
     }
 
     public class NotificationsProfile : Profile
