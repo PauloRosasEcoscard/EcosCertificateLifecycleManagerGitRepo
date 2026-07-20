@@ -48,17 +48,17 @@ namespace EcosCLM.Web.Pages.Authentication
             try
             {
                 _logger.LogInformation("Calling SignOutAsync for Cookie and OpenIdConnect schemes.");
-                await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-                await HttpContext.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme);
+                await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme).ConfigureAwait(false);
+                await HttpContext.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme).ConfigureAwait(false);
                 _logger.LogInformation("SignOutAsync calls completed.");
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
             }
 
             if (!string.IsNullOrEmpty(customerPreferenceValue))
-            {                
+            {
                 TempData["CustomerPreferenceAfterLogout"] = customerPreferenceValue;
                 _logger.LogInformation($"Customer preference '{customerPreferenceValue}' saved to TempData.");
             }

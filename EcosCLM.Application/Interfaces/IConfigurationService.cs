@@ -2,6 +2,6 @@
 {
     public interface IConfigurationService
     {
-        Task<int> GetSessionTimeoutMinutesAsync(string customerName);
+        public Task<int> GetSessionTimeoutMinutesAsync(string customerName);
     }
 }

@@ -14,7 +14,7 @@ namespace EcosCLM.Web.EcosLoginIntegration.Services
         private readonly ILogger<IEcosLoginService> _logger;
         private readonly IMapper _mapper;
 
-        public EcosLoginService(IConfiguration config, 
+        public EcosLoginService(IConfiguration config,
                                 ILogger<IEcosLoginService> logger,
                                 IMapper mapper)
         {
@@ -40,7 +40,7 @@ namespace EcosCLM.Web.EcosLoginIntegration.Services
                 RestClient client = new RestClient();
                 RestRequest request = new RestRequest(baseSiteUrl).AddJsonBody(login);
 
-                var response = await client.PostAsync(request);
+                var response = await client.PostAsync(request).ConfigureAwait(false);
 
                 if (!response.IsSuccessful)
                 {
@@ -71,7 +71,7 @@ namespace EcosCLM.Web.EcosLoginIntegration.Services
                 RestClient client = new RestClient();
                 RestRequest request = new RestRequest(baseSiteUrl).AddJsonBody(login);
 
-                var response = await client.PostAsync(request);
+                var response = await client.PostAsync(request).ConfigureAwait(false);
 
                 if (!response.IsSuccessful)
                 {
@@ -102,7 +102,7 @@ namespace EcosCLM.Web.EcosLoginIntegration.Services
                 RestClient client = new RestClient();
                 RestRequest request = new RestRequest(baseSiteUrl).AddJsonBody(login);
 
-                var response = await client.GetAsync(request);
+                var response = await client.GetAsync(request).ConfigureAwait(false);
 
                 if (!response.IsSuccessful)
                 {
@@ -128,7 +128,7 @@ namespace EcosCLM.Web.EcosLoginIntegration.Services
                 RestClient client = new RestClient();
                 RestRequest request = new RestRequest(baseSiteUrl).AddJsonBody(viewModel);
 
-                var response = await client.PostAsync(request);
+                var response = await client.PostAsync(request).ConfigureAwait(false);
 
                 if (!response.IsSuccessful)
                 {
@@ -154,7 +154,7 @@ namespace EcosCLM.Web.EcosLoginIntegration.Services
                 RestClient client = new RestClient();
                 RestRequest request = new RestRequest(baseSiteUrl).AddJsonBody(viewModel);
 
-                var response = await client.PostAsync(request);
+                var response = await client.PostAsync(request).ConfigureAwait(false);
 
                 if (!response.IsSuccessful)
                 {
@@ -180,7 +180,7 @@ namespace EcosCLM.Web.EcosLoginIntegration.Services
                 RestClient client = new RestClient();
                 RestRequest request = new RestRequest(baseSiteUrl).AddJsonBody(viewModel);
 
-                var response = await client.PostAsync(request);
+                var response = await client.PostAsync(request).ConfigureAwait(false);
 
                 if (!response.IsSuccessful)
                 {
@@ -207,7 +207,7 @@ namespace EcosCLM.Web.EcosLoginIntegration.Services
                 client.AddDefaultHeader("Authorization", $"Bearer {token}");
                 var request = new RestRequest().AddJsonBody(entity);
 
-                var response = await client.GetAsync(request);
+                var response = await client.GetAsync(request).ConfigureAwait(false);
 
                 if (!response.IsSuccessful)
                 {
@@ -234,7 +234,7 @@ namespace EcosCLM.Web.EcosLoginIntegration.Services
                 client.AddDefaultHeader("Authorization", $"Bearer {token}");
                 var request = new RestRequest().AddJsonBody(entity);
 
-                var response = await client.PostAsync(request);
+                var response = await client.PostAsync(request).ConfigureAwait(false);
 
                 if (!response.IsSuccessful)
                 {
@@ -262,7 +262,7 @@ namespace EcosCLM.Web.EcosLoginIntegration.Services
                 RestClient client = new RestClient();
                 RestRequest request = new RestRequest(baseSiteUrl);
 
-                var response = await client.GetAsync(request);
+                var response = await client.GetAsync(request).ConfigureAwait(false);
 
                 if (!response.IsSuccessful)
                 {
@@ -294,7 +294,7 @@ namespace EcosCLM.Web.EcosLoginIntegration.Services
                 RestClient client = new RestClient();
                 RestRequest request = new RestRequest(baseSiteUrl).AddJsonBody(login);
 
-                var response = await client.PostAsync(request);
+                var response = await client.PostAsync(request).ConfigureAwait(false);
 
                 if (!response.IsSuccessful)
                 {
@@ -320,7 +320,7 @@ namespace EcosCLM.Web.EcosLoginIntegration.Services
                 RestClient client = new RestClient();
                 RestRequest request = new RestRequest(baseSiteUrl);
 
-                var response = await client.GetAsync(request);
+                var response = await client.GetAsync(request).ConfigureAwait(false);
 
                 if (!response.IsSuccessful)
                 {
@@ -346,7 +346,7 @@ namespace EcosCLM.Web.EcosLoginIntegration.Services
                 RestClient client = new RestClient();
                 RestRequest request = new RestRequest(baseSiteUrl);
 
-                var response = await client.GetAsync(request);
+                var response = await client.GetAsync(request).ConfigureAwait(false);
 
                 if (!response.IsSuccessful)
                 {
@@ -372,7 +372,7 @@ namespace EcosCLM.Web.EcosLoginIntegration.Services
                 RestClient client = new RestClient();
                 RestRequest request = new RestRequest(baseSiteUrl);
 
-                var response = await client.GetAsync(request);
+                var response = await client.GetAsync(request).ConfigureAwait(false);
 
                 if (!response.IsSuccessful || string.IsNullOrEmpty(response.Content))
                 {
@@ -399,7 +399,7 @@ namespace EcosCLM.Web.EcosLoginIntegration.Services
                 RestClient client = new RestClient();
                 RestRequest request = new RestRequest(baseSiteUrl);
 
-                var response = await client.GetAsync(request);
+                var response = await client.GetAsync(request).ConfigureAwait(false);
 
                 if (!response.IsSuccessful || string.IsNullOrEmpty(response.Content))
                 {
@@ -439,7 +439,7 @@ namespace EcosCLM.Web.EcosLoginIntegration.Services
                 RestClient client = new RestClient();
                 RestRequest request = new RestRequest(baseSiteUrl);
 
-                var response = await client.GetAsync(request);
+                var response = await client.GetAsync(request).ConfigureAwait(false);
 
                 if (!response.IsSuccessful)
                 {
@@ -465,7 +465,7 @@ namespace EcosCLM.Web.EcosLoginIntegration.Services
                 RestClient client = new RestClient();
                 RestRequest request = new RestRequest(baseSiteUrl);
 
-                var response = await client.GetAsync(request);
+                var response = await client.GetAsync(request).ConfigureAwait(false);
 
                 if (!response.IsSuccessful)
                 {
@@ -491,7 +491,7 @@ namespace EcosCLM.Web.EcosLoginIntegration.Services
                 RestClient client = new RestClient();
                 RestRequest request = new RestRequest(baseSiteUrl).AddJsonBody(JsonConvert.SerializeObject(token));
 
-                var response = await client.PostAsync(request);
+                var response = await client.PostAsync(request).ConfigureAwait(false);
 
                 if (!response.IsSuccessful || string.IsNullOrEmpty(response.Content))
                 {
@@ -518,7 +518,7 @@ namespace EcosCLM.Web.EcosLoginIntegration.Services
                 RestClient client = new RestClient();
                 RestRequest request = new RestRequest(baseSiteUrl);
 
-                var response = await client.GetAsync(request);
+                var response = await client.GetAsync(request).ConfigureAwait(false);
 
                 if (!response.IsSuccessful)
                 {
@@ -546,7 +546,7 @@ namespace EcosCLM.Web.EcosLoginIntegration.Services
                 RestClient client = new RestClient();
                 RestRequest request = new RestRequest(baseSiteUrl).AddJsonBody(payload);
 
-                var response = await client.PostAsync(request);
+                var response = await client.PostAsync(request).ConfigureAwait(false);
 
                 if (!response.IsSuccessful || string.IsNullOrEmpty(response.Content))
                 {
@@ -576,7 +576,7 @@ namespace EcosCLM.Web.EcosLoginIntegration.Services
                 RestClient client = new RestClient();
                 RestRequest request = new RestRequest(baseSiteUrl).AddJsonBody(payload);
 
-                var response = await client.PostAsync(request);
+                var response = await client.PostAsync(request).ConfigureAwait(false);
 
                 if (!response.IsSuccessful || string.IsNullOrEmpty(response.Content))
                 {
@@ -607,7 +607,7 @@ namespace EcosCLM.Web.EcosLoginIntegration.Services
                 request.Method = Method.Post;
                 request.AddJsonBody(model);
 
-                var response = await client.ExecuteAsync(request);
+                var response = await client.ExecuteAsync(request).ConfigureAwait(false);
 
                 if (!response.IsSuccessful || string.IsNullOrEmpty(response.Content))
                 {
@@ -634,7 +634,7 @@ namespace EcosCLM.Web.EcosLoginIntegration.Services
                 RestClient client = new RestClient();
                 RestRequest request = new RestRequest(baseSiteUrl).AddJsonBody(model);
 
-                var response = await client.PutAsync(request);
+                var response = await client.PutAsync(request).ConfigureAwait(false);
 
                 if (!response.IsSuccessful || string.IsNullOrEmpty(response.Content))
                 {
@@ -661,7 +661,7 @@ namespace EcosCLM.Web.EcosLoginIntegration.Services
                 RestClient client = new RestClient();
                 RestRequest request = new RestRequest(baseSiteUrl);
 
-                var response = await client.PutAsync(request);
+                var response = await client.PutAsync(request).ConfigureAwait(false);
 
                 if (!response.IsSuccessful || string.IsNullOrEmpty(response.Content))
                 {
@@ -688,7 +688,7 @@ namespace EcosCLM.Web.EcosLoginIntegration.Services
                 RestClient client = new RestClient();
                 RestRequest request = new RestRequest(baseSiteUrl);
 
-                var response = await client.DeleteAsync(request);
+                var response = await client.DeleteAsync(request).ConfigureAwait(false);
 
                 if (!response.IsSuccessful)
                 {
@@ -714,7 +714,7 @@ namespace EcosCLM.Web.EcosLoginIntegration.Services
                 RestClient client = new RestClient();
                 RestRequest request = new RestRequest(baseSiteUrl);
 
-                var response = await client.GetAsync(request);
+                var response = await client.GetAsync(request).ConfigureAwait(false);
 
                 if (!response.IsSuccessful || string.IsNullOrEmpty(response.Content))
                 {
@@ -741,7 +741,7 @@ namespace EcosCLM.Web.EcosLoginIntegration.Services
                 RestClient client = new RestClient();
                 RestRequest request = new RestRequest(baseSiteUrl);
 
-                var response = await client.GetAsync(request);
+                var response = await client.GetAsync(request).ConfigureAwait(false);
 
                 if (!response.IsSuccessful || string.IsNullOrEmpty(response.Content))
                 {
@@ -768,7 +768,7 @@ namespace EcosCLM.Web.EcosLoginIntegration.Services
                 RestClient client = new RestClient();
                 RestRequest request = new RestRequest(baseSiteUrl);
 
-                var response = await client.GetAsync(request);
+                var response = await client.GetAsync(request).ConfigureAwait(false);
 
                 if (!response.IsSuccessful || string.IsNullOrEmpty(response.Content))
                 {
@@ -795,7 +795,7 @@ namespace EcosCLM.Web.EcosLoginIntegration.Services
                 RestClient client = new RestClient();
                 RestRequest request = new RestRequest(baseSiteUrl);
 
-                var response = await client.GetAsync(request);
+                var response = await client.GetAsync(request).ConfigureAwait(false);
 
                 if (!response.IsSuccessful || string.IsNullOrEmpty(response.Content))
                 {
@@ -822,7 +822,7 @@ namespace EcosCLM.Web.EcosLoginIntegration.Services
                 RestClient client = new RestClient();
                 RestRequest request = new RestRequest(baseSiteUrl);
 
-                var response = await client.GetAsync(request);
+                var response = await client.GetAsync(request).ConfigureAwait(false);
 
                 if (!response.IsSuccessful)
                 {
@@ -848,7 +848,7 @@ namespace EcosCLM.Web.EcosLoginIntegration.Services
                 RestClient client = new RestClient();
                 RestRequest request = new RestRequest(baseSiteUrl);
 
-                var response = await client.GetAsync(request);
+                var response = await client.GetAsync(request).ConfigureAwait(false);
 
                 if (!response.IsSuccessful || string.IsNullOrEmpty(response.Content))
                 {
@@ -880,7 +880,7 @@ namespace EcosCLM.Web.EcosLoginIntegration.Services
                 RestClient client = new RestClient();
                 RestRequest request = new RestRequest(baseSiteUrl).AddJsonBody(model);
 
-                var response = await client.GetAsync(request);
+                var response = await client.GetAsync(request).ConfigureAwait(false);
 
                 if (!response.IsSuccessful || string.IsNullOrEmpty(response.Content))
                 {
@@ -907,7 +907,7 @@ namespace EcosCLM.Web.EcosLoginIntegration.Services
                 RestClient client = new RestClient();
                 RestRequest request = new RestRequest(baseSiteUrl).AddJsonBody(model);
 
-                var response = await client.PostAsync(request);
+                var response = await client.PostAsync(request).ConfigureAwait(false);
 
                 if (!response.IsSuccessful || string.IsNullOrEmpty(response.Content))
                 {
@@ -940,7 +940,7 @@ namespace EcosCLM.Web.EcosLoginIntegration.Services
                 RestClient client = new RestClient();
                 RestRequest request = new RestRequest(baseSiteUrl);
 
-                var response = await client.GetAsync(request);
+                var response = await client.GetAsync(request).ConfigureAwait(false);
 
                 if (!response.IsSuccessful || string.IsNullOrEmpty(response.Content))
                 {
@@ -967,7 +967,7 @@ namespace EcosCLM.Web.EcosLoginIntegration.Services
                 RestClient client = new RestClient();
                 RestRequest request = new RestRequest(baseSiteUrl);
 
-                var response = await client.GetAsync(request);
+                var response = await client.GetAsync(request).ConfigureAwait(false);
 
                 if (!response.IsSuccessful || string.IsNullOrEmpty(response.Content))
                 {
@@ -994,7 +994,7 @@ namespace EcosCLM.Web.EcosLoginIntegration.Services
                 RestClient client = new RestClient();
                 RestRequest request = new RestRequest(baseSiteUrl);
 
-                var response = await client.GetAsync(request);
+                var response = await client.GetAsync(request).ConfigureAwait(false);
 
                 if (!response.IsSuccessful || string.IsNullOrEmpty(response.Content))
                 {
@@ -1021,7 +1021,7 @@ namespace EcosCLM.Web.EcosLoginIntegration.Services
                 RestClient client = new RestClient();
                 RestRequest request = new RestRequest(baseSiteUrl).AddJsonBody(model);
 
-                var response = await client.PostAsync(request);
+                var response = await client.PostAsync(request).ConfigureAwait(false);
 
                 if (!response.IsSuccessful || string.IsNullOrEmpty(response.Content))
                 {
@@ -1048,7 +1048,7 @@ namespace EcosCLM.Web.EcosLoginIntegration.Services
                 RestClient client = new RestClient();
                 RestRequest request = new RestRequest(baseSiteUrl).AddJsonBody(model);
 
-                var response = await client.PutAsync(request);
+                var response = await client.PutAsync(request).ConfigureAwait(false);
 
                 if (!response.IsSuccessful || string.IsNullOrEmpty(response.Content))
                 {
@@ -1075,7 +1075,7 @@ namespace EcosCLM.Web.EcosLoginIntegration.Services
                 RestClient client = new RestClient();
                 RestRequest request = new RestRequest(baseSiteUrl);
 
-                var response = await client.DeleteAsync(request);
+                var response = await client.DeleteAsync(request).ConfigureAwait(false);
 
                 if (!response.IsSuccessful)
                 {
@@ -1103,7 +1103,7 @@ namespace EcosCLM.Web.EcosLoginIntegration.Services
                 RestClient client = new RestClient();
                 RestRequest request = new RestRequest(baseSiteUrl).AddJsonBody(model);
 
-                var response = await client.PostAsync(request);
+                var response = await client.PostAsync(request).ConfigureAwait(false);
 
                 if (!response.IsSuccessful || string.IsNullOrEmpty(response.Content))
                 {
@@ -1130,7 +1130,7 @@ namespace EcosCLM.Web.EcosLoginIntegration.Services
                 RestClient client = new RestClient();
                 RestRequest request = new RestRequest(baseSiteUrl);
 
-                var response = await client.GetAsync(request);
+                var response = await client.GetAsync(request).ConfigureAwait(false);
 
                 if (!response.IsSuccessful || string.IsNullOrEmpty(response.Content))
                 {
@@ -1157,7 +1157,7 @@ namespace EcosCLM.Web.EcosLoginIntegration.Services
                 RestClient client = new RestClient();
                 RestRequest request = new RestRequest(baseSiteUrl).AddJsonBody(models);
 
-                var response = await client.PostAsync(request);
+                var response = await client.PostAsync(request).ConfigureAwait(false);
 
                 if (!response.IsSuccessful || string.IsNullOrEmpty(response.Content))
                 {
@@ -1184,7 +1184,7 @@ namespace EcosCLM.Web.EcosLoginIntegration.Services
                 RestClient client = new RestClient();
                 RestRequest request = new RestRequest(baseSiteUrl).AddJsonBody(models);
 
-                var response = await client.PutAsync(request);
+                var response = await client.PutAsync(request).ConfigureAwait(false);
 
                 if (!response.IsSuccessful)
                 {
@@ -1210,7 +1210,7 @@ namespace EcosCLM.Web.EcosLoginIntegration.Services
                 RestClient client = new RestClient();
                 RestRequest request = new RestRequest(baseSiteUrl).AddJsonBody(model);
 
-                var response = await client.PostAsync(request);
+                var response = await client.PostAsync(request).ConfigureAwait(false);
 
                 if (!response.IsSuccessful || string.IsNullOrEmpty(response.Content))
                 {
@@ -1237,7 +1237,7 @@ namespace EcosCLM.Web.EcosLoginIntegration.Services
                 RestClient client = new RestClient();
                 RestRequest request = new RestRequest(baseSiteUrl);
 
-                var response = await client.GetAsync(request);
+                var response = await client.GetAsync(request).ConfigureAwait(false);
 
                 if (!response.IsSuccessful || string.IsNullOrEmpty(response.Content))
                 {
@@ -1264,7 +1264,7 @@ namespace EcosCLM.Web.EcosLoginIntegration.Services
                 RestClient client = new RestClient();
                 RestRequest request = new RestRequest(baseSiteUrl).AddJsonBody(model);
 
-                var response = await client.PostAsync(request);
+                var response = await client.PostAsync(request).ConfigureAwait(false);
 
                 if (!response.IsSuccessful)
                 {
@@ -1290,7 +1290,7 @@ namespace EcosCLM.Web.EcosLoginIntegration.Services
                 RestClient client = new RestClient();
                 RestRequest request = new RestRequest(baseSiteUrl);
 
-                var response = await client.GetAsync(request);
+                var response = await client.GetAsync(request).ConfigureAwait(false);
 
                 if (!response.IsSuccessful || string.IsNullOrEmpty(response.Content))
                 {
@@ -1317,7 +1317,7 @@ namespace EcosCLM.Web.EcosLoginIntegration.Services
                 RestClient client = new RestClient();
                 RestRequest request = new RestRequest(baseSiteUrl);
 
-                var response = await client.GetAsync(request);
+                var response = await client.GetAsync(request).ConfigureAwait(false);
 
                 if (!response.IsSuccessful || string.IsNullOrEmpty(response.Content))
                 {
@@ -1344,7 +1344,7 @@ namespace EcosCLM.Web.EcosLoginIntegration.Services
                 RestClient client = new RestClient();
                 RestRequest request = new RestRequest(baseSiteUrl);
 
-                var response = await client.GetAsync(request);
+                var response = await client.GetAsync(request).ConfigureAwait(false);
 
                 if (!response.IsSuccessful || string.IsNullOrEmpty(response.Content))
                 {
@@ -1371,7 +1371,7 @@ namespace EcosCLM.Web.EcosLoginIntegration.Services
                 RestClient client = new RestClient();
                 RestRequest request = new RestRequest(baseSiteUrl).AddJsonBody(model);
 
-                var response = await client.PostAsync(request);
+                var response = await client.PostAsync(request).ConfigureAwait(false);
 
                 if (!response.IsSuccessful)
                 {
@@ -1397,7 +1397,7 @@ namespace EcosCLM.Web.EcosLoginIntegration.Services
                 RestClient client = new RestClient();
                 RestRequest request = new RestRequest(baseSiteUrl).AddJsonBody(model);
 
-                var response = await client.PostAsync(request);
+                var response = await client.PostAsync(request).ConfigureAwait(false);
 
                 if (!response.IsSuccessful)
                 {
@@ -1423,7 +1423,7 @@ namespace EcosCLM.Web.EcosLoginIntegration.Services
                 RestClient client = new RestClient();
                 RestRequest request = new RestRequest(baseSiteUrl).AddJsonBody(model);
 
-                var response = await client.PostAsync(request);
+                var response = await client.PostAsync(request).ConfigureAwait(false);
 
                 if (!response.IsSuccessful)
                 {
@@ -1449,7 +1449,7 @@ namespace EcosCLM.Web.EcosLoginIntegration.Services
                 RestClient client = new RestClient();
                 RestRequest request = new RestRequest(baseSiteUrl);
 
-                var response = await client.DeleteAsync(request);
+                var response = await client.DeleteAsync(request).ConfigureAwait(false);
 
                 if (!response.IsSuccessful)
                 {
@@ -1475,7 +1475,7 @@ namespace EcosCLM.Web.EcosLoginIntegration.Services
                 RestClient client = new RestClient();
                 RestRequest request = new RestRequest(baseSiteUrl).AddJsonBody(model);
 
-                var response = await client.PostAsync(request);
+                var response = await client.PostAsync(request).ConfigureAwait(false);
 
                 if (!response.IsSuccessful || string.IsNullOrEmpty(response.Content))
                 {
@@ -1504,7 +1504,7 @@ namespace EcosCLM.Web.EcosLoginIntegration.Services
                 RestClient client = new RestClient();
                 RestRequest request = new RestRequest(baseSiteUrl);
 
-                var response = await client.GetAsync(request);
+                var response = await client.GetAsync(request).ConfigureAwait(false);
 
                 if (!response.IsSuccessful || string.IsNullOrEmpty(response.Content))
                 {
@@ -1534,7 +1534,7 @@ namespace EcosCLM.Web.EcosLoginIntegration.Services
                 RestClient client = new RestClient();
                 RestRequest request = new RestRequest(baseSiteUrl);
 
-                var response = await client.GetAsync(request);
+                var response = await client.GetAsync(request).ConfigureAwait(false);
 
                 if (!response.IsSuccessful || string.IsNullOrEmpty(response.Content))
                 {
@@ -1562,7 +1562,7 @@ namespace EcosCLM.Web.EcosLoginIntegration.Services
                 RestRequest request = new RestRequest(baseSiteUrl);
 
                 request.Method = Method.Get;
-                var response = await client.ExecuteAsync(request);
+                var response = await client.ExecuteAsync(request).ConfigureAwait(false);
 
                 if (!response.IsSuccessful || string.IsNullOrEmpty(response.Content))
                 {
@@ -1597,7 +1597,7 @@ namespace EcosCLM.Web.EcosLoginIntegration.Services
                 RestClient client = new RestClient();
                 RestRequest request = new RestRequest(baseSiteUrl).AddJsonBody(model);
 
-                var response = await client.PostAsync(request);
+                var response = await client.PostAsync(request).ConfigureAwait(false);
 
                 if (!response.IsSuccessful || string.IsNullOrEmpty(response.Content))
                 {
@@ -1624,7 +1624,7 @@ namespace EcosCLM.Web.EcosLoginIntegration.Services
                 RestClient client = new RestClient();
                 RestRequest request = new RestRequest(baseSiteUrl).AddJsonBody(model);
 
-                var response = await client.PutAsync(request);
+                var response = await client.PutAsync(request).ConfigureAwait(false);
 
                 if (!response.IsSuccessful || string.IsNullOrEmpty(response.Content))
                 {
@@ -1651,7 +1651,7 @@ namespace EcosCLM.Web.EcosLoginIntegration.Services
                 RestClient client = new RestClient();
                 RestRequest request = new RestRequest(baseSiteUrl);
 
-                var response = await client.DeleteAsync(request);
+                var response = await client.DeleteAsync(request).ConfigureAwait(false);
 
                 if (!response.IsSuccessful)
                 {

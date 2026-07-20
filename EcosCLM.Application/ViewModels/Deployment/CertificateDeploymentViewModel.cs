@@ -8,7 +8,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace EcosCLM.Application.ViewModels.Deployment
 {
-    public class CertificateDeploymentViewModel : IValidatableObject 
+    public class CertificateDeploymentViewModel : IValidatableObject
     {
         public Guid Id { get; set; }
         public Guid CustomerId { get; set; }

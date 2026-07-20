@@ -11,9 +11,12 @@ namespace EcosCLM.Application.Extensions.Certificates
     {
         public static async Task<CertificateRequestSanDnsViewModel> GetByIdAsync(this ICertificateRequestSanDnsRepository repository, Guid id)
         {
+            ArgumentNullException.ThrowIfNull(repository);
+
             var entity = await repository.GetAll()
                 .Where(x => x.Id == id)
-                .SingleOrDefaultAsync();
+                .SingleOrDefaultAsync()
+                .ConfigureAwait(false);
 
             if (entity == null)
                 throw new NotFoundException(nameof(CertificateRequestSanDns), id);
@@ -21,8 +24,10 @@ namespace EcosCLM.Application.Extensions.Certificates
             return repository.ToViewModel(entity);
         }
 
-        public static async Task<List<CertificateRequestSanDnsViewModel>> GetAllWithPageAsync(this ICertificateRequestSanDnsRepository repository, int page = 0, int offset = 0, string filter = null, string oderBy = null, string orderDirection = null, Guid? customer = null)
+        public static async Task<List<CertificateRequestSanDnsViewModel>> GetAllWithPageAsync(this ICertificateRequestSanDnsRepository repository, int page = 0, int offset = 0, string? filter = null, string? oderBy = null, string? orderDirection = null, Guid? customer = null)
         {
+            ArgumentNullException.ThrowIfNull(repository);
+
             var query = repository.GetAll();
 
             if (customer.HasValue)
@@ -37,7 +42,7 @@ namespace EcosCLM.Application.Extensions.Certificates
                 if (search != null)
                 {
                     if (!string.IsNullOrEmpty(search.DnsName))
-                        query = query.Where(x => x.DnsName.Contains(search.DnsName));
+                        query = query.Where(x => x.DnsName!.Contains(search.DnsName));
 
                     if (search.RequestId != Guid.Empty)
                         query = query.Where(x => x.RequestId == search.RequestId);
@@ -50,13 +55,16 @@ namespace EcosCLM.Application.Extensions.Certificates
             if (page > 0)
                 query = query.Take(page);
 
-            var list = await query.ToListAsync();
+            var list = await query.ToListAsync().ConfigureAwait(false);
             return repository.ToListViewModel(list);
         }
 
         public static async Task<CertificateRequestSanDnsViewModel> CreateAsync(this ICertificateRequestSanDnsRepository repository, CertificateRequestSanDns entity)
         {
-            var query = await repository.AddAsync(entity);
+            ArgumentNullException.ThrowIfNull(repository);
+            ArgumentNullException.ThrowIfNull(entity);
+
+            var query = await repository.AddAsync(entity).ConfigureAwait(false);
             return repository.ToViewModel(query);
         }
     }

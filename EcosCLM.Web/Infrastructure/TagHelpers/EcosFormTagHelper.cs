@@ -37,7 +37,7 @@ namespace EcosCLM.Web.Infrastructure.TagHelpers
             output.TagName = "div";
             output.Attributes.SetAttribute("class", "ecos-card p-0");
 
-            var childContent = await output.GetChildContentAsync();
+            var childContent = await output.GetChildContentAsync().ConfigureAwait(false);
 
             var htmlContent = new StringBuilder();
 

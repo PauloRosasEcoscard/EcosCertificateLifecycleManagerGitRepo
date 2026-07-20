@@ -19,13 +19,13 @@ public class DynamicSessionTimeoutMiddleware
     {
         if (context.Request.Path.StartsWithSegments("/api") || context.Request.Path.StartsWithSegments("/lib"))
         {
-            await _next(context);
+            await _next(context).ConfigureAwait(false);
             return;
         }
 
         if (!context.Features.Get<Microsoft.AspNetCore.Http.Features.ISessionFeature>()?.Session.IsAvailable ?? true)
         {
-            await _next(context);
+            await _next(context).ConfigureAwait(false);
             return;
         }
 
@@ -33,11 +33,11 @@ public class DynamicSessionTimeoutMiddleware
 
         if (string.IsNullOrEmpty(customerName))
         {
-            await _next(context);
+            await _next(context).ConfigureAwait(false);
             return;
         }
 
-        var timeoutMinutes = await configurationService.GetSessionTimeoutMinutesAsync(customerName);
+        var timeoutMinutes = await configurationService.GetSessionTimeoutMinutesAsync(customerName).ConfigureAwait(false);
         var timeout = TimeSpan.FromMinutes(timeoutMinutes);
         var lastActivityString = context.Session.GetString("LastActivity");
 
@@ -52,7 +52,7 @@ public class DynamicSessionTimeoutMiddleware
             if ((DateTimeOffset.UtcNow - lastActivity) > timeout)
             {
                 context.Session.Clear();
-                await context.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+                await context.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme).ConfigureAwait(false);
                 context.Response.Redirect("/Authentication/Login?expired=true");
                 return;
             }
@@ -60,6 +60,6 @@ public class DynamicSessionTimeoutMiddleware
             context.Session.SetString("LastActivity", DateTimeOffset.UtcNow.ToString());
         }
 
-        await _next(context);
+        await _next(context).ConfigureAwait(false);
     }
 }

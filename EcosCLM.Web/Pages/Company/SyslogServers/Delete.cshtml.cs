@@ -25,7 +25,7 @@ namespace Ecos_Cloud_Vhsm_Dashboard.Pages.Company.SyslogServers
         {
             try
             {
-                Item = await _repository.GetByIdAsync(id, CustumerId);
+                Item = await _repository.GetByIdAsync(id, CustumerId).ConfigureAwait(false);
             }
             catch (NotFoundException)
             {
@@ -39,7 +39,7 @@ namespace Ecos_Cloud_Vhsm_Dashboard.Pages.Company.SyslogServers
         {
             try
             {
-                await _repository.DeleteAsync(Item.Id);
+                await _repository.DeleteAsync(Item.Id).ConfigureAwait(false);
                 return RedirectToPage("Index");
             }
             catch

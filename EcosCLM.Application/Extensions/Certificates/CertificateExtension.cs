@@ -11,9 +11,12 @@ namespace EcosCLM.Application.Extensions.Certificates
     {
         public static async Task<CertificateViewModel> GetByIdAsync(this ICertificateRepository repository, Guid id)
         {
+            ArgumentNullException.ThrowIfNull(repository);
+
             var entity = await repository.GetAll()
                 .Where(x => x.Id == id)
-                .SingleOrDefaultAsync();
+                .SingleOrDefaultAsync()
+                .ConfigureAwait(false);
 
             if (entity == null)
                 throw new NotFoundException(nameof(Certificate), id);
@@ -21,8 +24,10 @@ namespace EcosCLM.Application.Extensions.Certificates
             return repository.ToViewModel(entity);
         }
 
-        public static async Task<List<CertificateViewModel>> GetAllWithPageAsync(this ICertificateRepository repository, int page = 0, int offset = 0, string filter = null, string oderBy = null, string orderDirection = null, Guid? customer = null)
+        public static async Task<List<CertificateViewModel>> GetAllWithPageAsync(this ICertificateRepository repository, int page = 0, int offset = 0, string? filter = null, string? oderBy = null, string? orderDirection = null, Guid? customer = null)
         {
+            ArgumentNullException.ThrowIfNull(repository);
+
             var query = repository.GetAll();
 
             if (customer.HasValue)
@@ -35,6 +40,7 @@ namespace EcosCLM.Application.Extensions.Certificates
                     case "expiration":
                         query = orderDirection == "desc" ? query.OrderByDescending(i => i.NotAfter) : query.OrderBy(i => i.NotAfter);
                         break;
+
                     default:
                         query = query.OrderByDescending(x => x.CreatedAt);
                         break;
@@ -58,7 +64,7 @@ namespace EcosCLM.Application.Extensions.Certificates
                         query = query.Where(x => x.SerialNumber == search.SerialNumber);
 
                     if (!string.IsNullOrEmpty(search.SubjectDn))
-                        query = query.Where(x => x.SubjectDn.Contains(search.SubjectDn));
+                        query = query.Where(x => x.SubjectDn!.Contains(search.SubjectDn));
                 }
             }
 
@@ -68,13 +74,16 @@ namespace EcosCLM.Application.Extensions.Certificates
             if (page > 0)
                 query = query.Take(page);
 
-            var list = await query.ToListAsync();
+            var list = await query.ToListAsync().ConfigureAwait(false);
             return repository.ToListViewModel(list);
         }
 
         public static async Task<CertificateViewModel> CreateAsync(this ICertificateRepository repository, Certificate entity)
         {
-            var query = await repository.AddAsync(entity);
+            ArgumentNullException.ThrowIfNull(repository);
+            ArgumentNullException.ThrowIfNull(entity);
+
+            var query = await repository.AddAsync(entity).ConfigureAwait(false);
             return repository.ToViewModel(query);
         }
     }

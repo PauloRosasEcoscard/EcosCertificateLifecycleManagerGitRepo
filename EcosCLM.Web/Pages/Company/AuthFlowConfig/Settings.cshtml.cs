@@ -27,8 +27,8 @@ namespace EcosCLM.Web.Pages.Company.AuthFlowConfig
 
         public async Task<IActionResult> OnGetAsync()
         {
-            await LoadCustomersAsync();
-            await GetData();
+            await LoadCustomersAsync().ConfigureAwait(false);
+            await GetData().ConfigureAwait(false);
 
             if (Item == null)
             {
@@ -49,7 +49,7 @@ namespace EcosCLM.Web.Pages.Company.AuthFlowConfig
         {
             try
             {
-                var result = await _ecosLoginService.GetAllCustomers();
+                var result = await _ecosLoginService.GetAllCustomers().ConfigureAwait(false);
                 if (result.IsSuccessful && result.Data != null)
                 {
                     Customers = result.Data.ToDictionary(x => x.IdCustomer, x => x.TxTitle);
@@ -71,7 +71,7 @@ namespace EcosCLM.Web.Pages.Company.AuthFlowConfig
             {
                 try
                 {
-                    await UpdateAuthFlowConfig();
+                    await UpdateAuthFlowConfig().ConfigureAwait(false);
                     return Page();
                 }
                 catch (Exception ex)
@@ -88,7 +88,7 @@ namespace EcosCLM.Web.Pages.Company.AuthFlowConfig
         {
             try
             {
-                var result = await _ecosLoginService.GetAuthFlowConfigByCustomerId(CustumerId);
+                var result = await _ecosLoginService.GetAuthFlowConfigByCustomerId(CustumerId).ConfigureAwait(false);
 
                 if (result.IsSuccessful && result.Data != null)
                 {
@@ -110,7 +110,7 @@ namespace EcosCLM.Web.Pages.Company.AuthFlowConfig
         {
             Item.IdCustomer = CustumerId;
 
-            var result = await _ecosLoginService.EditClientAuthFlowConfig(CustumerId, Item);
+            var result = await _ecosLoginService.EditClientAuthFlowConfig(CustumerId, Item).ConfigureAwait(false);
 
             if (result.IsSuccessful)
             {

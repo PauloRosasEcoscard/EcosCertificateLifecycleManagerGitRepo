@@ -28,8 +28,8 @@ namespace EcosCLM.Web.Pages.Company.Users
 
         public async Task<IActionResult> OnGetAsync(Guid id)
         {
-            await LoadProfilesAsync();
-            await GetItens(id);
+            await LoadProfilesAsync().ConfigureAwait(false);
+            await GetItens(id).ConfigureAwait(false);
 
             return Page();
         }
@@ -42,7 +42,7 @@ namespace EcosCLM.Web.Pages.Company.Users
                 try
                 {
                     Item.Profile = (Item.IdProfile == "1" || Item.IdProfile == "2") ? int.Parse(Item.IdProfile) : 0;
-                    await UpdateUser();
+                    await UpdateUser().ConfigureAwait(false);
                 }
                 catch (Exception ex)
                 {
@@ -53,7 +53,7 @@ namespace EcosCLM.Web.Pages.Company.Users
                 return RedirectToPage("Index");
             }
 
-            await LoadProfilesAsync();
+            await LoadProfilesAsync().ConfigureAwait(false);
             return Page();
         }
 
@@ -63,7 +63,7 @@ namespace EcosCLM.Web.Pages.Company.Users
             ProfilesDict.Add("1", "Admin");
             ProfilesDict.Add("2", "Audit");
 
-            var profileResult = await _ecosLoginService.GetAllProfilesList();
+            var profileResult = await _ecosLoginService.GetAllProfilesList().ConfigureAwait(false);
             if (profileResult.IsSuccessful && profileResult.Data != null)
             {
                 var dbProfiles = profileResult.Data
@@ -81,7 +81,7 @@ namespace EcosCLM.Web.Pages.Company.Users
 
         private async Task UpdateUser()
         {
-            var result = await _ecosLoginService.EditPolicySystemUserProfile(Item.IdUser, Item);
+            var result = await _ecosLoginService.EditPolicySystemUserProfile(Item.IdUser, Item).ConfigureAwait(false);
 
             if (!result.IsSuccessful)
             {
@@ -91,7 +91,7 @@ namespace EcosCLM.Web.Pages.Company.Users
 
         private async Task GetItens(Guid id)
         {
-            var result = await _ecosLoginService.GetPolicySystemUserById(id);
+            var result = await _ecosLoginService.GetPolicySystemUserById(id).ConfigureAwait(false);
 
             if (result.IsSuccessful && result.Data != null)
             {

@@ -11,9 +11,12 @@ namespace EcosCLM.Application.Extensions.Base
     {
         public static async Task<AuditLogsViewModel> GetByIdAsync(this IAuditLogsRepository repository, Guid id)
         {
+            ArgumentNullException.ThrowIfNull(repository);
+
             var entity = await repository.GetAll()
                 .Where(x => x.Id == id)
-                .SingleOrDefaultAsync();
+                .SingleOrDefaultAsync()
+                .ConfigureAwait(false);
 
             if (entity == null)
                 throw new NotFoundException(nameof(AuditLogs), id);
@@ -21,8 +24,10 @@ namespace EcosCLM.Application.Extensions.Base
             return repository.ToViewModel(entity);
         }
 
-        public static async Task<List<AuditLogsViewModel>> GetAllWithPageAsync(this IAuditLogsRepository repository, int page = 0, int offset = 0, string filter = null, string oderBy = null, string orderDirection = null, Guid? Customer = null)
+        public static async Task<List<AuditLogsViewModel>> GetAllWithPageAsync(this IAuditLogsRepository repository, int page = 0, int offset = 0, string? filter = null, string? oderBy = null, string? orderDirection = null, Guid? Customer = null)
         {
+            ArgumentNullException.ThrowIfNull(repository);
+
             var query = repository.GetAll();
 
             query = query.Where(x => x.IdCustumer == Customer);
@@ -67,13 +72,16 @@ namespace EcosCLM.Application.Extensions.Base
             if (page > 0)
                 query = query.Take(page);
 
-            var list = await query.ToListAsync();
+            var list = await query.ToListAsync().ConfigureAwait(false);
             return repository.ToListViewModel(list);
         }
 
         public static async Task<AuditLogsViewModel> CreateAsync(this IAuditLogsRepository repository, AuditLogs entity)
         {
-            var query = await repository.AddAsync(entity);
+            ArgumentNullException.ThrowIfNull(repository);
+            ArgumentNullException.ThrowIfNull(entity);
+
+            var query = await repository.AddAsync(entity).ConfigureAwait(false);
             return repository.ToViewModel(query);
         }
     }

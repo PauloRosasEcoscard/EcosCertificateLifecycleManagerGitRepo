@@ -32,7 +32,7 @@ namespace EcosCLM.Web.Pages.Company.IdentityProvider
 
         public async Task<IActionResult> OnGetAsync()
         {
-            await LoadInitialDataAsync();
+            await LoadInitialDataAsync().ConfigureAwait(false);
             return Page();
         }
 
@@ -46,23 +46,23 @@ namespace EcosCLM.Web.Pages.Company.IdentityProvider
                     if (Item.MappingProfileFor != 0 && string.IsNullOrEmpty(AzureRoleMappingsJson))
                     {
                         TempData["error"] = "enter all mapping information";
-                        await LoadInitialDataAsync();
+                        await LoadInitialDataAsync().ConfigureAwait(false);
                         return Page();
                     }
 
-                    await UpdateAuthConfig();
+                    await UpdateAuthConfig().ConfigureAwait(false);
                     return RedirectToPage("Index");
                 }
                 catch (Exception ex)
                 {
                     TempData["error"] = ex.Message;
                     _logger.LogError(ex, "Error processing identity provider creation during post.");
-                    await LoadInitialDataAsync();
+                    await LoadInitialDataAsync().ConfigureAwait(false);
                     return Page();
                 }
             }
 
-            await LoadInitialDataAsync();
+            await LoadInitialDataAsync().ConfigureAwait(false);
             return Page();
         }
 
@@ -72,7 +72,7 @@ namespace EcosCLM.Web.Pages.Company.IdentityProvider
             {
                 try
                 {
-                    await TestAuthConfig();
+                    await TestAuthConfig().ConfigureAwait(false);
                 }
                 catch (Exception ex)
                 {
@@ -81,7 +81,7 @@ namespace EcosCLM.Web.Pages.Company.IdentityProvider
                 }
             }
 
-            await LoadInitialDataAsync();
+            await LoadInitialDataAsync().ConfigureAwait(false);
             return Page();
         }
 
@@ -89,7 +89,7 @@ namespace EcosCLM.Web.Pages.Company.IdentityProvider
         {
             try
             {
-                var customersResult = await _ecosLoginService.GetAllCustomers();
+                var customersResult = await _ecosLoginService.GetAllCustomers().ConfigureAwait(false);
                 if (customersResult.IsSuccessful && customersResult.Data != null)
                 {
                     Customers = customersResult.Data.ToDictionary(x => x.IdCustomer, x => x.TxTitle);
@@ -99,7 +99,7 @@ namespace EcosCLM.Web.Pages.Company.IdentityProvider
                 ProfilesDict.Add("1", "Admin");
                 ProfilesDict.Add("2", "Audit");
 
-                var profilesResult = await _ecosLoginService.GetAllProfilesList();
+                var profilesResult = await _ecosLoginService.GetAllProfilesList().ConfigureAwait(false);
                 if (profilesResult.IsSuccessful && profilesResult.Data != null)
                 {
                     var dbProfiles = profilesResult.Data
@@ -124,7 +124,7 @@ namespace EcosCLM.Web.Pages.Company.IdentityProvider
         {
             Item.IdCustomer = CustumerId;
 
-            var configResult = await _ecosLoginService.CreateAuthConfig(Item);
+            var configResult = await _ecosLoginService.CreateAuthConfig(Item).ConfigureAwait(false);
 
             if (configResult.IsSuccessful && configResult.Data != null)
             {
@@ -154,7 +154,7 @@ namespace EcosCLM.Web.Pages.Company.IdentityProvider
                     {
                         mapping.AuthConfigAzureId = createdModels.Id;
 
-                        var interpretResult = await _ecosLoginService.InterpretProfile(mapping);
+                        var interpretResult = await _ecosLoginService.InterpretProfile(mapping).ConfigureAwait(false);
                         if (interpretResult.IsSuccessful && interpretResult.Data != null)
                         {
                             mapping.InternalProfileType = interpretResult.Data.InternalProfileType;
@@ -166,9 +166,9 @@ namespace EcosCLM.Web.Pages.Company.IdentityProvider
                         }
                     });
 
-                    await Task.WhenAll(interpretationTasks);
+                    await Task.WhenAll(interpretationTasks).ConfigureAwait(false);
 
-                    var mappingResult = await _ecosLoginService.CreateAzureGroupRoleMappings(azureRoleMappings);
+                    var mappingResult = await _ecosLoginService.CreateAzureGroupRoleMappings(azureRoleMappings).ConfigureAwait(false);
                     if (!mappingResult.IsSuccessful)
                     {
                         _logger.LogError("Failed to save role mappings for Identity Provider ID: {ProviderId}", createdModels.Id);
@@ -192,7 +192,7 @@ namespace EcosCLM.Web.Pages.Company.IdentityProvider
                 ClientSecret = Item.ClientSecret
             };
 
-            var response = await _ecosLoginService.ValidateAzureCredentials(validateModel);
+            var response = await _ecosLoginService.ValidateAzureCredentials(validateModel).ConfigureAwait(false);
 
             if (response.IsSuccessful)
             {

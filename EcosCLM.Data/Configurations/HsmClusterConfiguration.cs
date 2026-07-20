@@ -8,6 +8,7 @@ namespace EcosCLM.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<HsmCluster> builder)
         {
+            ArgumentNullException.ThrowIfNull(builder);
             builder.ToTable("HsmCluster");
 
             builder.HasKey(x => x.Id);

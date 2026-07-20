@@ -37,7 +37,7 @@ namespace Ecos_Cloud_Vhsm_Dashboard.Pages.Company.SyslogServers
                 Item.CustumerId = CustumerId;
 
                 var entity = _repository.ToEntity(Item);
-                await _repository.AddAsync(entity);
+                await _repository.AddAsync(entity).ConfigureAwait(false);
 
                 return RedirectToPage("Index");
             }

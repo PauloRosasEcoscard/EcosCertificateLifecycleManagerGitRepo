@@ -24,7 +24,7 @@ namespace EcosCLM.Tests.Extensions.Certificates
                 {
                     throw new InvalidOperationException("CSR PEM is required to submit a certificate request.");
                 }
-                await Task.CompletedTask;
+                await Task.CompletedTask.ConfigureAwait(false);
             });
 
             Assert.Contains("CSR PEM is required", exception.Message);
@@ -65,7 +65,7 @@ namespace EcosCLM.Tests.Extensions.Certificates
                 {
                     throw new InvalidOperationException("Cannot submit request with pending approval tasks.");
                 }
-                await Task.CompletedTask;
+                await Task.CompletedTask.ConfigureAwait(false);
             });
 
             Assert.Contains("pending approval tasks", exception.Message);

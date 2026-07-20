@@ -11,9 +11,12 @@ namespace EcosCLM.Application.Extensions.Integration
     {
         public static async Task<ApiIdempotencyKeyViewModel> GetByIdAsync(this IApiIdempotencyKeyRepository repository, Guid id)
         {
+            ArgumentNullException.ThrowIfNull(repository);
+
             var entity = await repository.GetAll()
                 .Where(x => x.Id == id)
-                .SingleOrDefaultAsync();
+                .SingleOrDefaultAsync()
+                .ConfigureAwait(false);
 
             if (entity == null)
                 throw new NotFoundException(nameof(ApiIdempotencyKey), id);
@@ -21,8 +24,10 @@ namespace EcosCLM.Application.Extensions.Integration
             return repository.ToViewModel(entity);
         }
 
-        public static async Task<List<ApiIdempotencyKeyViewModel>> GetAllWithPageAsync(this IApiIdempotencyKeyRepository repository, int page = 0, int offset = 0, string filter = null, string oderBy = null, string orderDirection = null, Guid? customer = null)
+        public static async Task<List<ApiIdempotencyKeyViewModel>> GetAllWithPageAsync(this IApiIdempotencyKeyRepository repository, int page = 0, int offset = 0, string? filter = null, string? oderBy = null, string? orderDirection = null, Guid? customer = null)
         {
+            ArgumentNullException.ThrowIfNull(repository);
+
             var query = repository.GetAll();
 
             if (customer.HasValue)
@@ -35,6 +40,7 @@ namespace EcosCLM.Application.Extensions.Integration
                     case "key":
                         query = orderDirection == "desc" ? query.OrderByDescending(i => i.Key) : query.OrderBy(i => i.Key);
                         break;
+
                     default:
                         query = query.OrderByDescending(x => x.ExpiresAt);
                         break;
@@ -62,13 +68,16 @@ namespace EcosCLM.Application.Extensions.Integration
             if (page > 0)
                 query = query.Take(page);
 
-            var list = await query.ToListAsync();
+            var list = await query.ToListAsync().ConfigureAwait(false);
             return repository.ToListViewModel(list);
         }
 
         public static async Task<ApiIdempotencyKeyViewModel> CreateAsync(this IApiIdempotencyKeyRepository repository, ApiIdempotencyKey entity)
         {
-            var query = await repository.AddAsync(entity);
+            ArgumentNullException.ThrowIfNull(repository);
+            ArgumentNullException.ThrowIfNull(entity);
+
+            var query = await repository.AddAsync(entity).ConfigureAwait(false);
             return repository.ToViewModel(query);
         }
     }

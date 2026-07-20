@@ -27,7 +27,7 @@ namespace EcosCLM.Web.Pages.Catalog.DeploymentEnvironment
         {
             try
             {
-                Item = await _repository.GetByIdAsync(id);
+                Item = await _repository.GetByIdAsync(id).ConfigureAwait(false);
 
                 if (Item == null)
                 {
@@ -55,14 +55,14 @@ namespace EcosCLM.Web.Pages.Catalog.DeploymentEnvironment
         {
             try
             {
-                var existingEntity = await _repository.FindOneAsync(x => x.Id == Item.Id);
+                var existingEntity = await _repository.FindOneAsync(x => x.Id == Item.Id).ConfigureAwait(false);
                 if (existingEntity == null || existingEntity.CustomerId != CustumerId)
                 {
                     TempData["warning"] = "Operation not allowed.";
                     return RedirectToPage("Index");
                 }
 
-                await _repository.DelAsync(existingEntity);
+                await _repository.DelAsync(existingEntity).ConfigureAwait(false);
 
                 TempData["success"] = "Deployment Environment deleted successfully!";
                 return RedirectToPage("Index");

@@ -18,7 +18,7 @@ namespace EcosCLM.Web.Pages.Company.IdentityProvider
 
         public SelectList Profiles { get; set; }
         private Dictionary<string, string> ProfilesDict = new();
-        private List<AzureGroupRoleMappingViewModel> azureRoleMappings { get; set; } = null;
+        private List<AzureGroupRoleMappingViewModel> azureRoleMappings { get; set; } = new();
 
         [BindProperty]
         public string AzureRoleMappingsJson { get; set; }
@@ -38,9 +38,9 @@ namespace EcosCLM.Web.Pages.Company.IdentityProvider
 
         public async Task<IActionResult> OnGet(int id)
         {
-            await LoadCustomersAsync();
-            await GetData(id);
-            await GetListProfilesAsync();
+            await LoadCustomersAsync().ConfigureAwait(false);
+            await GetData(id).ConfigureAwait(false);
+            await GetListProfilesAsync().ConfigureAwait(false);
 
             if (Item == null)
             {
@@ -67,7 +67,7 @@ namespace EcosCLM.Web.Pages.Company.IdentityProvider
         {
             try
             {
-                var result = await _ecosLoginService.GetAllCustomers();
+                var result = await _ecosLoginService.GetAllCustomers().ConfigureAwait(false);
                 if (result.IsSuccessful && result.Data != null)
                 {
                     Customers = result.Data.ToDictionary(x => x.IdCustomer, x => x.TxTitle);
@@ -89,7 +89,7 @@ namespace EcosCLM.Web.Pages.Company.IdentityProvider
             ProfilesDict.Add("1", "Admin");
             ProfilesDict.Add("2", "Audit");
 
-            var profileList = await _ecosLoginService.GetAllProfilesList();
+            var profileList = await _ecosLoginService.GetAllProfilesList().ConfigureAwait(false);
 
             if (profileList != null)
             {
@@ -112,7 +112,7 @@ namespace EcosCLM.Web.Pages.Company.IdentityProvider
             {
                 try
                 {
-                    await UpdateAzureAuthConfig();
+                    await UpdateAzureAuthConfig().ConfigureAwait(false);
                     return RedirectToPage("Index");
                 }
                 catch (Exception ex)
@@ -139,7 +139,7 @@ namespace EcosCLM.Web.Pages.Company.IdentityProvider
             {
                 try
                 {
-                    await TestAzureAuthConfig();
+                    await TestAzureAuthConfig().ConfigureAwait(false);
                 }
                 catch (Exception ex)
                 {
@@ -171,7 +171,7 @@ namespace EcosCLM.Web.Pages.Company.IdentityProvider
                 ClientSecret = Item.ClientSecret
             };
 
-            HttpResponseMessage response = await HttpRequestService.PostAsync(string.Concat(url, uri), body, _logger);
+            HttpResponseMessage response = await HttpRequestService.PostAsync(string.Concat(url, uri), body, _logger).ConfigureAwait(false);
 
             if (response.IsSuccessStatusCode)
             {
@@ -187,7 +187,7 @@ namespace EcosCLM.Web.Pages.Company.IdentityProvider
         {
             try
             {
-                await GetItem(id);
+                await GetItem(id).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
@@ -200,9 +200,9 @@ namespace EcosCLM.Web.Pages.Company.IdentityProvider
         {
             string url = _configuration.GetSection("AppSettings:Clients:Login").Value;
             string uri = string.Format(PolicySystemUris.getIdentityProviderByCustumerIdentityProvider, CustumerId, id);
-            HttpResponseMessage response = await HttpRequestService.GetAsync(string.Concat(url, uri), _logger);
+            HttpResponseMessage response = await HttpRequestService.GetAsync(string.Concat(url, uri), _logger).ConfigureAwait(false);
 
-            string responseContentHttp = await response.Content.ReadAsStringAsync();
+            string responseContentHttp = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
             if (response.IsSuccessStatusCode)
             {
@@ -216,8 +216,8 @@ namespace EcosCLM.Web.Pages.Company.IdentityProvider
             string uriAzureGroupRole = string.Format(PolicySystemUris.getAzureGroupRoleMapping, CustumerId, Item?.Id);
 
             _logger.LogInformation($"[GetItem] Fetching Azure Group Role Mappings from: {string.Concat(url, uriAzureGroupRole)}");
-            HttpResponseMessage responseAzureGroupRole = await HttpRequestService.GetAsync(string.Concat(url, uriAzureGroupRole), _logger);
-            string responseContentHttpAzureGroupRole = await responseAzureGroupRole.Content.ReadAsStringAsync();
+            HttpResponseMessage responseAzureGroupRole = await HttpRequestService.GetAsync(string.Concat(url, uriAzureGroupRole), _logger).ConfigureAwait(false);
+            string responseContentHttpAzureGroupRole = await responseAzureGroupRole.Content.ReadAsStringAsync().ConfigureAwait(false);
 
             if (responseAzureGroupRole.IsSuccessStatusCode)
             {
@@ -235,7 +235,7 @@ namespace EcosCLM.Web.Pages.Company.IdentityProvider
         {
             Item.IdCustomer = CustumerId;
 
-            var configResult = await _ecosLoginService.EditAuthConfig(Item);
+            var configResult = await _ecosLoginService.EditAuthConfig(Item).ConfigureAwait(false);
 
             if (configResult.IsSuccessful && configResult.Data != null)
             {
@@ -271,7 +271,7 @@ namespace EcosCLM.Web.Pages.Company.IdentityProvider
                 {
                     mapping.AuthConfigAzureId = createdOrUpdatedAuth.Id;
 
-                    var result = await _ecosLoginService.InterpretProfile(mapping);
+                    var result = await _ecosLoginService.InterpretProfile(mapping).ConfigureAwait(false);
                     if (result.IsSuccessful && result.Data != null)
                     {
                         mapping.InternalProfileType = result.Data.InternalProfileType;
@@ -283,9 +283,9 @@ namespace EcosCLM.Web.Pages.Company.IdentityProvider
                     }
                 });
 
-                await Task.WhenAll(interpretationTasks);
+                await Task.WhenAll(interpretationTasks).ConfigureAwait(false);
 
-                var mappingResult = await _ecosLoginService.UpdateAzureGroupRoleMappings(azureRoleMappingsToSave);
+                var mappingResult = await _ecosLoginService.UpdateAzureGroupRoleMappings(azureRoleMappingsToSave).ConfigureAwait(false);
 
                 if (!mappingResult.IsSuccessful)
                 {

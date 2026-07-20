@@ -41,7 +41,7 @@ namespace EcosCLM.Web.Pages.Catalog.DeploymentEnvironment
                     entity.CreatedAt = DateTime.UtcNow;
                     entity.UpdatedAt = DateTime.UtcNow;
 
-                    await _repository.CreateAsync(entity);
+                    await _repository.CreateAsync(entity).ConfigureAwait(false);
 
                     TempData["success"] = "Deployment Environment created successfully!";
                     return RedirectToPage("Index");

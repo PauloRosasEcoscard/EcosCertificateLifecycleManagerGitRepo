@@ -26,7 +26,7 @@ namespace EcosCLM.Web.Pages.Company.PolicySettings
 
         public async Task<IActionResult> OnGetAsync()
         {
-            Item = await _policySettingsRepository.GetByIdCustomerAsync(CustumerId);
+            Item = await _policySettingsRepository.GetByIdCustomerAsync(CustumerId).ConfigureAwait(false);
 
             if (Item == null)
             {
@@ -34,7 +34,7 @@ namespace EcosCLM.Web.Pages.Company.PolicySettings
                 {
                     CustumerId = CustumerId,
                     TimeoutSession = 30
-                });
+                }).ConfigureAwait(false);
 
                 return RedirectToPage("Index");
             }
@@ -52,7 +52,7 @@ namespace EcosCLM.Web.Pages.Company.PolicySettings
         {
             if (ModelState.IsValid)
             {
-                await _policySettingsRepository.EditAsync(Item);
+                await _policySettingsRepository.EditAsync(Item).ConfigureAwait(false);
                 return RedirectToPage("Index");
             }
             return Page();

@@ -7,7 +7,7 @@ namespace EcosCLM.Application.Infrastructure.Mappers
 {
     public static class MappingProfiles
     {
-        public static IMapper LoadConfigurations(string[] configs = null)
+        public static IMapper LoadConfigurations(string[]? configs = null)
         {
             if (configs == null || configs.Length == 0)
             {

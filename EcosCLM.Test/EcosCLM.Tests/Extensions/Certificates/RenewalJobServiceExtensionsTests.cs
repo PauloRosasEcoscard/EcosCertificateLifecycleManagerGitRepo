@@ -40,7 +40,7 @@ namespace EcosCLM.Tests.Extensions.Certificates
                 {
                     throw new InvalidOperationException("An active renewal job already exists for this certificate.");
                 }
-                await Task.CompletedTask;
+                await Task.CompletedTask.ConfigureAwait(false);
             });
 
             Assert.Contains("active renewal job already exists", exception.Message);

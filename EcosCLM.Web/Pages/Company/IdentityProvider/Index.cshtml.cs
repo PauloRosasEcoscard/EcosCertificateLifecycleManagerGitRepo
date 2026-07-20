@@ -39,11 +39,11 @@ namespace EcosCLM.Web.Pages.Company.IdentityProvider
 
             Search = GetFilters();
 
-            await LoadCustomersAsync();
+            await LoadCustomersAsync().ConfigureAwait(false);
 
             UrlForCustomer = GetUrlForCustomer();
 
-            await GetData();
+            await GetData().ConfigureAwait(false);
 
             AddGridConfig();
             return Page();
@@ -67,7 +67,7 @@ namespace EcosCLM.Web.Pages.Company.IdentityProvider
         {
             try
             {
-                await GetItens();
+                await GetItens().ConfigureAwait(false);
 
                 if (Itens != null)
                 {
@@ -90,7 +90,7 @@ namespace EcosCLM.Web.Pages.Company.IdentityProvider
 
         private async Task GetItens()
         {
-            var result = await _ecosLoginService.GetAuthConfigByCustomerId(CustumerId);
+            var result = await _ecosLoginService.GetAuthConfigByCustomerId(CustumerId).ConfigureAwait(false);
 
             if (result.IsSuccessful && result.Data != null)
             {
@@ -107,7 +107,7 @@ namespace EcosCLM.Web.Pages.Company.IdentityProvider
         {
             try
             {
-                var result = await _ecosLoginService.GetAllCustomers();
+                var result = await _ecosLoginService.GetAllCustomers().ConfigureAwait(false);
                 if (result.IsSuccessful && result.Data != null)
                 {
                     Customers = result.Data.ToDictionary(x => x.IdCustomer, x => x.TxTitle);

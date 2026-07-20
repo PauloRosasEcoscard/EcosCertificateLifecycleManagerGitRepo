@@ -8,6 +8,7 @@ namespace EcosCLM.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<ApprovalTask> builder)
         {
+            ArgumentNullException.ThrowIfNull(builder);
             builder.ToTable("ApprovalTask");
 
             builder.HasKey(x => x.Id);
