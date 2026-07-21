@@ -28,25 +28,53 @@ namespace EcosCLM.Web.Pages.Deployment.DeploymentTarget
 
         public IActionResult OnGet()
         {
+            _logger.LogInformation("===== ONGET EXECUTADO =====");
+
             LoadLists();
             return Page();
         }
 
         public async Task<IActionResult> OnPostSaveAsync()
         {
+
+            _logger.LogInformation("===== ONPOSTSAVE EXECUTADO =====");
+
+
+            Item.CustomerId = CustumerId;
+            Item.CreatedAt = DateTime.UtcNow;
+            Item.UpdatedAt = DateTime.UtcNow;
+
+            _logger.LogInformation("CustomerId: {CustomerId}", Item.CustomerId);
+
             if (!ModelState.IsValid)
             {
+                _logger.LogError("MODELSTATE INVÁLIDO");
+
+                foreach (var state in ModelState)
+                {
+                    foreach (var error in state.Value.Errors)
+                    {
+                        _logger.LogError(
+                            "Campo: {Campo} | Erro: {Erro}",
+                            state.Key,
+                            error.ErrorMessage);
+                    }
+                }
+                _logger.LogInformation("REDIRECIONANDO PARA INDEX");
+
                 LoadLists();
                 return Page();
             }
 
             try
             {
-                Item.CustomerId = CustumerId;
-                Item.CreatedAt = DateTime.UtcNow;
-                Item.UpdatedAt = DateTime.UtcNow;
+                _logger.LogInformation("Chamando AddAsync...");
 
-                await _repository.AddAsync(_repository.ToEntity(Item));
+                var entity = _repository.ToEntity(Item);
+
+                await _repository.AddAsync(entity);
+
+                _logger.LogInformation("Registro salvo com sucesso.");
 
                 TempData["success"] = "Deployment target created successfully.";
 
@@ -54,10 +82,12 @@ namespace EcosCLM.Web.Pages.Deployment.DeploymentTarget
             }
             catch (Exception ex)
             {
-                TempData["error"] = ex.Message;
-                _logger.LogError(ex, "Error creating deployment target.");
+                _logger.LogError(ex, "ERRO AO SALVAR");
+
+                TempData["error"] = ex.ToString();
 
                 LoadLists();
+
                 return Page();
             }
         }
@@ -73,8 +103,16 @@ namespace EcosCLM.Web.Pages.Deployment.DeploymentTarget
             AutomationList = new SelectList(
                 new List<SelectListItem>
                 {
-                    new("Disabled", "0"),
-                    new("Enabled", "1")
+                    new SelectListItem
+                    {
+                        Text = "Disabled",
+                        Value = "0"
+                    },
+                    new SelectListItem
+                    {
+                        Text = "Enabled",
+                        Value = "1"
+                    }
                 },
                 "Value",
                 "Text");

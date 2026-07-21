@@ -11,6 +11,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Pomelo.Extensions.Caching.MySql;
 using System.Reflection.Emit;
+using EcosCLM.Application.Validators.Certificates;
+using EcosCLM.Application.Validators.Deployment;
+using EcosCLM.Application.Validators.Integration;
 
 namespace EcosCLM.Data.Extensions
 {
@@ -99,6 +102,11 @@ namespace EcosCLM.Data.Extensions
             services.AddScoped<ICertificateRequestRepository, CertificateRequestRepository>();
             services.AddScoped<ICertificateRequestSanDnsRepository, CertificateRequestSanDnsRepository>();
             services.AddScoped<IRenewalJobRepository, RenewalJobRepository>();
+            services.AddScoped<CertificateValidator>();
+            services.AddScoped<CertificateDeploymentValidator>();
+            services.AddScoped<DeploymentTargetValidator>();
+            services.AddScoped<ApiIdempotencyKeyValidator>();
+            services.AddScoped<EventOutboxValidator>();
             #endregion
         }
 
