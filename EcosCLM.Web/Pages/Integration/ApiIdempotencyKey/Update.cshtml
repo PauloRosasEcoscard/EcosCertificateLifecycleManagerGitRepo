@@ -1,0 +1,23 @@
+﻿@page "{id:guid}"
+@model EcosCLM.Web.Pages.Integration.ApiIdempotencyKey.UpdateModel
+
+@{
+    ViewData["Title"] = "Edit API Idempotency Key";
+}
+
+<div class="row">
+    <div class="col-12 mt-3">
+
+        <ecos-form title="Edit API Idempotency Key"
+                   subtitle="Update this idempotency key."
+                   handler="Save">
+
+            <input type="hidden" asp-for="Item.Id" />
+
+            <partial name="_ApiIdempotencyKeyFormFields"
+                     model="Model.Item" />
+
+        </ecos-form>
+
+    </div>
+</div>

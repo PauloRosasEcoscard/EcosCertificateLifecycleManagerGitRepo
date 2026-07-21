@@ -1,0 +1,153 @@
+﻿@page
+@model IndexModel
+
+@{
+    ViewData["Title"] = "Deployment Target";
+    ViewData["Breadcrumb"] = "Deployment";
+    ViewData["PageName"] = "Deployment Target";
+}
+
+<div class="row">
+    <div class="col-12 mt-3">
+
+        <ecos-grid config="Model.GridConfig">
+
+            @if (Model.Itens?.Any() == true)
+            {
+                @foreach (var item in Model.Itens)
+                {
+                    <div class="ecos-model-card p-3">
+
+                        <div class="row align-items-center w-100 m-0">
+
+                            <div class="col-md-3">
+                                <span class="ecos-card-label">Name</span>
+                                <span class="ecos-card-value fw-semibold d-block">
+                                    @item.Name
+                                </span>
+                            </div>
+
+                            <div class="col-md-3">
+                                <span class="ecos-card-label">Target Type</span>
+                                <span class="ecos-card-value d-block">
+                                    @item.TargetType
+                                </span>
+                            </div>
+
+                            <div class="col-md-2">
+                                <span class="ecos-card-label">Status</span>
+                                <span class="ecos-card-value d-block">
+                                    @item.Status
+                                </span>
+                            </div>
+
+                            <div class="col-md-2">
+                                <span class="ecos-card-label">Automation</span>
+                                <span class="ecos-card-value d-block">
+                                    @(item.AutomationEnabled == 1 ? "Enabled" : "Disabled")
+                                </span>
+                            </div>
+
+                            <div class="col-md-2 text-end">
+
+                                <div class="d-flex justify-content-end gap-1">
+
+                                    <button class="btn btn-link text-muted p-1"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#details-@item.Id">
+                                        <i class="material-symbols-outlined">visibility</i>
+                                    </button>
+
+                                    <a asp-page="Update"
+                                       asp-route-id="@item.Id"
+                                       class="btn btn-link text-primary p-1">
+                                        <i class="material-symbols-outlined">edit</i>
+                                    </a>
+
+                                    <a asp-page="Delete"
+                                       asp-route-id="@item.Id"
+                                       class="btn btn-link text-danger p-1">
+                                        <i class="material-symbols-outlined">delete</i>
+                                    </a>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="modal fade"
+                         id="details-@item.Id"
+                         tabindex="-1">
+
+                        <div class="modal-dialog modal-dialog-centered">
+
+                            <div class="modal-content">
+
+                                <div class="modal-header">
+                                    <h5 class="modal-title">
+                                        Deployment Target Details
+                                    </h5>
+
+                                    <button type="button"
+                                            class="btn-close"
+                                            data-bs-dismiss="modal">
+                                    </button>
+                                </div>
+
+                                <div class="modal-body">
+
+                                    <div class="mb-2">
+                                        <small class="text-muted">Name</small>
+                                        <div>@item.Name</div>
+                                    </div>
+
+                                    <div class="mb-2">
+                                        <small class="text-muted">Target Type</small>
+                                        <div>@item.TargetType</div>
+                                    </div>
+
+                                    <div class="mb-2">
+                                        <small class="text-muted">Endpoint</small>
+                                        <div>@item.EndpointRef</div>
+                                    </div>
+
+                                    <div class="mb-2">
+                                        <small class="text-muted">Status</small>
+                                        <div>@item.Status</div>
+                                    </div>
+
+                                    <div class="mb-2">
+                                        <small class="text-muted">Automation</small>
+                                        <div>@(item.AutomationEnabled == 1 ? "Enabled" : "Disabled")</div>
+                                    </div>
+
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button class="btn btn-secondary"
+                                            data-bs-dismiss="modal">
+                                        Close
+                                    </button>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="ecos-model-card p-4 text-center text-muted">
+                    No deployment targets found.
+                </div>
+            }
+
+        </ecos-grid>
+
+    </div>
+</div>

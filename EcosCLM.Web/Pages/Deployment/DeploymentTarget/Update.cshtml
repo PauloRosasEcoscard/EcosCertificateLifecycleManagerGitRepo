@@ -1,0 +1,22 @@
+﻿@page "{id:guid}"
+@model EcosCLM.Web.Pages.Deployment.DeploymentTarget.UpdateModel
+
+@{
+    ViewData["Title"] = "Edit Deployment Target";
+}
+
+<div class="row">
+    <div class="col-12 mt-3">
+
+        <ecos-form title="Edit Deployment Target"
+                   subtitle="Update deployment target information."
+                   handler="Save">
+
+            <input type="hidden" asp-for="Item.Id" />
+
+            <partial name="_DeploymentTargetFormFields" model="Model.Item" />
+
+        </ecos-form>
+
+    </div>
+</div>

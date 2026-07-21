@@ -1,0 +1,75 @@
+﻿@page
+@model EcosCLM.Web.Pages.Integration.ApiIdempotencyKey.IndexModel
+
+@{
+    ViewData["Title"] = "API Idempotency Keys";
+}
+
+<div class="row">
+    <div class="col-12 mt-3">
+
+        <ecos-grid config="Model.GridConfig">
+
+            @if (Model.Itens.Any())
+            {
+                @foreach (var item in Model.Itens)
+                {
+                    <div class="ecos-model-card p-3">
+
+                        <div class="row align-items-center w-100 m-0">
+
+                            <div class="col-md-5">
+                                <span class="ecos-card-label">Key</span>
+                                <span class="ecos-card-value d-block text-break">
+                                    @item.Key
+                                </span>
+                            </div>
+
+                            <div class="col-md-3">
+                                <span class="ecos-card-label">Expires</span>
+                                <span class="ecos-card-value">
+                                    @item.ExpiresAt.ToString("dd/MM/yyyy HH:mm")
+                                </span>
+                            </div>
+
+                            <div class="col-md-2">
+                                <span class="ecos-card-label">Response</span>
+                                <span class="ecos-card-value">
+                                    @(item.ResponseJson.Length > 30
+                                                                ? item.ResponseJson.Substring(0, 30) + "..."
+                                                                : item.ResponseJson)
+                        </span>
+                    </div>
+
+                            <div class="col-md-2 text-end">
+
+                                <a asp-page="Update"
+                                   asp-route-id="@item.Id"
+                                   class="btn btn-link text-primary p-1">
+                                    <i class="material-symbols-outlined">edit</i>
+                                </a>
+
+                                <a asp-page="Delete"
+                                   asp-route-id="@item.Id"
+                                   class="btn btn-link text-danger p-1">
+                                    <i class="material-symbols-outlined">delete</i>
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                        }
+            }
+            else
+            {
+                <div class="ecos-model-card p-4 text-center">
+                    No information available.
+                </div>
+            }
+
+        </ecos-grid>
+
+    </div>
+</div>

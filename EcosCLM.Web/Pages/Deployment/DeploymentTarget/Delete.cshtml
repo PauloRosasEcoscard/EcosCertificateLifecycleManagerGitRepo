@@ -1,0 +1,59 @@
+﻿@page "{id:guid}"
+@model EcosCLM.Web.Pages.Deployment.DeploymentTarget.DeleteModel
+
+@{
+    ViewData["Title"] = "Delete Deployment Target";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card my-4">
+
+            <div class="card-header p-0 position-relative">
+                <div class="card-body d-flex align-items-center justify-content-between bg-secondary pt-4 pb-3">
+                    <h5 class="text-white fw-bold mb-0">
+                        Delete Deployment Target
+                    </h5>
+                </div>
+            </div>
+
+            <div class="card-body px-4 pb-4">
+
+                <form method="post">
+
+                    <input type="hidden" asp-for="Item.Id" />
+
+                    <p>
+                        Are you sure you want to delete the deployment target
+                        <strong>@Model.Item.Name</strong>?
+                    </p>
+
+                    <p class="fw-bold text-danger">
+                        This action is <u>irreversible</u>.
+                    </p>
+
+                    <div class="row mt-4">
+
+                        <div class="col-md-6">
+                            <a asp-page="Index"
+                               class="btn btn-secondary w-100">
+                                Cancel
+                            </a>
+                        </div>
+
+                        <div class="col-md-6">
+                            <button type="submit"
+                                    class="btn btn-danger w-100">
+                                Delete
+                            </button>
+                        </div>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+    </div>
+</div>

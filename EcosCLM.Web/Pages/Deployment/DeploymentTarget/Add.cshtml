@@ -1,0 +1,20 @@
+﻿@page
+@model EcosCLM.Web.Pages.Deployment.DeploymentTarget.AddModel
+
+@{
+    ViewData["Title"] = "Add Deployment Target";
+}
+
+<div class="row">
+    <div class="col-12 mt-3">
+
+        <ecos-form title="Add Deployment Target"
+                   subtitle="Register a new deployment target."
+                   handler="Save">
+
+            <partial name="_DeploymentTargetFormFields" model="Model.Item" />
+
+        </ecos-form>
+
+    </div>
+</div>

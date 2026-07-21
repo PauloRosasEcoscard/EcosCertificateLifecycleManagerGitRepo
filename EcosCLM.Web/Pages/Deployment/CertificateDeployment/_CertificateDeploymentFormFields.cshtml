@@ -1,0 +1,86 @@
+﻿@model EcosCLM.Application.ViewModels.Deployment.CertificateDeploymentViewModel
+
+<div class="row g-4 px-2 pb-2">
+
+    <div class="col-12">
+        <h6 class="fw-bold mb-0 pb-2 border-bottom border-2"
+            style="border-color: var(--bs-primary) !important; color: var(--bs-primary);">
+            Deployment Information
+        </h6>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="CertificateId" class="form-label small fw-bold text-muted mb-1">
+            Certificate
+        </label>
+
+        <select asp-for="CertificateId"
+                asp-items="ViewBag.Certificates"
+                class="form-select ecos-input shadow-none rounded-3 px-3 py-2">
+
+            <option value="">Select a certificate</option>
+
+        </select>
+
+        <span asp-validation-for="CertificateId" class="text-danger small mt-1"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="TargetId" class="form-label small fw-bold text-muted mb-1">
+            Deployment Target
+        </label>
+
+        <select asp-for="TargetId"
+                asp-items="ViewBag.Targets"
+                class="form-select ecos-input shadow-none rounded-3 px-3 py-2">
+
+            <option value="">Select a target</option>
+
+        </select>
+
+        <span asp-validation-for="TargetId" class="text-danger small mt-1"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="Status" class="form-label small fw-bold text-muted mb-1">
+            Status
+        </label>
+
+        <select asp-for="Status"
+                class="form-select ecos-input shadow-none rounded-3 px-3 py-2">
+
+            <option value="PENDING">PENDING</option>
+            <option value="SUCCESS">SUCCESS</option>
+            <option value="FAILED">FAILED</option>
+
+        </select>
+
+        <span asp-validation-for="Status" class="text-danger small mt-1"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="DeployedAt" class="form-label small fw-bold text-muted mb-1">
+            Deployment Date
+        </label>
+
+        <input asp-for="DeployedAt"
+               type="datetime-local"
+               class="form-control ecos-input shadow-none rounded-3 px-3 py-2" />
+
+        <span asp-validation-for="DeployedAt" class="text-danger small mt-1"></span>
+    </div>
+
+    <div class="col-12">
+        <label asp-for="ErrorMessage" class="form-label small fw-bold text-muted mb-1">
+            Error Message
+        </label>
+
+        <textarea asp-for="ErrorMessage"
+                  rows="4"
+                  class="form-control ecos-input shadow-none rounded-3 px-3 py-2"
+                  placeholder="Optional"></textarea>
+
+        <span asp-validation-for="ErrorMessage" class="text-danger small mt-1"></span>
+    </div>
+
+</div>

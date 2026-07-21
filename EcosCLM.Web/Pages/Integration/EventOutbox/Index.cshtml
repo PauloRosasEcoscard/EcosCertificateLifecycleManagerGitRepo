@@ -1,0 +1,147 @@
+﻿@page
+@model EcosCLM.Web.Pages.Integration.EventOutbox.IndexModel
+
+@{
+    ViewData["Title"] = "Event Outbox";
+}
+
+<div class="row">
+    <div class="col-12 mt-3">
+
+        <ecos-grid config="Model.GridConfig">
+
+            @if (Model.Itens.Any())
+            {
+                @foreach (var item in Model.Itens)
+                {
+                    <div class="ecos-model-card p-3">
+
+                        <div class="row align-items-center w-100 m-0">
+
+                            <div class="col-md-4">
+                                <span class="ecos-card-label">Event Type</span>
+                                <span class="ecos-card-value d-block">
+                                    @item.EventType
+                                </span>
+                            </div>
+
+                            <div class="col-md-2">
+                                <span class="ecos-card-label">Status</span>
+                                <span class="ecos-card-value">
+                                    @item.Status
+                                </span>
+                            </div>
+
+                            <div class="col-md-2">
+                                <span class="ecos-card-label">Retries</span>
+                                <span class="ecos-card-value">
+                                    @item.Retries
+                                </span>
+                            </div>
+
+                            <div class="col-md-2">
+                                <span class="ecos-card-label">Created</span>
+                                <span class="ecos-card-value">
+                                    @item.CreatedAt.ToString("dd/MM/yyyy")
+                                </span>
+                            </div>
+
+                            <div class="col-md-2 text-end">
+
+                                <button type="button"
+                                        class="btn btn-link text-muted p-1"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#details-@item.Id">
+                                    <i class="material-symbols-outlined">visibility</i>
+                                </button>
+
+                                <a asp-page="Update"
+                                   asp-route-id="@item.Id"
+                                   class="btn btn-link text-primary p-1">
+                                    <i class="material-symbols-outlined">edit</i>
+                                </a>
+
+                                <a asp-page="Delete"
+                                   asp-route-id="@item.Id"
+                                   class="btn btn-link text-danger p-1">
+                                    <i class="material-symbols-outlined">delete</i>
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="modal fade"
+                         id="details-@item.Id"
+                         tabindex="-1">
+
+                        <div class="modal-dialog modal-lg modal-dialog-centered">
+
+                            <div class="modal-content">
+
+                                <div class="modal-header">
+                                    <h5 class="modal-title">
+                                        Event Details
+                                    </h5>
+
+                                    <button class="btn-close"
+                                            data-bs-dismiss="modal"></button>
+                                </div>
+
+                                <div class="modal-body">
+
+                                    <div class="mb-3">
+                                        <small class="text-muted">Event Type</small>
+                                        <div>@item.EventType</div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <small class="text-muted">Status</small>
+                                        <div>@item.Status</div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <small class="text-muted">Retries</small>
+                                        <div>@item.Retries</div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <small class="text-muted">Created At</small>
+                                        <div>@item.CreatedAt</div>
+                                    </div>
+
+                                    <div>
+                                        <small class="text-muted">Payload JSON</small>
+
+                                        <pre class="bg-light p-3 rounded text-break">@item.PayloadJson</pre>
+                                    </div>
+
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button class="btn btn-secondary"
+                                            data-bs-dismiss="modal">
+                                        Close
+                                    </button>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="ecos-model-card p-4 text-center text-muted">
+                    No information available.
+                </div>
+            }
+
+        </ecos-grid>
+
+    </div>
+</div>
