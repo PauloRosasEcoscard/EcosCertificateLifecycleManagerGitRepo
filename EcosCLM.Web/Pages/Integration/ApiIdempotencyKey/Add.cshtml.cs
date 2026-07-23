@@ -25,17 +25,27 @@ namespace EcosCLM.Web.Pages.Integration.ApiIdempotencyKey
         public IActionResult OnGet()
         {
             Item.ExpiresAt = DateTime.UtcNow.AddDays(1);
+
             return Page();
         }
 
         public async Task<IActionResult> OnPostSaveAsync()
         {
+            // Campos preenchidos pelo servidor
+            Item.CustomerId = CustumerId;
+
+            // Remove a validação desse campo, pois ele não vem do formulário
+            ModelState.Remove("Item.CustomerId");
+
             if (!ModelState.IsValid)
+            {
                 return Page();
+            }
 
             try
             {
-                Item.CustomerId = CustumerId;
+                if (Item.Id == Guid.Empty)
+                    Item.Id = Guid.NewGuid();
 
                 await _repository.AddAsync(_repository.ToEntity(Item));
 
@@ -46,7 +56,10 @@ namespace EcosCLM.Web.Pages.Integration.ApiIdempotencyKey
             catch (Exception ex)
             {
                 TempData["error"] = ex.Message;
-                _logger.LogError(ex, "Error creating API idempotency key.");
+
+                _logger.LogError(
+                    ex,
+                    "Error creating API idempotency key.");
 
                 return Page();
             }

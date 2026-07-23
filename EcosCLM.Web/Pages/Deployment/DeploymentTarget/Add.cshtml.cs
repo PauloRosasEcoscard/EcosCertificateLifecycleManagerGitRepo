@@ -31,20 +31,25 @@ namespace EcosCLM.Web.Pages.Deployment.DeploymentTarget
             _logger.LogInformation("===== ONGET EXECUTADO =====");
 
             LoadLists();
+
             return Page();
         }
 
         public async Task<IActionResult> OnPostSaveAsync()
         {
-
             _logger.LogInformation("===== ONPOSTSAVE EXECUTADO =====");
 
-
+            // Campos preenchidos pelo servidor
             Item.CustomerId = CustumerId;
             Item.CreatedAt = DateTime.UtcNow;
             Item.UpdatedAt = DateTime.UtcNow;
 
             _logger.LogInformation("CustomerId: {CustomerId}", Item.CustomerId);
+
+            // Remove validações de campos que não vêm do formulário
+            ModelState.Remove("Item.CustomerId");
+            ModelState.Remove("Item.CreatedAt");
+            ModelState.Remove("Item.UpdatedAt");
 
             if (!ModelState.IsValid)
             {
@@ -60,7 +65,6 @@ namespace EcosCLM.Web.Pages.Deployment.DeploymentTarget
                             error.ErrorMessage);
                     }
                 }
-                _logger.LogInformation("REDIRECIONANDO PARA INDEX");
 
                 LoadLists();
                 return Page();
@@ -84,7 +88,7 @@ namespace EcosCLM.Web.Pages.Deployment.DeploymentTarget
             {
                 _logger.LogError(ex, "ERRO AO SALVAR");
 
-                TempData["error"] = ex.ToString();
+                TempData["error"] = ex.Message;
 
                 LoadLists();
 

@@ -46,6 +46,12 @@ namespace EcosCLM.Web.Pages.Deployment.CertificateDeployment
 
                 Item = _repository.ToViewModel(entity);
 
+                if (Item.CustomerId != CustumerId)
+                {
+                    TempData["warning"] = "Invalid operation.";
+                    return RedirectToPage("Index");
+                }
+
                 await LoadInitialDataAsync();
 
                 return Page();
@@ -54,7 +60,8 @@ namespace EcosCLM.Web.Pages.Deployment.CertificateDeployment
             {
                 TempData["error"] = ex.Message;
 
-                _logger.LogError(ex,
+                _logger.LogError(
+                    ex,
                     "Error loading certificate deployment.");
 
                 return RedirectToPage("Index");
@@ -63,6 +70,14 @@ namespace EcosCLM.Web.Pages.Deployment.CertificateDeployment
 
         public async Task<IActionResult> OnPostSaveAsync()
         {
+            // Campos preenchidos pelo servidor
+            Item.CustomerId = CustumerId;
+            Item.UpdatedAt = DateTime.UtcNow;
+
+            // Remove validações desses campos
+            ModelState.Remove("Item.CustomerId");
+            ModelState.Remove("Item.UpdatedAt");
+
             if (!ModelState.IsValid)
             {
                 await LoadInitialDataAsync();
@@ -71,9 +86,6 @@ namespace EcosCLM.Web.Pages.Deployment.CertificateDeployment
 
             try
             {
-                Item.CustomerId = CustumerId;
-                Item.UpdatedAt = DateTime.UtcNow;
-
                 await _repository.UpdAsync(_repository.ToEntity(Item));
 
                 TempData["success"] = "Certificate deployment updated successfully.";
@@ -84,7 +96,8 @@ namespace EcosCLM.Web.Pages.Deployment.CertificateDeployment
             {
                 TempData["error"] = ex.Message;
 
-                _logger.LogError(ex,
+                _logger.LogError(
+                    ex,
                     "Error updating certificate deployment.");
 
                 await LoadInitialDataAsync();
@@ -128,7 +141,8 @@ namespace EcosCLM.Web.Pages.Deployment.CertificateDeployment
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex,
+                _logger.LogError(
+                    ex,
                     "Error loading auxiliary data.");
             }
 

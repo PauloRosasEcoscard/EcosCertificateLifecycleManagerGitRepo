@@ -43,6 +43,14 @@ namespace EcosCLM.Web.Pages.Deployment.CertificateDeployment
 
         public async Task<IActionResult> OnPostSaveAsync()
         {
+            Item.CustomerId = CustumerId;
+            Item.CreatedAt = DateTime.UtcNow;
+            Item.UpdatedAt = DateTime.UtcNow;
+
+            ModelState.Remove("Item.CustomerId");
+            ModelState.Remove("Item.CreatedAt");
+            ModelState.Remove("Item.UpdatedAt");
+
             if (!ModelState.IsValid)
             {
                 await LoadInitialDataAsync();
@@ -51,10 +59,6 @@ namespace EcosCLM.Web.Pages.Deployment.CertificateDeployment
 
             try
             {
-                Item.CustomerId = CustumerId;
-                Item.CreatedAt = DateTime.UtcNow;
-                Item.UpdatedAt = DateTime.UtcNow;
-
                 await _repository.AddAsync(_repository.ToEntity(Item));
 
                 TempData["success"] = "Certificate deployment created successfully.";
@@ -78,9 +82,31 @@ namespace EcosCLM.Web.Pages.Deployment.CertificateDeployment
         {
             try
             {
+                _logger.LogInformation("========== LOAD INITIAL DATA ==========");
+                _logger.LogInformation("CustumerId: {CustomerId}", CustumerId);
+
+                // CERTIFICATES
+
+                var allCertificates = _certificateRepository
+                    .FindBy(x => true)
+                    .ToList();
+
+                _logger.LogInformation("Total Certificates (sem filtro): {Count}", allCertificates.Count);
+
+                foreach (var certificate in allCertificates)
+                {
+                    _logger.LogInformation(
+                        "Certificate -> Id={Id} Subject={Subject} CustomerId={CustomerId}",
+                        certificate.Id,
+                        certificate.SubjectDn,
+                        certificate.CustomerId);
+                }
+
                 var certificates = _certificateRepository
                     .FindBy(x => x.CustomerId == CustumerId)
                     .ToList();
+
+                _logger.LogInformation("Certificates encontrados: {Count}", certificates.Count);
 
                 Certificates = new SelectList(
                     certificates,
@@ -88,9 +114,28 @@ namespace EcosCLM.Web.Pages.Deployment.CertificateDeployment
                     "SubjectDn",
                     Item.CertificateId);
 
+                // TARGETS
+
+                var allTargets = _targetRepository
+                    .FindBy(x => true)
+                    .ToList();
+
+                _logger.LogInformation("Total Targets (sem filtro): {Count}", allTargets.Count);
+
+                foreach (var target in allTargets)
+                {
+                    _logger.LogInformation(
+                        "Target -> Id={Id} Name={Name} CustomerId={CustomerId}",
+                        target.Id,
+                        target.Name,
+                        target.CustomerId);
+                }
+
                 var targets = _targetRepository
                     .FindBy(x => x.CustomerId == CustumerId)
                     .ToList();
+
+                _logger.LogInformation("Targets encontrados: {Count}", targets.Count);
 
                 Targets = new SelectList(
                     targets,
@@ -106,6 +151,13 @@ namespace EcosCLM.Web.Pages.Deployment.CertificateDeployment
                         "FAILED"
                     },
                     Item.Status);
+
+                ViewData["Certificates"] = Certificates;
+                ViewData["Targets"] = Targets;
+                ViewData["StatusList"] = StatusList;
+
+                _logger.LogInformation("ViewData preenchido com sucesso.");
+                _logger.LogInformation("=======================================");
             }
             catch (Exception ex)
             {

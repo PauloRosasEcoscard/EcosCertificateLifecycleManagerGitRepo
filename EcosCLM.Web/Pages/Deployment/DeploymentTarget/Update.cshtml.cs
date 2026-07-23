@@ -58,6 +58,14 @@ namespace EcosCLM.Web.Pages.Deployment.DeploymentTarget
 
         public async Task<IActionResult> OnPostSaveAsync()
         {
+            // Campos preenchidos pelo servidor
+            Item.CustomerId = CustumerId;
+            Item.UpdatedAt = DateTime.UtcNow;
+
+            // Remove validações desses campos
+            ModelState.Remove("Item.CustomerId");
+            ModelState.Remove("Item.UpdatedAt");
+
             if (!ModelState.IsValid)
             {
                 LoadLists();
@@ -80,7 +88,8 @@ namespace EcosCLM.Web.Pages.Deployment.DeploymentTarget
                 entity.SecretRef = Item.SecretRef;
                 entity.AutomationEnabled = Item.AutomationEnabled;
                 entity.Status = Item.Status;
-                entity.UpdatedAt = DateTime.UtcNow;
+                entity.CustomerId = Item.CustomerId;
+                entity.UpdatedAt = Item.UpdatedAt;
 
                 await _repository.UpdAsync(entity);
 
@@ -94,6 +103,7 @@ namespace EcosCLM.Web.Pages.Deployment.DeploymentTarget
                 _logger.LogError(ex, "Error updating deployment target.");
 
                 LoadLists();
+
                 return Page();
             }
         }
@@ -109,8 +119,16 @@ namespace EcosCLM.Web.Pages.Deployment.DeploymentTarget
             AutomationList = new SelectList(
                 new List<SelectListItem>
                 {
-                    new("Disabled", "0"),
-                    new("Enabled", "1")
+                    new SelectListItem
+                    {
+                        Text = "Disabled",
+                        Value = "0"
+                    },
+                    new SelectListItem
+                    {
+                        Text = "Enabled",
+                        Value = "1"
+                    }
                 },
                 "Value",
                 "Text");

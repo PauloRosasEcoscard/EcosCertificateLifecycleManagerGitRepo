@@ -52,13 +52,19 @@ namespace EcosCLM.Web.Pages.Integration.ApiIdempotencyKey
 
         public async Task<IActionResult> OnPostSaveAsync()
         {
+            // Campos preenchidos pelo servidor
+            Item.CustomerId = CustumerId;
+
+            // Remove validação de campos que não vêm do formulário
+            ModelState.Remove("Item.CustomerId");
+
             if (!ModelState.IsValid)
+            {
                 return Page();
+            }
 
             try
             {
-                Item.CustomerId = CustumerId;
-
                 await _repository.UpdAsync(_repository.ToEntity(Item));
 
                 TempData["success"] = "API idempotency key updated successfully.";
@@ -68,7 +74,10 @@ namespace EcosCLM.Web.Pages.Integration.ApiIdempotencyKey
             catch (Exception ex)
             {
                 TempData["error"] = ex.Message;
-                _logger.LogError(ex, "Error updating API idempotency key.");
+
+                _logger.LogError(
+                    ex,
+                    "Error updating API idempotency key.");
 
                 return Page();
             }
