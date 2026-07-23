@@ -47,7 +47,7 @@ public class Program
                     {
                         using var client = new HttpClient { Timeout = TimeSpan.FromSeconds(3) };
                         var loginApiUrl = builder.Configuration["AppSettings:Clients:Login"];
-                        var response = await client.GetAsync(loginApiUrl);
+                        var response = await client.GetAsync(loginApiUrl).ConfigureAwait(false);
 
                         return response.StatusCode != System.Net.HttpStatusCode.NotFound || response.IsSuccessStatusCode
                             ? Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult.Healthy("Login server active.")
@@ -152,7 +152,7 @@ public class Program
                             error = entry.Value.Exception?.Message
                         })
                     };
-                    await context.Response.WriteAsync(Newtonsoft.Json.JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented));
+                    await context.Response.WriteAsync(Newtonsoft.Json.JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented)).ConfigureAwait(false);
                 }
             });
 

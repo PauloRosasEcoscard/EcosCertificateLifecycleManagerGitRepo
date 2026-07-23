@@ -28,7 +28,7 @@ namespace EcosCLM.Web.Pages.Company.IdentityProvider
 
         public async Task<IActionResult> OnGet(int id)
         {
-            await GetData(id);
+            await GetData(id).ConfigureAwait(false);
 
             if (Item == null)
                 return RedirectToPage("Index");
@@ -49,8 +49,8 @@ namespace EcosCLM.Web.Pages.Company.IdentityProvider
                 string url = _configuration.GetSection("AppSettings:Clients:Login").Value;
                 string uri = string.Format(PolicySystemUris.deleteIdentityProvider, Item.Id);
 
-                HttpResponseMessage response = await HttpRequestService.DeleteAsync(string.Concat(url, uri), _logger);
-                string responseContentHttp = await response.Content.ReadAsStringAsync();
+                HttpResponseMessage response = await HttpRequestService.DeleteAsync(string.Concat(url, uri), _logger).ConfigureAwait(false);
+                string responseContentHttp = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
                 if (!response.IsSuccessStatusCode)
                 {
@@ -72,7 +72,7 @@ namespace EcosCLM.Web.Pages.Company.IdentityProvider
         {
             try
             {
-                await GetItem(id);
+                await GetItem(id).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
@@ -86,8 +86,8 @@ namespace EcosCLM.Web.Pages.Company.IdentityProvider
             string url = _configuration.GetSection("AppSettings:Clients:Login").Value;
             string uri = string.Format(PolicySystemUris.getIdentityProviderByCustumerIdentityProvider, CustumerId, id);
 
-            HttpResponseMessage response = await HttpRequestService.GetAsync(string.Concat(url, uri), _logger);
-            string responseContentHttp = await response.Content.ReadAsStringAsync();
+            HttpResponseMessage response = await HttpRequestService.GetAsync(string.Concat(url, uri), _logger).ConfigureAwait(false);
+            string responseContentHttp = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
             if (response.IsSuccessStatusCode)
             {

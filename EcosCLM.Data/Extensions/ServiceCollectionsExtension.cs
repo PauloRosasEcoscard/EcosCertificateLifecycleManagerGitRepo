@@ -3,17 +3,12 @@ using EcosCLM.Application.Services;
 using EcosCLM.Data.Context;
 using EcosCLM.Data.Repositories;
 using EcosCLM.Data.Services;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.SqlServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Pomelo.Extensions.Caching.MySql;
-using System.Reflection.Emit;
-using EcosCLM.Application.Validators.Certificates;
-using EcosCLM.Application.Validators.Deployment;
-using EcosCLM.Application.Validators.Integration;
+using System.Globalization;
 
 namespace EcosCLM.Data.Extensions
 {
@@ -21,7 +16,10 @@ namespace EcosCLM.Data.Extensions
     {
         public static void ServicesApplication(IServiceCollection services, IConfiguration configuration)
         {
-            var repositoryType = configuration.GetSection("RepositoryType")?.Value?.ToUpper();
+            ArgumentNullException.ThrowIfNull(services);
+            ArgumentNullException.ThrowIfNull(configuration);
+
+            var repositoryType = configuration.GetSection("RepositoryType")?.Value?.ToUpper(CultureInfo.InvariantCulture);
             var connectionStrings = configuration.GetSection("ConnectionStrings");
             string dashboardConnectionString = configuration.GetConnectionString("EcosCLM")!;
 
@@ -58,12 +56,14 @@ namespace EcosCLM.Data.Extensions
                     options.TableName = "SessionEntry";
                 });
             }
+
             #region Services
+
             services.AddTransient<EmailService>();
             services.AddHostedService<QueuedHostedService>();
             services.AddSingleton<IBackgroundTaskQueue>(_ =>
             {
-                if (!int.TryParse(configuration["QueueCapacity"], out var queueCapacity))
+                if (!int.TryParse(configuration["QueueCapacity"], NumberStyles.Integer, CultureInfo.InvariantCulture, out var queueCapacity))
                 {
                     queueCapacity = 100;
                 }
@@ -72,9 +72,11 @@ namespace EcosCLM.Data.Extensions
             });
             services.AddSingleton<IDownloadManager, DownloadManager>();
             services.AddScoped<FileGenerator>();
-            #endregion
+
+            #endregion Services
 
             #region DependencyInjection
+
             services.AddTransient<EcosCLMContext>();
             services.AddScoped<IAuditLogsRepository, AuditLogsRepository>();
             services.AddScoped<ISyslogServersRepository, SyslogServersRepository>();
@@ -110,5 +112,7 @@ namespace EcosCLM.Data.Extensions
             #endregion
         }
 
+            #endregion DependencyInjection
+        }
     }
 }

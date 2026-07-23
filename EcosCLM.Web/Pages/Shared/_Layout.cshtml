@@ -10,36 +10,45 @@
 @inject INotificationsRepository notificationsRepository
 
 @{
-    string? email = HttpContextAccessor.HttpContext.User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value ??
-                    HttpContextAccessor.HttpContext.User.FindFirst("email")?.Value;
+    string email = HttpContextAccessor.HttpContext?.User?.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value ??
+                   HttpContextAccessor.HttpContext?.User?.FindFirst("email")?.Value ?? "";
 
-    List<Notifications> notifications = notificationsRepository.GetAll()
-                                                               .Where(x => x.User == email)
-                                                               .OrderByDescending(x => x.Timestamp)
-                                                               .ToList();
+    List<Notifications> notifications = new();
+
+    if (!string.IsNullOrEmpty(email))
+    {
+        notifications = notificationsRepository.GetAll()
+                                               .Where(x => x.User == email)
+                                               .OrderByDescending(x => x.Timestamp)
+                                               .ToList();
+    }
 
     string userName = "";
     string profileDescription = "";
 
     try
     {
-        userName = User.Identity.Name;
+        userName = User.Identity?.Name ?? "";
 
-        TypeProfile profile = ((TypeProfile)int.Parse(User.Claims.FirstOrDefault(c => c.Type == "Profile")!.Value));
-
-        switch (profile)
+        var profileClaim = User.Claims.FirstOrDefault(c => c.Type == "Profile");
+        if (profileClaim != null && int.TryParse(profileClaim.Value, out int profileId))
         {
-            case TypeProfile.Admin:
-                profileDescription = "Admin";
-                break;
+            TypeProfile profile = (TypeProfile)profileId;
 
-            case TypeProfile.Audit:
-                profileDescription = "Audit";
-                break;
+            switch (profile)
+            {
+                case TypeProfile.Admin:
+                    profileDescription = "Admin";
+                    break;
 
-            case TypeProfile.Custom:
-                profileDescription = await GetProfile(email);
-                break;
+                case TypeProfile.Audit:
+                    profileDescription = "Audit";
+                    break;
+
+                case TypeProfile.Custom:
+                    profileDescription = await GetProfile(email).ConfigureAwait(false);
+                    break;
+            }
         }
     }
     catch { }
@@ -48,11 +57,13 @@
 {
     async Task<string> GetProfile(string email)
     {
-        string url = Configuration.GetSection("AppSettings:Clients:Login").Value!;
+        string url = Configuration.GetSection("AppSettings:Clients:Login").Value ?? "";
         string uri = string.Format(PolicySystemUris.getProfile, email);
 
-        HttpResponseMessage response = await HttpRequestService.GetAsync(string.Concat(url, uri), null);
-        string responseContentHttp = await response.Content.ReadAsStringAsync();
+        if (string.IsNullOrEmpty(url)) return "Custom";
+
+        HttpResponseMessage response = await HttpRequestService.GetAsync(string.Concat(url, uri), null).ConfigureAwait(false);
+        string responseContentHttp = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
         if (response.IsSuccessStatusCode)
         {
@@ -136,14 +147,14 @@
                         <div class="dropdown">
                             <a href="#" class="btn btn-link text-muted p-2 position-relative d-inline-flex" id="notificationDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="material-symbols-outlined fs-4">notifications</i>
-                                @if (notifications.Any())
+                                @if (notifications.Count > 0)
                                 {
                                     <span class="position-absolute top-1 start-75 translate-middle p-1 bg-danger border border-light rounded-circle"></span>
                                 }
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end p-2 overflow-auto" style="max-height: 350px; width: 340px;" aria-labelledby="notificationDropdown">
                                 <div class="px-3 py-2 border-bottom fw-semibold small text-muted">Notifications</div>
-                                @if (!notifications.Any())
+                                @if (notifications.Count == 0)
                                 {
                                     <li class="text-center py-4 text-muted small">No notifications found</li>
                                 }
@@ -154,7 +165,7 @@
                                             <i class="material-symbols-outlined text-primary mt-1">@notification.Icon</i>
                                             <div>
                                                 <div class="small">@notification.Message</div>
-                                                <small class="text-muted">@ParseNotificationTimestamp(notification.Timestamp)</small>
+                                                <div class="small text-muted">@ParseNotificationTimestamp(notification.Timestamp)</div>
                                             </div>
                                         </a>
                                     </li>
@@ -201,7 +212,6 @@
         </main>
     </div>
 
-    @* ABSTRAÇÃO DE NOTIFICAÇÕES AQUI *@
     <partial name="_NotificationToasts" />
 
     <script src="~/lib/chartJs/chart.umd.min.js"></script>
@@ -210,63 +220,63 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const sidebar = document.getElementById('sidebar');
-            const toggleBtn = document.getElementById('toggleSidebar');
-            const overlay = document.getElementById('overlay');
-            const mainContent = document.querySelector('.main-content');
+            document.addEventListener("DOMContentLoaded", function() {
+                const sidebar = document.getElementById('sidebar');
+                const toggleBtn = document.getElementById('toggleSidebar');
+                const overlay = document.getElementById('overlay');
+                const mainContent = document.querySelector('.main-content');
 
-            function toggleSidebar() {
-                sidebar.classList.toggle('active');
-                overlay.classList.toggle('active');
-                mainContent.classList.toggle('sidebar-active');
-            }
+                function toggleSidebar() {
+                    sidebar.classList.toggle('active');
+                    overlay.classList.toggle('active');
+                    mainContent.classList.toggle('sidebar-active');
+                }
 
-            if(toggleBtn) toggleBtn.addEventListener('click', toggleSidebar);
-            if(overlay) overlay.addEventListener('click', toggleSidebar);
-        });
+                if (toggleBtn) toggleBtn.addEventListener('click', toggleSidebar);
+                if (overlay) overlay.addEventListener('click', toggleSidebar);
+            });
     </script>
 
     <script>
-        (() => {
-          'use strict'
-          const getStoredTheme = () => localStorage.getItem('theme')
-          const setStoredTheme = theme => localStorage.setItem('theme', theme)
-          const getPreferredTheme = () => {
-            const storedTheme = getStoredTheme()
-            if (storedTheme) return storedTheme
-            return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
-          }
-          const setTheme = theme => {
-            document.documentElement.setAttribute('data-bs-theme', theme)
-          }
-          setTheme(getPreferredTheme())
+            (() => {
+                'use strict'
+                const getStoredTheme = () => localStorage.getItem('theme')
+                const setStoredTheme = theme => localStorage.setItem('theme', theme)
+                const getPreferredTheme = () => {
+                    const storedTheme = getStoredTheme()
+                    if (storedTheme) return storedTheme
+                    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+                }
+                const setTheme = theme => {
+                    document.documentElement.setAttribute('data-bs-theme', theme)
+                }
+                setTheme(getPreferredTheme())
 
-          const showActiveTheme = (theme) => {
-            document.querySelectorAll('[data-bs-theme-value]').forEach(element => {
-              element.classList.remove('active')
-              element.setAttribute('aria-pressed', 'false')
-            })
+                const showActiveTheme = (theme) => {
+                    document.querySelectorAll('[data-bs-theme-value]').forEach(element => {
+                        element.classList.remove('active')
+                        element.setAttribute('aria-pressed', 'false')
+                    })
 
-            const btnToActive = document.querySelector(`[data-bs-theme-value="${theme}"]`)
-            if (btnToActive) {
-                btnToActive.classList.add('active')
-                btnToActive.setAttribute('aria-pressed', 'true')
-            }
-          }
+                    const btnToActive = document.querySelector(`[data-bs-theme-value="${theme}"]`)
+                    if (btnToActive) {
+                        btnToActive.classList.add('active')
+                        btnToActive.setAttribute('aria-pressed', 'true')
+                    }
+                }
 
-          window.addEventListener('DOMContentLoaded', () => {
-            showActiveTheme(getPreferredTheme())
-            document.querySelectorAll('[data-bs-theme-value]').forEach(toggle => {
-                toggle.addEventListener('click', () => {
-                  const theme = toggle.getAttribute('data-bs-theme-value')
-                  setStoredTheme(theme)
-                  setTheme(theme)
-                  showActiveTheme(theme)
+                window.addEventListener('DOMContentLoaded', () => {
+                    showActiveTheme(getPreferredTheme())
+                    document.querySelectorAll('[data-bs-theme-value]').forEach(toggle => {
+                        toggle.addEventListener('click', () => {
+                            const theme = toggle.getAttribute('data-bs-theme-value')
+                            setStoredTheme(theme)
+                            setTheme(theme)
+                            showActiveTheme(theme)
+                        })
+                    })
                 })
-              })
-          })
-        })()
+            })()
     </script>
 
     @await RenderSectionAsync("Scripts", required: false)

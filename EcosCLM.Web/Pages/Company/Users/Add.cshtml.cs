@@ -28,7 +28,7 @@ namespace EcosCLM.Web.Pages.Company.Users
             IConfiguration configuration,
             IConfiguration config,
             IAuditLogsRepository auditLogs,
-            IHttpContextAccessor httpContextAccessor, 
+            IHttpContextAccessor httpContextAccessor,
             IEcosLoginService EcosLoginService,
             ISyslogService syslogService)
             : base(EcosLoginService, config)
@@ -38,13 +38,13 @@ namespace EcosCLM.Web.Pages.Company.Users
             _configuration = configuration;
             _syslogService = syslogService;
             _EcosLoginService = EcosLoginService;
-            
+
         }
 
 
         public async Task<IActionResult> OnGet()
         {
-            await GetListProfilesAsync();
+            await GetListProfilesAsync().ConfigureAwait(false);
             return Page();
         }
 
@@ -55,7 +55,7 @@ namespace EcosCLM.Web.Pages.Company.Users
             ProfilesDict.Add("1", "Admin");
             ProfilesDict.Add("2", "Audit");
 
-            var profileList = await _EcosLoginService.GetAllProfilesList();
+            var profileList = await _EcosLoginService.GetAllProfilesList().ConfigureAwait(false);
 
             if (profileList != null)
             {
@@ -75,7 +75,7 @@ namespace EcosCLM.Web.Pages.Company.Users
 
         public async Task<IActionResult> OnPost()
         {
-            await GetListProfilesAsync();
+            await GetListProfilesAsync().ConfigureAwait(false);
 
             if (ModelState.TryGetValue("Item.TxPassword", out var entry) && entry.ValidationState == ModelValidationState.Valid
                 && ModelState.TryGetValue("Item.TxEmail", out var entry1) && entry1.ValidationState == ModelValidationState.Valid)
@@ -85,7 +85,7 @@ namespace EcosCLM.Web.Pages.Company.Users
                     Item.Profile = (Item.IdProfile == "1" || Item.IdProfile == "2") ? int.Parse(Item.IdProfile) : 0;
 
                     Item.Secret = "";
-                    var response = await _EcosLoginService.AddPolicySystemUser(Item);
+                    var response = await _EcosLoginService.AddPolicySystemUser(Item).ConfigureAwait(false);
 
                     if (!response.IsSuccessful)
                     {

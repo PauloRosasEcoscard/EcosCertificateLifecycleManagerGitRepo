@@ -25,7 +25,7 @@ public class AzureAdOpenIdConnectEvents : OpenIdConnectEvents
 
         if (context.HttpContext.User.Identity?.IsAuthenticated == true)
         {
-            await ClearAuthenticationState(context.HttpContext);
+            await ClearAuthenticationState(context.HttpContext).ConfigureAwait(false);
         }
 
         string customerToUse = context.HttpContext.Items["CustomerName"]?.ToString() ?? string.Empty;
@@ -46,7 +46,7 @@ public class AzureAdOpenIdConnectEvents : OpenIdConnectEvents
         }
 
         context.Properties.Items["ExpectedAudience"] = clientIdToUse;
-        await Task.CompletedTask;
+        await Task.CompletedTask.ConfigureAwait(false);
     }
 
     public override async Task TokenValidated(TokenValidatedContext context)
@@ -80,12 +80,12 @@ public class AzureAdOpenIdConnectEvents : OpenIdConnectEvents
             }
         }
 
-        await Task.CompletedTask;
+        await Task.CompletedTask.ConfigureAwait(false);
     }
 
     public override async Task RemoteFailure(RemoteFailureContext context)
     {
-        await ClearAuthenticationState(context.HttpContext);
+        await ClearAuthenticationState(context.HttpContext).ConfigureAwait(false);
 
         string errorMessage = context.Failure is SecurityTokenInvalidAudienceException
             ? "InvalidAudience"
@@ -97,8 +97,8 @@ public class AzureAdOpenIdConnectEvents : OpenIdConnectEvents
 
     private static async Task ClearAuthenticationState(HttpContext context)
     {
-        await context.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-        await context.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme);
+        await context.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme).ConfigureAwait(false);
+        await context.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme).ConfigureAwait(false);
 
         context.User = new ClaimsPrincipal(new ClaimsIdentity());
 

@@ -32,7 +32,7 @@
         public string? CurveName { get; set; }
 
         /// <summary>Indica se a chave pode ser exportada do HSM (1 = Sim, 0 = Não). Geralmente definido como '0' por segurança.</summary>
-        public short Extractable { get; set; } = 0;
+        public short Extractable { get; set; }
 
         /// <summary>Status da chave (ex: 'ACTIVE', 'REVOKED', 'EXPIRED').</summary>
         public string Status { get; set; } = "ACTIVE";

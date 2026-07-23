@@ -10,7 +10,7 @@ namespace EcosCLM.Web.ViewComponents
 
         public async Task<IViewComponentResult> InvokeAsync(Pager model, string url)
         {
-            await Task.Run(() => { });
+            await Task.Run(() => { }).ConfigureAwait(false);
 
             return View(new Paginatorbar
             {

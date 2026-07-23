@@ -7,11 +7,11 @@ namespace EcosCLM.Application.Infrastructure.Mappers
 {
     public static class MappingProfiles
     {
-        public static IMapper LoadConfigurations(string[] configs = null)
+        public static IMapper LoadConfigurations(string[]? configs = null)
         {
             if (configs == null || configs.Length == 0)
             {
-                configs = new string[] { "EcosCLM.Application"};
+                configs = new string[] { "EcosCLM.Application" };
             }
 
             var assemblies = configs.Select(name => Assembly.Load(name)).ToArray();

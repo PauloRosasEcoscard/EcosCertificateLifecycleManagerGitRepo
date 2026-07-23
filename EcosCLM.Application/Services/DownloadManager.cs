@@ -22,6 +22,8 @@ namespace EcosCLM.Application.Services
             DownloadGenerator generator,
             CancellationToken ct = default)
         {
+            ArgumentNullException.ThrowIfNull(generator);
+
             using var scope = _scopeFactory.CreateScope();
 
             var _repository =
@@ -39,15 +41,15 @@ namespace EcosCLM.Application.Services
                 CreatedAt = DateTime.UtcNow
             };
 
-            await _repository.AddAsync(job);
+            await _repository.AddAsync(job).ConfigureAwait(false);
 
             await _queue.QueueBackgroundWorkItemAsync(async token =>
             {
                 using var innerScope = _scopeFactory.CreateScope();
                 var manager = innerScope.ServiceProvider.GetRequiredService<IDownloadManager>();
 
-                await manager.ProcessAsync(job.Id, generator, token);
-            });
+                await manager.ProcessAsync(job.Id, generator, token).ConfigureAwait(false);
+            }).ConfigureAwait(false);
 
             return job.Id;
         }
@@ -57,6 +59,8 @@ namespace EcosCLM.Application.Services
             DownloadGenerator generator,
             CancellationToken ct)
         {
+            ArgumentNullException.ThrowIfNull(generator);
+
             using var scope = _scopeFactory.CreateScope();
 
             var _repository =
@@ -65,23 +69,23 @@ namespace EcosCLM.Application.Services
             var _notifications =
                 scope.ServiceProvider.GetRequiredService<INotificationsRepository>();
 
-            var job = await _repository.FindOneAsync(x => x.Id == jobId);
+            var job = await _repository.FindOneAsync(x => x.Id == jobId).ConfigureAwait(false);
 
             if (job == null)
                 return;
 
             job.Status = DownloadStatus.Processing;
-            await _repository.UpdAsync(job);
+            await _repository.UpdAsync(job).ConfigureAwait(false);
 
             try
             {
-                var file = await generator(ct);
+                var file = await generator(ct).ConfigureAwait(false);
 
                 var path = Path.Combine("downloads", jobId.ToString());
                 Directory.CreateDirectory(path);
 
                 var filePath = Path.Combine(path, file.FileName);
-                await File.WriteAllBytesAsync(filePath, file.Content, ct);
+                await File.WriteAllBytesAsync(filePath, file.Content, ct).ConfigureAwait(false);
 
                 job.FilePath = filePath;
                 job.FileName = file.FileName;
@@ -96,15 +100,15 @@ namespace EcosCLM.Application.Services
                     Message = $"Your file \"{job.FileName}\" is ready for download.",
                     Link = $"/Download?id={job.Id}",
                     Icon = "download"
-                });
+                }).ConfigureAwait(false);
 
-                await _repository.UpdAsync(job);
+                await _repository.UpdAsync(job).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
                 job.Status = DownloadStatus.Error;
                 job.Error = ex.Message;
-                await _repository.UpdAsync(job);
+                await _repository.UpdAsync(job).ConfigureAwait(false);
             }
         }
     }

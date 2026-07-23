@@ -39,7 +39,7 @@ namespace EcosCLM.Web.Infrastructure.TagHelpers
             output.Attributes.SetAttribute("action", $"{currentPath}?handler={Handler}");
             output.Attributes.SetAttribute("class", "ecos-card p-0");
 
-            var headerHtml = new StringBuilder();
+            var childContent = await output.GetChildContentAsync().ConfigureAwait(false);
 
             // 1. Token Anti-Forgery + Cabeçalho
             headerHtml.Append($"<input type='hidden' name='__RequestVerificationToken' value='{antiforgeryToken.RequestToken}' />");

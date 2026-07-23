@@ -37,7 +37,7 @@ namespace EcosCLM.Web.Pages.Catalog.DeploymentEnvironment
 
             Search = GetFilters();
 
-            await GetData();
+            await GetData().ConfigureAwait(false);
 
             AddGridConfig();
             return Page();
@@ -68,7 +68,7 @@ namespace EcosCLM.Web.Pages.Catalog.DeploymentEnvironment
                     filter: filterJson,
                     oderBy: "name",
                     customer: CustumerId
-                );
+                ).ConfigureAwait(false);
 
                 if (listResult != null)
                 {

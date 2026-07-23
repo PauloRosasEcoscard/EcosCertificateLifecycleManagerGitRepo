@@ -8,6 +8,7 @@ namespace EcosCLM.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<CLMApplication> builder)
         {
+            ArgumentNullException.ThrowIfNull(builder);
             builder.ToTable("CLMApplication");
 
             builder.HasKey(x => x.Id);

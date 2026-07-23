@@ -8,6 +8,8 @@ namespace EcosCLM.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<ManagedDomain> builder)
         {
+            ArgumentNullException.ThrowIfNull(builder);
+
             builder.ToTable("ManagedDomain");
 
             builder.HasKey(x => x.Id);

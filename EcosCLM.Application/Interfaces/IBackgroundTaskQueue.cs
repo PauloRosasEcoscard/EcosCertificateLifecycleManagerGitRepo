@@ -8,10 +8,10 @@ namespace EcosCLM.Application.Interfaces
 {
     public interface IBackgroundTaskQueue
     {
-        ValueTask QueueBackgroundWorkItemAsync(
+        public ValueTask QueueBackgroundWorkItemAsync(
             Func<CancellationToken, ValueTask> workItem);
 
-        ValueTask<Func<CancellationToken, ValueTask>> DequeueAsync(
+        public ValueTask<Func<CancellationToken, ValueTask>> DequeueAsync(
             CancellationToken cancellationToken);
     }
 }

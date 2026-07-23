@@ -74,14 +74,14 @@ namespace EcosCLM.Web.Infrastructure.Core
 
             if (User?.Identity == null || !User.Identity.IsAuthenticated)
             {
-                RedirectToLogin(context);
+                BasePageModel<T>.RedirectToLogin(context);
                 return;
             }
 
             try
             {
                 Email = User.FindFirst(ClaimTypes.Email)?.Value ?? User.FindFirst("email")?.Value;
-                var result = await _EcosLoginService.GetUserCustomerId(Email);
+                var result = await _EcosLoginService.GetUserCustomerId(Email).ConfigureAwait(false);
                 CustumerId = result.Data ?? Guid.Empty;
                 var userSetProfile = User.FindFirst("Profile")?.Value;
                 var isAdmin = ((int)TypeProfile.Admin).ToString();
@@ -89,14 +89,14 @@ namespace EcosCLM.Web.Infrastructure.Core
 
                 if (userSetProfile == isAdmin)
                 {
-                    await next(); // Executa a página normalmente
+                    await next().ConfigureAwait(false); // Executa a página normalmente
                     return;
                 }
 
                 var claimsRoles = User.FindFirst(ClaimTypes.Role)?.Value;
                 if (!string.IsNullOrEmpty(claimsRoles))
                 {
-                    var resultClaims = await _EcosLoginService.DecryptRoles<List<ContextRolesViewModel>>(claimsRoles, _config.GetEncryptKeyFromConfig());
+                    var resultClaims = await _EcosLoginService.DecryptRoles<List<ContextRolesViewModel>>(claimsRoles, _config.GetEncryptKeyFromConfig()).ConfigureAwait(false);
                     ContextRoles = resultClaims.Data ?? new();
                 }
 
@@ -108,7 +108,7 @@ namespace EcosCLM.Web.Infrastructure.Core
                 {
                     if (!canViewAudit && !IsValidPageMethod(pagePath, 1))
                     {
-                        RedirectToAccessDenied(context);
+                        BasePageModel<T>.RedirectToAccessDenied(context);
                         return;
                     }
                 }
@@ -125,7 +125,7 @@ namespace EcosCLM.Web.Infrastructure.Core
 
                     if (!isValidPage)
                     {
-                        RedirectToAccessDenied(context);
+                        BasePageModel<T>.RedirectToAccessDenied(context);
                         return;
                     }
                 }
@@ -133,11 +133,11 @@ namespace EcosCLM.Web.Infrastructure.Core
             catch (Exception ex)
             {
                 Console.WriteLine($"Auth Error: {ex.Message}");
-                RedirectToLogin(context);
+                BasePageModel<T>.RedirectToLogin(context);
                 return;
             }
 
-            await next();
+            await next().ConfigureAwait(false);
         }
 
         private bool IsValidPageMethod(string pagePath, int permissionLevel)
@@ -236,12 +236,12 @@ namespace EcosCLM.Web.Infrastructure.Core
         }
 
         #region Helpers de Redirecionamento
-        private void RedirectToLogin(PageHandlerExecutingContext context)
+        private static void RedirectToLogin(PageHandlerExecutingContext context)
         {
             context.Result = new RedirectToPageResult("/authentication/login");
         }
 
-        private void RedirectToAccessDenied(PageHandlerExecutingContext context)
+        private static void RedirectToAccessDenied(PageHandlerExecutingContext context)
         {
             context.Result = new RedirectToPageResult("/authentication/accessdenied");
         }

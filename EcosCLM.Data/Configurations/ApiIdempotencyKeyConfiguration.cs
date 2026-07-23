@@ -8,6 +8,7 @@ namespace EcosCLM.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<ApiIdempotencyKey> builder)
         {
+            ArgumentNullException.ThrowIfNull(builder);
             builder.ToTable("ApiIdempotencyKey");
 
             builder.HasKey(x => x.Id);

@@ -11,9 +11,12 @@ namespace EcosCLM.Application.Extensions.Deployment
     {
         public static async Task<DeploymentTargetViewModel> GetByIdAsync(this IDeploymentTargetRepository repository, Guid id)
         {
+            ArgumentNullException.ThrowIfNull(repository);
+
             var entity = await repository.GetAll()
                 .Where(x => x.Id == id)
-                .SingleOrDefaultAsync();
+                .SingleOrDefaultAsync()
+                .ConfigureAwait(false);
 
             if (entity == null)
                 throw new NotFoundException(nameof(DeploymentTarget), id);
@@ -21,8 +24,10 @@ namespace EcosCLM.Application.Extensions.Deployment
             return repository.ToViewModel(entity);
         }
 
-        public static async Task<List<DeploymentTargetViewModel>> GetAllWithPageAsync(this IDeploymentTargetRepository repository, int page = 0, int offset = 0, string filter = null, string oderBy = null, string orderDirection = null, Guid? customer = null)
+        public static async Task<List<DeploymentTargetViewModel>> GetAllWithPageAsync(this IDeploymentTargetRepository repository, int page = 0, int offset = 0, string? filter = null, string? oderBy = null, string? orderDirection = null, Guid? customer = null)
         {
+            ArgumentNullException.ThrowIfNull(repository);
+
             var query = repository.GetAll();
 
             if (customer.HasValue)
@@ -35,9 +40,11 @@ namespace EcosCLM.Application.Extensions.Deployment
                     case "name":
                         query = orderDirection == "desc" ? query.OrderByDescending(i => i.Name) : query.OrderBy(i => i.Name);
                         break;
+
                     case "type":
                         query = orderDirection == "desc" ? query.OrderByDescending(i => i.TargetType) : query.OrderBy(i => i.TargetType);
                         break;
+
                     default:
                         query = query.OrderByDescending(x => x.CreatedAt);
                         break;
@@ -77,13 +84,16 @@ namespace EcosCLM.Application.Extensions.Deployment
             if (page > 0)
                 query = query.Take(page);
 
-            var list = await query.ToListAsync();
+            var list = await query.ToListAsync().ConfigureAwait(false);
             return repository.ToListViewModel(list);
         }
 
         public static async Task<DeploymentTargetViewModel> CreateAsync(this IDeploymentTargetRepository repository, DeploymentTarget entity)
         {
-            var query = await repository.AddAsync(entity);
+            ArgumentNullException.ThrowIfNull(repository);
+            ArgumentNullException.ThrowIfNull(entity);
+
+            var query = await repository.AddAsync(entity).ConfigureAwait(false);
             return repository.ToViewModel(query);
         }
     }

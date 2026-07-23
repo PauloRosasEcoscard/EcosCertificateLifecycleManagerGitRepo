@@ -1,0 +1,10 @@
+<Project>
+  <PropertyGroup>
+    <!-- Ativa a análise de código nativa do .NET (Roslyn Analyzers) em todos os projetos -->
+	  <!--<EnableNETAnalyzers>true</EnableNETAnalyzers>-->
+    <!-- Define o nível de análise como o mais rígido e moderno disponível -->
+	  <!--<AnalysisLevel>latest-recommended</AnalysisLevel>-->
+    <!-- Trata os avisos de qualidade (Warnings) como erros, quebrando a build do CI se o código estiver fora do padrão -->
+	  <!--<TreatWarningsAsErrors>true</TreatWarningsAsErrors>-->
+  </PropertyGroup>
+</Project>

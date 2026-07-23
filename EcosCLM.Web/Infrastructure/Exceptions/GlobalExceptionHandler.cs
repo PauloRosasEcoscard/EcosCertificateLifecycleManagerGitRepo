@@ -40,7 +40,7 @@ public class GlobalExceptionHandler : IExceptionHandler
             problemDetails.Extensions.Add("errorCode", errorTraceId);
 
             httpContext.Response.StatusCode = statusCode;
-            await httpContext.Response.WriteAsJsonAsync(problemDetails, cancellationToken);
+            await httpContext.Response.WriteAsJsonAsync(problemDetails, cancellationToken).ConfigureAwait(false);
             return true;
         }
 
@@ -71,7 +71,7 @@ public class GlobalExceptionHandler : IExceptionHandler
                 // Isso evita que a aplicação quebre tentando acessar algo que não existe.
                 httpContext.Response.StatusCode = statusCode;
                 httpContext.Response.ContentType = "text/html; charset=utf-8";
-                await httpContext.Response.WriteAsync($"<h1>Error</h1><p>Protocol: {errorTraceId}</p>");
+                await httpContext.Response.WriteAsync($"<h1>Error</h1><p>Protocol: {errorTraceId}</p>").ConfigureAwait(false);
                 return true;
             }
         }
@@ -82,7 +82,7 @@ public class GlobalExceptionHandler : IExceptionHandler
 
         httpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
         httpContext.Response.ContentType = "text/html";
-        await httpContext.Response.WriteAsync($"<html><body style='font-family:sans-serif; text-align:center; padding:50px;'><h2>Critical System Failure</h2><p>Please contact support.</p><p>Protocol: <strong>{errorTraceId}</strong></p></body></html>", cancellationToken);
+        await httpContext.Response.WriteAsync($"<html><body style='font-family:sans-serif; text-align:center; padding:50px;'><h2>Critical System Failure</h2><p>Please contact support.</p><p>Protocol: <strong>{errorTraceId}</strong></p></body></html>", cancellationToken).ConfigureAwait(false);
 
         return true;
     }

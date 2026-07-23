@@ -8,6 +8,8 @@ namespace EcosCLM.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<HsmKeyRef> builder)
         {
+            ArgumentNullException.ThrowIfNull(builder);
+
             builder.ToTable("HsmKeyRef");
 
             builder.HasKey(x => x.Id);

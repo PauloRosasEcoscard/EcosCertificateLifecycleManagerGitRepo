@@ -13,7 +13,7 @@ namespace EcosCLM.Application.ViewModels.Integration
         public string EventType { get; set; } = string.Empty;
         public string PayloadJson { get; set; } = "{}";
         public string Status { get; set; } = "PENDING";
-        public int Retries { get; set; } = 0;
+        public int Retries { get; set; }
         public DateTime CreatedAt { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

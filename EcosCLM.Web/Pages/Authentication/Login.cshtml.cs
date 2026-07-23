@@ -81,7 +81,7 @@ namespace EcosCLM.Web.Pages.Authentication
             try
             {
                 RestoreCustomerCookieFromTempData();
-                await ResolveCustomerAsync(ReturnUrl);
+                await ResolveCustomerAsync(ReturnUrl).ConfigureAwait(false);
 
                 if (User.Identity?.IsAuthenticated == true && User.HasClaim(x => x.Type == ClaimTypes.NameIdentifier))
                 {
@@ -121,7 +121,7 @@ namespace EcosCLM.Web.Pages.Authentication
                 ReturnUrl = _config["AppSettings:Clients:Dashboard"] ?? HttpContext.Request.Host.Value
             };
 
-            var tokenServiceResponse = await _EcosLoginService.Login(loginRequest);
+            var tokenServiceResponse = await _EcosLoginService.Login(loginRequest).ConfigureAwait(false);
 
             if (tokenServiceResponse?.Data == null)
             {
@@ -138,12 +138,12 @@ namespace EcosCLM.Web.Pages.Authentication
                 return Page();
             }
 
-            return await ProcessAuthenticationAsync(userToken.token);
+            return await ProcessAuthenticationAsync(userToken.token).ConfigureAwait(false);
         }
 
         private async Task<IActionResult> ProcessAuthenticationAsync(string token)
         {
-            var membershipContext = await _EcosLoginService.ValidateApiUserByToken(token);
+            var membershipContext = await _EcosLoginService.ValidateApiUserByToken(token).ConfigureAwait(false);
             var user = membershipContext.Data?.User;
 
             if (user == null)
@@ -152,14 +152,14 @@ namespace EcosCLM.Web.Pages.Authentication
                 return Page();
             }
 
-            await LoadAuthFlowConfigAsync(user.IdCustomer);
+            await LoadAuthFlowConfigAsync(user.IdCustomer).ConfigureAwait(false);
 
             if (user.IsAuth2fa == true || Login2fa)
             {
                 return SetupAndRedirectTo2fa(user);
             }
 
-            var claimsPrincipal = await BuildClaimsPrincipal(membershipContext.Data);
+            var claimsPrincipal = await BuildClaimsPrincipal(membershipContext.Data).ConfigureAwait(false);
             var authProperties = BuildAuthenticationProperties();
 
             SetCustomerCookieIfRequired(user);
@@ -167,7 +167,7 @@ namespace EcosCLM.Web.Pages.Authentication
             await HttpContext.SignInAsync(
                 CookieAuthenticationDefaults.AuthenticationScheme,
                 claimsPrincipal,
-                authProperties);
+                authProperties).ConfigureAwait(false);
 
             AuditSuccessfulLogin(user.UserEmail);
 
@@ -178,9 +178,9 @@ namespace EcosCLM.Web.Pages.Authentication
         {
             var baseUrl = _config["AppSettings:Clients:Login"];
             var uri = string.Format(PolicySystemUris.getClientAuthFlowConfig, customerId);
-            var response = await HttpRequestService.GetAsync(string.Concat(baseUrl, uri), _logger);
+            var response = await HttpRequestService.GetAsync(string.Concat(baseUrl, uri), _logger).ConfigureAwait(false);
 
-            var responseContent = await response.Content.ReadAsStringAsync();
+            var responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
             if (response.IsSuccessStatusCode)
             {
@@ -205,7 +205,7 @@ namespace EcosCLM.Web.Pages.Authentication
 
             if (!string.IsNullOrEmpty(customerIdentifier))
             {
-                Customer = await GetCustomerId(customerIdentifier);
+                Customer = await GetCustomerId(customerIdentifier).ConfigureAwait(false);
                 _logger.LogInformation("Customer identifier found in URL: '{Identifier}'", customerIdentifier);
             }
             else if (HttpContext.Request.Cookies.TryGetValue(CustomerCookieName, out var customerFromCookie) && Guid.TryParse(customerFromCookie, out var parsedCustomer))
@@ -216,8 +216,8 @@ namespace EcosCLM.Web.Pages.Authentication
 
             if (Customer != Guid.Empty)
             {
-                await LoadAuthFlowConfigAsync(Customer);
-                var customerData = await _EcosLoginService.GetCustomerById(Customer);
+                await LoadAuthFlowConfigAsync(Customer).ConfigureAwait(false);
+                var customerData = await _EcosLoginService.GetCustomerById(Customer).ConfigureAwait(false);
                 CustomerName = customerData.Data?.TxTitle ?? string.Empty;
             }
         }
@@ -267,11 +267,11 @@ namespace EcosCLM.Web.Pages.Authentication
             if (membershipContext.Roles.AnyOrNull() && user.Profile == 0)
             {
                 var encryptKey = _config.GetEncryptKeyFromConfig();
-                var roles = await _EcosLoginService.EncryptRoles(membershipContext.Roles, encryptKey);
+                var roles = await _EcosLoginService.EncryptRoles(membershipContext.Roles, encryptKey).ConfigureAwait(false);
                 claims.Add(new Claim(ClaimTypes.Role, roles.Data));
             }
 
-            var customerConfig = await _EcosLoginService.GetCustomerById(user.IdCustomer);
+            var customerConfig = await _EcosLoginService.GetCustomerById(user.IdCustomer).ConfigureAwait(false);
             if (customerConfig.IsSuccessful)
             {
                 claims.Add(new Claim("Customer", customerConfig.Data?.TxTitle));
@@ -298,7 +298,7 @@ namespace EcosCLM.Web.Pages.Authentication
 
         private async Task SetCustomerCookieIfRequired(ContextUserViewModel user)
         {
-            var hasCustomerConfig = await _EcosLoginService.GetAuthConfigByCustomerId(user.IdCustomer);
+            var hasCustomerConfig = await _EcosLoginService.GetAuthConfigByCustomerId(user.IdCustomer).ConfigureAwait(false);
             if (!hasCustomerConfig.Data.Any()) return;
 
             var cookieOptions = new CookieOptions
@@ -315,7 +315,7 @@ namespace EcosCLM.Web.Pages.Authentication
 
         private async Task AuditSuccessfulLogin(string userEmail)
         {
-            var user = await _EcosLoginService.ExistPolicySystemUserByEmail(userEmail);
+            var user = await _EcosLoginService.ExistPolicySystemUserByEmail(userEmail).ConfigureAwait(false);
 
             var auditLog = new AuditLogs
             {
@@ -326,7 +326,7 @@ namespace EcosCLM.Web.Pages.Authentication
                 LogType = "Authentication"
             };
 
-            await _auditLogs.CreateAsync(auditLog);
+            await _auditLogs.CreateAsync(auditLog).ConfigureAwait(false);
 
             await _notificationsRepository.CreateAsync(new Notifications
             {
@@ -335,7 +335,7 @@ namespace EcosCLM.Web.Pages.Authentication
                 Message = "New Login",
                 Link = "#",
                 Icon = "security"
-            });
+            }).ConfigureAwait(false);
 
             try
             {
@@ -369,7 +369,7 @@ namespace EcosCLM.Web.Pages.Authentication
 
         private async Task<Guid> GetCustomerId(string customerName)
         {
-            var customer = await _EcosLoginService.GetCustomerByName(customerName);
+            var customer = await _EcosLoginService.GetCustomerByName(customerName).ConfigureAwait(false);
             return customer.Data?.IdCustomer ?? Guid.Empty;
         }
 

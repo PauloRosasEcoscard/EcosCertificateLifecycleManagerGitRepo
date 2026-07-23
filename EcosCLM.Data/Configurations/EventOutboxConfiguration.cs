@@ -8,6 +8,7 @@ namespace EcosCLM.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<EventOutbox> builder)
         {
+            ArgumentNullException.ThrowIfNull(builder);
             builder.ToTable("EventOutbox");
 
             builder.HasKey(x => x.Id);

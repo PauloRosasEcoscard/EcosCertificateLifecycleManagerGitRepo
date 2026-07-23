@@ -2,7 +2,7 @@
 {
     /// <summary>
     /// Define um alvo de implantação onde os certificados digitais serão instalados.
-    /// Representa a infraestrutura física ou lógica (como um Cluster Kubernetes, um Balanceador de Carga 
+    /// Representa a infraestrutura física ou lógica (como um Cluster Kubernetes, um Balanceador de Carga
     /// ou um Servidor Web) que consumirá o certificado para habilitar a comunicação segura (TLS).
     /// </summary>
     public class DeploymentTarget
@@ -32,7 +32,7 @@
         public string? SecretRef { get; set; }
 
         /// <summary>Flag que indica se a automação está habilitada (1 = Sim, 0 = Não).</summary>
-        public short AutomationEnabled { get; set; } = 0;
+        public short AutomationEnabled { get; set; }
 
         /// <summary>Status do alvo (ex: 'ACTIVE', 'OFFLINE', 'ERROR').</summary>
         public string Status { get; set; } = "ACTIVE";

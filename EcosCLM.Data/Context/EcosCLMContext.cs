@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using System.Globalization;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -17,7 +18,7 @@ namespace EcosCLM.Data.Context
 {
     public class EcosCLMContext : DbContext, IDataProtectionKeyContext
     {
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IHttpContextAccessor? _httpContextAccessor;
         private readonly IServiceProvider? _serviceProvider;
 
         public DbSet<AuditLogs> AuditLogs { get; set; }
@@ -28,7 +29,6 @@ namespace EcosCLM.Data.Context
         public DbSet<DataProtectionKey> DataProtectionKeys { get; set; }
         public DbSet<SessionEntry> SessionEntry { get; set; }
 
-        // CLM Domain DbSets
         public DbSet<CLMApplication> CLMApplications { get; set; }
         public DbSet<DeploymentEnvironment> DeploymentEnvironments { get; set; }
         public DbSet<ManagedDomain> ManagedDomains { get; set; }
@@ -59,6 +59,7 @@ namespace EcosCLM.Data.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            ArgumentNullException.ThrowIfNull(modelBuilder);
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(EcosCLMContext).Assembly);
         }
 
@@ -66,11 +67,9 @@ namespace EcosCLM.Data.Context
         {
             var auditEntries = CreateAuditEntries();
 
-            if (auditEntries.Any())
+            if (auditEntries.Count > 0)
             {
                 AuditLogs.AddRange(auditEntries);
-
-                // Disparo síncrono controlado (safeguard)
                 _ = DispatchSyslogEntriesAsync(auditEntries);
             }
 
@@ -81,15 +80,13 @@ namespace EcosCLM.Data.Context
         {
             var auditEntries = CreateAuditEntries();
 
-            if (auditEntries.Any())
+            if (auditEntries.Count > 0)
             {
-                await AuditLogs.AddRangeAsync(auditEntries, cancellationToken);
-
-                // Disparo assíncrono correto no pipeline
-                await DispatchSyslogEntriesAsync(auditEntries);
+                await AuditLogs.AddRangeAsync(auditEntries, cancellationToken).ConfigureAwait(false);
+                await DispatchSyslogEntriesAsync(auditEntries).ConfigureAwait(false);
             }
 
-            return await base.SaveChangesAsync(cancellationToken);
+            return await base.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
         }
 
         private List<AuditLogs> CreateAuditEntries()
@@ -101,7 +98,7 @@ namespace EcosCLM.Data.Context
             var userEmail = httpContext?.User?.Identity?.Name ?? "System";
 
             var customerIdClaim = httpContext?.User?.FindFirst("CustomerId")?.Value;
-            Guid.TryParse(customerIdClaim, out Guid customerId);
+            _ = Guid.TryParse(customerIdClaim, out Guid customerId);
 
             string sourceIp = httpContext?.Connection.RemoteIpAddress?.ToString() == "::1"
                 ? "127.0.0.1"
@@ -128,7 +125,7 @@ namespace EcosCLM.Data.Context
                     SourceIp = sourceIp,
                     DestinationIp = destIp,
                     LogType = entry.State.ToString(),
-                    Log = $"Entity {entityName} with Key {primaryKey} was {entry.State.ToString().ToLower()}."
+                    Log = $"Entity {entityName} with Key {primaryKey} was {entry.State.ToString().ToLower(CultureInfo.InvariantCulture)}."
                 };
 
                 log.Hash = GenerateAuditHash(log);
@@ -149,22 +146,21 @@ namespace EcosCLM.Data.Context
                 {
                     foreach (var log in entries)
                     {
-                        // await adicionado corretamente para a nova assinatura assíncrona
-                        await syslogService.InitializeAsync(log.IdCustumer);
+                        await syslogService.InitializeAsync(log.IdCustumer).ConfigureAwait(false);
                         syslogService.SendLog("Ecos Dashboard", log, SyslogSeverity.Information);
                     }
                 }
             }
             catch
             {
-                // Ignora falhas de rede no Syslog para não quebrar a persistência principal
+                // Ignored
             }
         }
 
-        private string GenerateAuditHash(AuditLogs entity)
+        private static string GenerateAuditHash(AuditLogs entity)
         {
             StringBuilder hashData = new StringBuilder();
-            hashData.Append(entity.Date.ToString("o"));
+            hashData.Append(entity.Date.ToString("o", CultureInfo.InvariantCulture));
             hashData.Append(entity.User);
             hashData.Append(entity.IdCustumer);
             hashData.Append(entity.LogType);
@@ -172,13 +168,12 @@ namespace EcosCLM.Data.Context
             hashData.Append(entity.SourceIp);
             hashData.Append(entity.DestinationIp);
 
-            using SHA256 sha256 = SHA256.Create();
             byte[] inputBytes = Encoding.UTF8.GetBytes(hashData.ToString());
-            byte[] hashBytes = sha256.ComputeHash(inputBytes);
+            byte[] hashBytes = SHA256.HashData(inputBytes);
 
             StringBuilder sb = new StringBuilder();
             foreach (byte b in hashBytes)
-                sb.Append(b.ToString("x2"));
+                sb.Append(b.ToString("x2", CultureInfo.InvariantCulture));
 
             return sb.ToString();
         }

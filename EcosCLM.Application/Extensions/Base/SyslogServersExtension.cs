@@ -10,10 +10,13 @@ namespace EcosCLM.Application.Extensions.Base
     {
         public static async Task<SyslogServersViewModel> GetByIdAsync(this ISyslogServersRepository repository, int id, Guid customerId)
         {
+            ArgumentNullException.ThrowIfNull(repository);
+
             var entity = await repository.GetAll()
                 .Where(x => x.Id == id)
                 .Where(x => x.CustumerId == customerId)
-                .SingleOrDefaultAsync();
+                .SingleOrDefaultAsync()
+                .ConfigureAwait(false);
 
             if (entity == null)
                 throw new NotFoundException(nameof(SyslogServers), id);
@@ -23,9 +26,12 @@ namespace EcosCLM.Application.Extensions.Base
 
         public static async Task<SyslogServersViewModel> GetByIdCustomerAsync(this ISyslogServersRepository repository, Guid customerId)
         {
+            ArgumentNullException.ThrowIfNull(repository);
+
             var entity = await repository.GetAll()
                 .Where(x => x.CustumerId == customerId)
-                .SingleOrDefaultAsync();
+                .SingleOrDefaultAsync()
+                .ConfigureAwait(false);
 
             if (entity == null)
                 throw new NotFoundException(nameof(SyslogServers), customerId);
@@ -33,8 +39,10 @@ namespace EcosCLM.Application.Extensions.Base
             return repository.ToViewModel(entity);
         }
 
-        public static async Task<List<SyslogServersViewModel>> GetAllWithPageAsync(this ISyslogServersRepository repository, Guid? Customer = null, int page = 0, int offset = 0, string filter = null)
+        public static async Task<List<SyslogServersViewModel>> GetAllWithPageAsync(this ISyslogServersRepository repository, Guid? Customer = null, int page = 0, int offset = 0, string? filter = null)
         {
+            ArgumentNullException.ThrowIfNull(repository);
+
             var query = repository.GetAll();
 
             query = query.Where(x => x.CustumerId == Customer);
@@ -45,31 +53,39 @@ namespace EcosCLM.Application.Extensions.Base
             if (page > 0)
                 query = query.Take(page);
 
-            var list = await query.ToListAsync();
+            var list = await query.ToListAsync().ConfigureAwait(false);
             return repository.ToListViewModel(list);
         }
 
         public static async Task<SyslogServersViewModel> CreateAsync(this ISyslogServersRepository repository, SyslogServersViewModel model)
         {
+            ArgumentNullException.ThrowIfNull(repository);
+            ArgumentNullException.ThrowIfNull(model);
+
             var entity = repository.ToEntity(model);
-            var query = await repository.AddAsync(entity);
+            var query = await repository.AddAsync(entity).ConfigureAwait(false);
             return repository.ToViewModel(query);
         }
 
         public static async Task<SyslogServersViewModel> EditAsync(this ISyslogServersRepository repository, SyslogServersViewModel model)
         {
+            ArgumentNullException.ThrowIfNull(repository);
+            ArgumentNullException.ThrowIfNull(model);
+
             var entity = repository.ToEntity(model);
-            var query = await repository.UpdAsync(entity);
+            var query = await repository.UpdAsync(entity).ConfigureAwait(false);
             return repository.ToViewModel(query);
         }
 
         public static async Task<bool> DeleteAsync(this ISyslogServersRepository repository, int id)
         {
-            var entity = await repository.FindOneAsync(x => x.Id == id);
+            ArgumentNullException.ThrowIfNull(repository);
+
+            var entity = await repository.FindOneAsync(x => x.Id == id).ConfigureAwait(false);
 
             if (entity != null)
             {
-                await repository.DelAsync(entity);
+                await repository.DelAsync(entity).ConfigureAwait(false);
             }
 
             return true;

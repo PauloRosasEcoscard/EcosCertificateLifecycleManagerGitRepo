@@ -80,7 +80,7 @@ namespace Ecos_Cloud_Vhsm_Dashboard.Pages.Company.SyslogServers
         {
             Item.CustumerId = CustumerId;
 
-            await _repository.CreateAsync(Item);
+            await _repository.CreateAsync(Item).ConfigureAwait(false);
 
             await _auditLogs.CreateAsync(new AuditLogs
             {
@@ -89,7 +89,7 @@ namespace Ecos_Cloud_Vhsm_Dashboard.Pages.Company.SyslogServers
                 IdCustumer = CustumerId,
                 Log = "User: " + Email + " created a new SyslogServer",
                 LogType = "Company Management"
-            });
+            }).ConfigureAwait(false);
 
             return RedirectToPage("Index");
         }
@@ -97,7 +97,7 @@ namespace Ecos_Cloud_Vhsm_Dashboard.Pages.Company.SyslogServers
         private async Task GetData()
         {
             int page = 0, offset = 0;
-            var query = await _repository.GetAllWithPageAsync(CustumerId, page, offset, Filter);
+            var query = await _repository.GetAllWithPageAsync(CustumerId, page, offset, Filter).ConfigureAwait(false);
             Pager = new Pager(query.Count(), PageCurrent, PageSize, MaxPages);
             Itens = query.Skip((Pager.CurrentPage - 1) * Pager.PageSize).Take(Pager.PageSize);
         }
