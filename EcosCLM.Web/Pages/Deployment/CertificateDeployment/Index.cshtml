@@ -1,0 +1,244 @@
+﻿
+@page
+@model IndexModel
+
+@{
+    ViewData["Title"] = "Certificate Deployment";
+    ViewData["Breadcrumb"] = "Deployment";
+    ViewData["PageName"] = "Certificate Deployment";
+}
+
+<div class="row">
+    <div class="col-12 mt-3">
+
+        <ecos-grid config="Model.GridConfig">
+
+            @if (Model.Itens?.Any() == true)
+            {
+                @foreach (var item in Model.Itens)
+                {
+                    <div class="ecos-model-card p-3">
+                        <div class="row align-items-center w-100 m-0">
+
+                            <div class="col-12 col-md-3 mb-2 mb-md-0">
+                                <span class="ecos-card-label">Certificate</span>
+                                <span class="ecos-card-value fw-semibold text-main d-block">
+                                    @(item.Certificate?.SubjectDn ?? "-")
+                                </span>
+                            </div>
+
+                            <div class="col-12 col-md-3 mb-2 mb-md-0">
+                                <span class="ecos-card-label">Target</span>
+                                <span class="ecos-card-value text-main d-block">
+                                    @(item.Target?.Name ?? "-")
+                                </span>
+                            </div>
+
+                            <div class="col-12 col-md-2 mb-2 mb-md-0">
+                                <span class="ecos-card-label">Status</span>
+
+                                @if (item.Status == "SUCCESS")
+                                {
+                                    <span class="badge bg-success">@item.Status</span>
+                                }
+                                else if (item.Status == "FAILED")
+                                {
+                                    <span class="badge bg-danger">@item.Status</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-warning text-dark">@item.Status</span>
+                                }
+                            </div>
+
+                            <div class="col-12 col-md-2 mb-2 mb-md-0">
+                                <span class="ecos-card-label">Deployed At</span>
+                                <span class="ecos-card-value d-block">
+                                    @(item.DeployedAt?.ToString("dd/MM/yyyy HH:mm") ?? "-")
+                                </span>
+                            </div>
+
+                            <div class="col-12 col-md-2 text-end ms-auto card-action-col">
+
+                                <div class="d-flex justify-content-end gap-1">
+
+                                    <button type="button"
+                                            class="btn btn-link text-muted p-1 d-inline-flex align-items-center"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#deploymentDetailsModal-@item.Id"
+                                            title="View Details">
+                                        <i class="material-symbols-outlined fs-5">
+                                            visibility
+                                        </i>
+                                    </button>
+
+                                    <a asp-page="Update"
+                                       asp-route-id="@item.Id"
+                                       class="btn btn-link text-primary p-1 d-inline-flex align-items-center"
+                                       title="Edit">
+
+                                        <i class="material-symbols-outlined fs-5">
+                                            edit
+                                        </i>
+
+                                    </a>
+
+                                    <a asp-page="Delete"
+                                       asp-route-id="@item.Id"
+                                       class="btn btn-link text-danger p-1 d-inline-flex align-items-center"
+                                       title="Delete">
+
+                                        <i class="material-symbols-outlined fs-5">
+                                            delete
+                                        </i>
+
+                                    </a>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="modal fade"
+                         id="deploymentDetailsModal-@item.Id"
+                         tabindex="-1"
+                         aria-hidden="true">
+
+                        <div class="modal-dialog modal-lg modal-dialog-centered">
+
+                            <div class="modal-content border-0 shadow">
+
+                                <div class="modal-header border-bottom-0 pb-0">
+
+                                    <h5 class="modal-title fw-bold text-main">
+                                        Deployment Details
+                                    </h5>
+
+                                    <button type="button"
+                                            class="btn-close"
+                                            data-bs-dismiss="modal"
+                                            aria-label="Close">
+                                    </button>
+
+                                </div>
+
+                                <div class="modal-body py-3">
+
+                                    <div class="row g-3">
+
+                                        <div class="col-md-6">
+                                            <span class="text-muted small d-block">
+                                                Certificate
+                                            </span>
+
+                                            <strong class="text-main">
+                                            @(item.Certificate?.SubjectDn ?? "-")
+                                        </strong>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <span class="text-muted small d-block">
+                                                Deployment Target
+                                            </span>
+
+                                            <strong class="text-main">
+                                                @(item.Target?.Name ?? "-")
+                                            </strong>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <span class="text-muted small d-block">
+                                                Status
+                                            </span>
+
+                                            <span class="text-main">
+                                                @item.Status
+                                            </span>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <span class="text-muted small d-block">
+                                                Customer Id
+                                            </span>
+
+                                            <span class="text-main">
+                                                @item.CustomerId
+                                            </span>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <span class="text-muted small d-block">
+                                                Created At
+                                            </span>
+
+                                            <span class="text-main">
+                                                @item.CreatedAt.ToString("dd/MM/yyyy HH:mm")
+                                            </span>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <span class="text-muted small d-block">
+                                                Updated At
+                                            </span>
+
+                                            <span class="text-main">
+                                                @item.UpdatedAt.ToString("dd/MM/yyyy HH:mm")
+                                            </span>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <span class="text-muted small d-block">
+                                                Deployed At
+                                            </span>
+
+                                            <span class="text-main">
+                                                @(item.DeployedAt?.ToString("dd/MM/yyyy HH:mm") ?? "-")
+                                            </span>
+                                        </div>
+
+                                        <div class="col-12">
+                                            <span class="text-muted small d-block">
+                                                Error Message
+                                            </span>
+
+                                            <span class="text-main text-break">
+                                                @(string.IsNullOrWhiteSpace(item.ErrorMessage)
+                                                    ? "-"
+                                                    : item.ErrorMessage)
+                                            </span>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="modal-footer border-top-0 pt-0">
+
+                                    <button type="button"
+                                            class="btn btn-outline-secondary btn-sm"
+                                            data-bs-dismiss="modal">
+                                        Close
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="ecos-model-card p-4 text-center text-muted small">
+                    No deployment records found.
+                </div>
+            }
+
+        </ecos-grid>
+
+    </div>
+</div>

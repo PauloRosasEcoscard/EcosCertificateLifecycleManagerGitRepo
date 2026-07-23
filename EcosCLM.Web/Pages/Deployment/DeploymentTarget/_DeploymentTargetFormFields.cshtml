@@ -1,0 +1,69 @@
+﻿@using Microsoft.AspNetCore.Mvc.Rendering
+@model EcosCLM.Application.ViewModels.Deployment.DeploymentTargetViewModel
+
+<div class="row g-4 px-2 pb-2">
+
+    <div class="col-12">
+        <h6 class="fw-bold mb-0 pb-2 border-bottom border-2"
+            style="border-color: var(--bs-primary)!important;color:var(--bs-primary);">
+            Deployment Target Information
+        </h6>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="Name" class="form-label small fw-bold text-muted mb-1"></label>
+        <input asp-for="Name"
+               class="form-control ecos-input shadow-none rounded-3 px-3 py-2"
+               placeholder="Target name" />
+        <span asp-validation-for="Name" class="text-danger small"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="TargetType" class="form-label small fw-bold text-muted mb-1"></label>
+        <input asp-for="TargetType"
+               class="form-control ecos-input shadow-none rounded-3 px-3 py-2"
+               placeholder="Windows Server, IIS, Kubernetes..." />
+        <span asp-validation-for="TargetType" class="text-danger small"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="EndpointRef" class="form-label small fw-bold text-muted mb-1"></label>
+        <input asp-for="EndpointRef"
+               class="form-control ecos-input shadow-none rounded-3 px-3 py-2"
+               placeholder="Endpoint" />
+        <span asp-validation-for="EndpointRef" class="text-danger small"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="SecretRef" class="form-label small fw-bold text-muted mb-1"></label>
+        <input asp-for="SecretRef"
+               class="form-control ecos-input shadow-none rounded-3 px-3 py-2"
+               placeholder="Secret Reference" />
+        <span asp-validation-for="SecretRef" class="text-danger small"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="AutomationEnabled" class="form-label small fw-bold text-muted mb-1">
+            Automation
+        </label>
+
+        <select asp-for="AutomationEnabled"
+                asp-items="@(ViewData["AutomationList"] as SelectList)"
+                class="form-select ecos-input shadow-none rounded-3 px-3 py-2">
+        </select>
+
+        <span asp-validation-for="AutomationEnabled" class="text-danger small"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="Status" class="form-label small fw-bold text-muted mb-1"></label>
+
+        <select asp-for="Status"
+                asp-items="@(ViewData["StatusList"] as SelectList)"
+                class="form-select ecos-input shadow-none rounded-3 px-3 py-2">
+        </select>
+
+        <span asp-validation-for="Status" class="text-danger small"></span>
+    </div>
+
+</div>

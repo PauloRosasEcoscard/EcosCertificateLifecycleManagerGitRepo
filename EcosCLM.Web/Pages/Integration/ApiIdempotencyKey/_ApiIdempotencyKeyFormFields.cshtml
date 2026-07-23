@@ -1,0 +1,56 @@
+﻿@model EcosCLM.Application.ViewModels.Integration.ApiIdempotencyKeyViewModel
+
+<div class="row g-4 px-2 pb-2">
+
+    <div class="col-12">
+        <h6 class="fw-bold mb-0 pb-2 border-bottom border-2"
+            style="border-color: var(--bs-primary)!important;color:var(--bs-primary);">
+            API Idempotency Key
+        </h6>
+    </div>
+
+    <div class="col-12">
+        <label asp-for="Key"
+               class="form-label small fw-bold text-muted mb-1">
+            Key
+        </label>
+
+        <input asp-for="Key"
+               class="form-control ecos-input shadow-none rounded-3 px-3 py-2"
+               placeholder="Unique idempotency key" />
+
+        <span asp-validation-for="Key"
+              class="text-danger small"></span>
+    </div>
+
+    <div class="col-12">
+        <label asp-for="ResponseJson"
+               class="form-label small fw-bold text-muted mb-1">
+            Response Json
+        </label>
+
+        <textarea asp-for="ResponseJson"
+                  rows="8"
+                  class="form-control ecos-input shadow-none rounded-3 px-3 py-2"
+                  placeholder="{}"></textarea>
+
+        <span asp-validation-for="ResponseJson"
+              class="text-danger small"></span>
+    </div>
+
+    <div class="col-md-4">
+        <label asp-for="ExpiresAt"
+               class="form-label small fw-bold text-muted mb-1">
+            Expires At
+        </label>
+
+        <input asp-for="ExpiresAt"
+               type="datetime-local"
+               class="form-control ecos-input shadow-none rounded-3 px-3 py-2"
+               value="@Model.ExpiresAt.ToString("yyyy-MM-ddTHH:mm")" />
+
+        <span asp-validation-for="ExpiresAt"
+              class="text-danger small"></span>
+    </div>
+
+</div>

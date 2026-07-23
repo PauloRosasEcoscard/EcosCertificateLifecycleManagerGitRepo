@@ -1,0 +1,85 @@
+﻿@model EcosCLM.Application.ViewModels.Integration.EventOutboxViewModel
+
+<div class="row g-4 px-2 pb-2">
+
+    <div class="col-12">
+        <h6 class="fw-bold mb-0 pb-2 border-bottom border-2"
+            style="border-color: var(--bs-primary)!important;color:var(--bs-primary);">
+            Event Information
+        </h6>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="EventType"
+               class="form-label small fw-bold text-muted mb-1">
+            Event Type
+        </label>
+
+        <input asp-for="EventType"
+               class="form-control ecos-input shadow-none rounded-3 px-3 py-2"
+               placeholder="CertificateIssued" />
+
+        <span asp-validation-for="EventType"
+              class="text-danger small"></span>
+    </div>
+
+    <div class="col-md-3">
+        <label asp-for="Status"
+               class="form-label small fw-bold text-muted mb-1">
+            Status
+        </label>
+
+        <select asp-for="Status"
+                asp-items='@(ViewData["StatusList"] as SelectList)'
+                class="form-select ecos-input shadow-none rounded-3 px-3 py-2">
+        </select>
+
+        <span asp-validation-for="Status"
+              class="text-danger small"></span>
+    </div>
+
+    <div class="col-md-3">
+        <label asp-for="Retries"
+               class="form-label small fw-bold text-muted mb-1">
+            Retries
+        </label>
+
+        <input asp-for="Retries"
+               type="number"
+               min="0"
+               class="form-control ecos-input shadow-none rounded-3 px-3 py-2" />
+
+        <span asp-validation-for="Retries"
+              class="text-danger small"></span>
+    </div>
+
+    <div class="col-md-4">
+        <label asp-for="CreatedAt"
+               class="form-label small fw-bold text-muted mb-1">
+            Created At
+        </label>
+
+        <input asp-for="CreatedAt"
+               type="datetime-local"
+               value="@Model.CreatedAt.ToString("yyyy-MM-ddTHH:mm")"
+               class="form-control ecos-input shadow-none rounded-3 px-3 py-2" />
+
+        <span asp-validation-for="CreatedAt"
+              class="text-danger small"></span>
+    </div>
+
+    <div class="col-12">
+        <label asp-for="PayloadJson"
+               class="form-label small fw-bold text-muted mb-1">
+            Payload JSON
+        </label>
+
+        <textarea asp-for="PayloadJson"
+                  rows="10"
+                  class="form-control ecos-input shadow-none rounded-3 px-3 py-2"></textarea>
+
+        <span asp-validation-for="PayloadJson"
+              class="text-danger small"></span>
+    </div>
+
+</div>

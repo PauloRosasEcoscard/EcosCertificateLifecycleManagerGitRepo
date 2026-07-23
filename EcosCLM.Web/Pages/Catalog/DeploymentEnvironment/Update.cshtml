@@ -13,7 +13,7 @@
             <input type="hidden" asp-for="Item.Id" />
             <input type="hidden" asp-for="Item.CreatedAt" />
 
-            <partial name="_DeploymentEnvironmentFormFields" model="Model.Item" />
+            <partial name="_DeploymentEnvironmentFormFields" for="Item" />
 
         </ecos-form>
     </div>

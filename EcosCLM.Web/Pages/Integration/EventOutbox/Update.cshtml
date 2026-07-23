@@ -1,0 +1,23 @@
+﻿@page
+@model EcosCLM.Web.Pages.Integration.EventOutbox.UpdateModel
+
+@{
+    ViewData["Title"] = "Edit Event Outbox";
+}
+
+<div class="row">
+    <div class="col-12 mt-3">
+
+        <ecos-form title="Edit Event Outbox"
+                   subtitle="Update the event information."
+                   handler="Save">
+
+            <input type="hidden" asp-for="Item.Id" />
+
+            <partial name="_EventOutboxFormFields"
+                     for="Item" />
+
+        </ecos-form>
+
+    </div>
+</div>

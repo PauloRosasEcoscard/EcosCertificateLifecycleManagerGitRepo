@@ -1,0 +1,22 @@
+﻿@page
+@model EcosCLM.Web.Pages.Deployment.CertificateDeployment.UpdateModel
+
+@{
+    ViewData["Title"] = "Edit Certificate Deployment";
+}
+
+<div class="row">
+    <div class="col-12 mt-3">
+
+        <ecos-form title="Edit Certificate Deployment"
+                   subtitle="Update the deployment information."
+                   handler="Save">
+
+            <input type="hidden" asp-for="Item.Id" />
+
+            <partial name="_CertificateDeploymentFormFields" for="Item" />
+
+        </ecos-form>
+
+    </div>
+</div>

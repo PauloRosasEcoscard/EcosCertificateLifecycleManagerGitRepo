@@ -1,0 +1,20 @@
+﻿@page
+@model AddModel
+
+@{
+    ViewData["Title"] = "Add Certificate Deployment";
+}
+
+<div class="row">
+    <div class="col-12 mt-3">
+
+        <ecos-form title="Add Certificate Deployment"
+                   subtitle="Register a certificate deployment."
+                   handler="Save">
+
+            <partial name="_CertificateDeploymentFormFields" for="Item" />
+
+        </ecos-form>
+
+    </div>
+</div>

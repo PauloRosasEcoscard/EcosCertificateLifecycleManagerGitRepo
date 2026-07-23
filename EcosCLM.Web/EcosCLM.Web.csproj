@@ -29,8 +29,6 @@
 	<ItemGroup>
 	  <Folder Include="logs\" />
 	  <Folder Include="Pages\Certificates\" />
-	  <Folder Include="Pages\Deployment\" />
-	  <Folder Include="Pages\Integration\" />
 	  <Folder Include="Pages\Security\" />
 	</ItemGroup>
 </Project>

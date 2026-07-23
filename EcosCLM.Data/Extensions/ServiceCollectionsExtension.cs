@@ -104,6 +104,13 @@ namespace EcosCLM.Data.Extensions
             services.AddScoped<ICertificateRequestRepository, CertificateRequestRepository>();
             services.AddScoped<ICertificateRequestSanDnsRepository, CertificateRequestSanDnsRepository>();
             services.AddScoped<IRenewalJobRepository, RenewalJobRepository>();
+            services.AddScoped<CertificateValidator>();
+            services.AddScoped<CertificateDeploymentValidator>();
+            services.AddScoped<DeploymentTargetValidator>();
+            services.AddScoped<ApiIdempotencyKeyValidator>();
+            services.AddScoped<EventOutboxValidator>();
+            #endregion
+        }
 
             #endregion DependencyInjection
         }

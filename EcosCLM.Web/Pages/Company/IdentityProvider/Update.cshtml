@@ -12,7 +12,7 @@
 
             <input type="hidden" asp-for="Item.Id" />
 
-            <partial name="_IdentityProviderFormFields" model="Model.Item" />
+            <partial name="_IdentityProviderFormFields" for="Item" />
 
             <div class="d-flex justify-content-end mt-3">
                 <button type="submit" asp-page-handler="Test" class="btn btn-info px-4">Test Connection</button>
