@@ -1,0 +1,16 @@
+﻿@page
+@model EcosCLM.Web.Pages.Certificates.CaOrder.AddModel
+@{
+    ViewData["Title"] = "Add CA Order";
+}
+
+<div class="row">
+    <div class="col-12 mt-3">
+        <ecos-form title="Add CA Order"
+                   subtitle="Record a new Certificate Authority external order process.">
+
+            <partial name="_CaOrderFormFields" for="Item" />
+
+        </ecos-form>
+    </div>
+</div>

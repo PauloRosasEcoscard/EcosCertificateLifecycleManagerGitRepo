@@ -50,7 +50,7 @@ namespace EcosCLM.Web.Pages.Integration.EventOutbox
             }
         }
 
-        public async Task<IActionResult> OnPostSaveAsync()
+        public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
             {

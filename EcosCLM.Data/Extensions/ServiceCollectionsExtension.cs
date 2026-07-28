@@ -1,8 +1,10 @@
 ﻿using EcosCLM.Application.Interfaces;
 using EcosCLM.Application.Services;
+using EcosCLM.Application.Validators.Catalog;
 using EcosCLM.Application.Validators.Certificates;
 using EcosCLM.Application.Validators.Deployment;
 using EcosCLM.Application.Validators.Integration;
+using EcosCLM.Application.Validators.Security;
 using EcosCLM.Data.Context;
 using EcosCLM.Data.Repositories;
 using EcosCLM.Data.Services;
@@ -107,11 +109,24 @@ namespace EcosCLM.Data.Extensions
             services.AddScoped<ICertificateRequestRepository, CertificateRequestRepository>();
             services.AddScoped<ICertificateRequestSanDnsRepository, CertificateRequestSanDnsRepository>();
             services.AddScoped<IRenewalJobRepository, RenewalJobRepository>();
+
+            services.AddScoped<CLMApplicationValidator>();
+            services.AddScoped<DeploymentEnvironmentValidator>();
+            services.AddScoped<ManagedDomainValidator>();
+            services.AddScoped<ApprovalTaskValidator>();
+            services.AddScoped<CaOrderValidator>();
+            services.AddScoped<CertificateRequestSanDnsValidator>();
+            services.AddScoped<CertificateRequestValidator>();
             services.AddScoped<CertificateValidator>();
+            services.AddScoped<RenewalJobValidator>();
             services.AddScoped<CertificateDeploymentValidator>();
             services.AddScoped<DeploymentTargetValidator>();
             services.AddScoped<ApiIdempotencyKeyValidator>();
             services.AddScoped<EventOutboxValidator>();
+            services.AddScoped<CertificateAuthorityValidator>();
+            services.AddScoped<CertificateProfileValidator>();
+            services.AddScoped<HsmClusterValidator>();
+            services.AddScoped<HsmKeyRefValidator>();
 
             #endregion DependencyInjection
         }

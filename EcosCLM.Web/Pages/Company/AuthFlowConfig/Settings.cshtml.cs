@@ -65,7 +65,7 @@ namespace EcosCLM.Web.Pages.Company.AuthFlowConfig
             }
         }
 
-        public async Task<IActionResult> OnPostSaveAsync()
+        public async Task<IActionResult> OnPostAsync()
         {
             if (ModelState.IsValid)
             {

@@ -1,0 +1,58 @@
+﻿@model EcosCLM.Application.ViewModels.Certificates.ApprovalTaskViewModel
+
+<div class="row g-4 px-2 pb-2">
+
+    <div class="col-12">
+        <h6 class="fw-bold mb-0 pb-2 border-bottom border-2" style="border-color: var(--bs-primary) !important; color: var(--bs-primary);">
+            Approval Task Specifications
+        </h6>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="RequestId" class="form-label small fw-bold text-muted mb-1">Certificate Request ID</label>
+        <input asp-for="RequestId" class="form-control ecos-input shadow-none rounded-3 px-3 py-2" placeholder="Ex: 00000000-0000-0000-0000-000000000000" required />
+        <span asp-validation-for="RequestId" class="text-danger small mt-1"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="StepOrder" class="form-label small fw-bold text-muted mb-1">Step Order</label>
+        <input asp-for="StepOrder" type="number" class="form-control ecos-input shadow-none rounded-3 px-3 py-2" min="1" required />
+        <span asp-validation-for="StepOrder" class="text-danger small mt-1"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="ApproverRoleId" class="form-label small fw-bold text-muted mb-1">Approver Role ID</label>
+        <input asp-for="ApproverRoleId" class="form-control ecos-input shadow-none rounded-3 px-3 py-2" placeholder="Ex: 00000000-0000-0000-0000-000000000000" />
+        <span asp-validation-for="ApproverRoleId" class="text-danger small mt-1"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="ApproverUserId" class="form-label small fw-bold text-muted mb-1">Approver User ID</label>
+        <input asp-for="ApproverUserId" class="form-control ecos-input shadow-none rounded-3 px-3 py-2" placeholder="Ex: 00000000-0000-0000-0000-000000000000" />
+        <span asp-validation-for="ApproverUserId" class="text-danger small mt-1"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="Status" class="form-label small fw-bold text-muted mb-1">Status</label>
+        <select asp-for="Status" class="form-select ecos-input shadow-none rounded-3 px-3 py-2">
+            <option value="PENDING">Pending</option>
+            <option value="APPROVED">Approved</option>
+            <option value="REJECTED">Rejected</option>
+            <option value="SKIPPED">Skipped</option>
+        </select>
+        <span asp-validation-for="Status" class="text-danger small mt-1"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="DecidedBy" class="form-label small fw-bold text-muted mb-1">Decided By (User ID)</label>
+        <input asp-for="DecidedBy" class="form-control ecos-input shadow-none rounded-3 px-3 py-2" placeholder="Ex: 00000000-0000-0000-0000-000000000000" />
+        <span asp-validation-for="DecidedBy" class="text-danger small mt-1"></span>
+    </div>
+
+    <div class="col-12">
+        <label asp-for="DecisionComment" class="form-label small fw-bold text-muted mb-1">Decision Comment</label>
+        <textarea asp-for="DecisionComment" class="form-control ecos-input shadow-none rounded-3 px-3 py-2" rows="3" placeholder="Provide reason or justification for approval or rejection..."></textarea>
+        <span asp-validation-for="DecisionComment" class="text-danger small mt-1"></span>
+    </div>
+
+</div>

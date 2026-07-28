@@ -1,0 +1,16 @@
+﻿@page
+@model EcosCLM.Web.Pages.Catalog.CLMApplication.AddModel
+@{
+    ViewData["Title"] = "Add Application";
+}
+
+<div class="row">
+    <div class="col-12 mt-3">
+        <ecos-form title="Add Application"
+                   subtitle="Define application attributes and lifecycle metadata.">
+
+            <partial name="_CLMApplicationFormFields" for="Item" />
+
+        </ecos-form>
+    </div>
+</div>

@@ -28,7 +28,5 @@
 	</ItemGroup>
 	<ItemGroup>
 	  <Folder Include="logs\" />
-	  <Folder Include="Pages\Certificates\" />
-	  <Folder Include="Pages\Security\" />
 	</ItemGroup>
 </Project>

@@ -1,0 +1,19 @@
+﻿@page "{id:Guid}"
+@model EcosCLM.Web.Pages.Catalog.ManagedDomain.UpdateModel
+@{
+    ViewData["Title"] = "Edit Managed Domain";
+}
+
+<div class="row">
+    <div class="col-12 mt-3">
+        <ecos-form title="Edit Managed Domain"
+                   subtitle="Modify domain specifications or validation state.">
+
+            <input type="hidden" asp-for="Item.Id" />
+            <input type="hidden" asp-for="Item.CreatedAt" />
+
+            <partial name="_ManagedDomainFormFields" for="Item" />
+
+        </ecos-form>
+    </div>
+</div>

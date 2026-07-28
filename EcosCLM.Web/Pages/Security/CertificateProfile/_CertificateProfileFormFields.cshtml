@@ -1,0 +1,93 @@
+﻿@model EcosCLM.Application.ViewModels.Security.CertificateProfileViewModel
+
+<div class="row g-4 px-2 pb-2">
+
+    <div class="col-12">
+        <h6 class="fw-bold mb-0 pb-2 border-bottom border-2" style="border-color: var(--bs-primary) !important; color: var(--bs-primary);">
+            Profile Specifications
+        </h6>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="Name" class="form-label small fw-bold text-muted mb-1">Profile Name</label>
+        <input asp-for="Name" class="form-control ecos-input shadow-none rounded-3 px-3 py-2" placeholder="Ex: Web Server TLS, Client Auth Profile" required />
+        <span asp-validation-for="Name" class="text-danger small mt-1"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="CertificateType" class="form-label small fw-bold text-muted mb-1">Certificate Type</label>
+        <select asp-for="CertificateType" class="form-select ecos-input shadow-none rounded-3 px-3 py-2">
+            <option value="TLS_SERVER">TLS Server</option>
+            <option value="TLS_CLIENT">TLS Client</option>
+            <option value="CODE_SIGNING">Code Signing</option>
+            <option value="S_MIME">S/MIME</option>
+        </select>
+        <span asp-validation-for="CertificateType" class="text-danger small mt-1"></span>
+    </div>
+
+    <div class="col-md-4">
+        <label asp-for="KeyAlgorithm" class="form-label small fw-bold text-muted mb-1">Key Algorithm</label>
+        <select asp-for="KeyAlgorithm" class="form-select ecos-input shadow-none rounded-3 px-3 py-2">
+            <option value="RSA">RSA</option>
+            <option value="ECDSA">ECDSA</option>
+            <option value="ED25519">ED25519</option>
+        </select>
+        <span asp-validation-for="KeyAlgorithm" class="text-danger small mt-1"></span>
+    </div>
+
+    <div class="col-md-4">
+        <label asp-for="KeySize" class="form-label small fw-bold text-muted mb-1">Key Size (bits)</label>
+        <input asp-for="KeySize" type="number" class="form-control ecos-input shadow-none rounded-3 px-3 py-2" placeholder="Ex: 2048, 4096" />
+        <span asp-validation-for="KeySize" class="text-danger small mt-1"></span>
+    </div>
+
+    <div class="col-md-4">
+        <label asp-for="CurveName" class="form-label small fw-bold text-muted mb-1">Curve Name (ECC)</label>
+        <input asp-for="CurveName" class="form-control ecos-input shadow-none rounded-3 px-3 py-2" placeholder="Ex: P-256, P-384" />
+        <span asp-validation-for="CurveName" class="text-danger small mt-1"></span>
+    </div>
+
+    <div class="col-md-4">
+        <label asp-for="SignatureAlgorithm" class="form-label small fw-bold text-muted mb-1">Signature Algorithm</label>
+        <input asp-for="SignatureAlgorithm" class="form-control ecos-input shadow-none rounded-3 px-3 py-2" placeholder="Ex: SHA256withRSA" />
+        <span asp-validation-for="SignatureAlgorithm" class="text-danger small mt-1"></span>
+    </div>
+
+    <div class="col-md-4">
+        <label asp-for="ValidityDays" class="form-label small fw-bold text-muted mb-1">Validity (Days)</label>
+        <input asp-for="ValidityDays" type="number" class="form-control ecos-input shadow-none rounded-3 px-3 py-2" placeholder="Ex: 365" required />
+        <span asp-validation-for="ValidityDays" class="text-danger small mt-1"></span>
+    </div>
+
+    <div class="col-md-4">
+        <label asp-for="RenewalWindowDays" class="form-label small fw-bold text-muted mb-1">Renewal Window (Days)</label>
+        <input asp-for="RenewalWindowDays" type="number" class="form-control ecos-input shadow-none rounded-3 px-3 py-2" placeholder="Ex: 30" required />
+        <span asp-validation-for="RenewalWindowDays" class="text-danger small mt-1"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="RequireApproval" class="form-label small fw-bold text-muted mb-1">Require Approval</label>
+        <select asp-for="RequireApproval" class="form-select ecos-input shadow-none rounded-3 px-3 py-2">
+            <option value="1">Yes</option>
+            <option value="0">No</option>
+        </select>
+        <span asp-validation-for="RequireApproval" class="text-danger small mt-1"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="Status" class="form-label small fw-bold text-muted mb-1">Status</label>
+        <select asp-for="Status" class="form-select ecos-input shadow-none rounded-3 px-3 py-2">
+            <option value="ACTIVE">Active</option>
+            <option value="INACTIVE">Inactive</option>
+            <option value="DEPRECATED">Deprecated</option>
+        </select>
+        <span asp-validation-for="Status" class="text-danger small mt-1"></span>
+    </div>
+
+    <div class="col-12">
+        <label asp-for="Description" class="form-label small fw-bold text-muted mb-1">Description</label>
+        <textarea asp-for="Description" class="form-control ecos-input shadow-none rounded-3 px-3 py-2" rows="3" placeholder="Describe the profile purpose, policies, or constraints..."></textarea>
+        <span asp-validation-for="Description" class="text-danger small mt-1"></span>
+    </div>
+
+</div>

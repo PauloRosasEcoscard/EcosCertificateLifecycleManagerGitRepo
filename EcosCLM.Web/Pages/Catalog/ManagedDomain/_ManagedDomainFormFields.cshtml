@@ -1,0 +1,40 @@
+﻿@model EcosCLM.Application.ViewModels.Catalog.ManagedDomainViewModel
+
+<div class="row g-4 px-2 pb-2">
+
+    <div class="col-12">
+        <h6 class="fw-bold mb-0 pb-2 border-bottom border-2" style="border-color: var(--bs-primary) !important; color: var(--bs-primary);">
+            Domain Specifications
+        </h6>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="Fqdn" class="form-label small fw-bold text-muted mb-1">FQDN (Fully Qualified Domain Name)</label>
+        <input asp-for="Fqdn" class="form-control ecos-input shadow-none rounded-3 px-3 py-2" placeholder="Ex: api.example.com" required />
+        <span asp-validation-for="Fqdn" class="text-danger small mt-1"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="ValidationStatus" class="form-label small fw-bold text-muted mb-1">Validation Status</label>
+        <select asp-for="ValidationStatus" class="form-select ecos-input shadow-none rounded-3 px-3 py-2">
+            <option value="PENDING">Pending</option>
+            <option value="VALIDATED">Validated</option>
+            <option value="FAILED">Failed</option>
+            <option value="EXPIRED">Expired</option>
+        </select>
+        <span asp-validation-for="ValidationStatus" class="text-danger small mt-1"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="ApplicationId" class="form-label small fw-bold text-muted mb-1">Associated Application ID</label>
+        <input asp-for="ApplicationId" class="form-control ecos-input shadow-none rounded-3 px-3 py-2" placeholder="Ex: 00000000-0000-0000-0000-000000000000" />
+        <span asp-validation-for="ApplicationId" class="text-danger small mt-1"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="ExpiresAt" class="form-label small fw-bold text-muted mb-1">Expiration Date</label>
+        <input asp-for="ExpiresAt" type="datetime-local" class="form-control ecos-input shadow-none rounded-3 px-3 py-2" />
+        <span asp-validation-for="ExpiresAt" class="text-danger small mt-1"></span>
+    </div>
+
+</div>

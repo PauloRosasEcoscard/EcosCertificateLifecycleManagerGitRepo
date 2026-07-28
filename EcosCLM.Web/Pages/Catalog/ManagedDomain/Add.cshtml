@@ -1,0 +1,16 @@
+﻿@page
+@model EcosCLM.Web.Pages.Catalog.ManagedDomain.AddModel
+@{
+    ViewData["Title"] = "Add Managed Domain";
+}
+
+<div class="row">
+    <div class="col-12 mt-3">
+        <ecos-form title="Add Managed Domain"
+                   subtitle="Register a new domain name for tracking and certificate validation.">
+
+            <partial name="_ManagedDomainFormFields" for="Item" />
+
+        </ecos-form>
+    </div>
+</div>

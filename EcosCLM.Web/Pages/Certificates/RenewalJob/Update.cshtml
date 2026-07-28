@@ -1,0 +1,19 @@
+﻿@page "{id:Guid}"
+@model EcosCLM.Web.Pages.Certificates.RenewalJob.UpdateModel
+@{
+    ViewData["Title"] = "Edit Renewal Job";
+}
+
+<div class="row">
+    <div class="col-12 mt-3">
+        <ecos-form title="Edit Renewal Job"
+                   subtitle="Modify job execution window or status parameters.">
+
+            <input type="hidden" asp-for="Item.Id" />
+            <input type="hidden" asp-for="Item.CreatedAt" />
+
+            <partial name="_RenewalJobFormFields" for="Item" />
+
+        </ecos-form>
+    </div>
+</div>

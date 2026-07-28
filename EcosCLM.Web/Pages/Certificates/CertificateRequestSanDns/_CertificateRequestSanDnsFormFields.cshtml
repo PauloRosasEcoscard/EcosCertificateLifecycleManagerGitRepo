@@ -1,0 +1,23 @@
+﻿@model EcosCLM.Application.ViewModels.Certificates.CertificateRequestSanDnsViewModel
+
+<div class="row g-4 px-2 pb-2">
+
+    <div class="col-12">
+        <h6 class="fw-bold mb-0 pb-2 border-bottom border-2" style="border-color: var(--bs-primary) !important; color: var(--bs-primary);">
+            SAN DNS Specifications
+        </h6>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="RequestId" class="form-label small fw-bold text-muted mb-1">Certificate Request ID</label>
+        <input asp-for="RequestId" class="form-control ecos-input shadow-none rounded-3 px-3 py-2" placeholder="Ex: 00000000-0000-0000-0000-000000000000" required />
+        <span asp-validation-for="RequestId" class="text-danger small mt-1"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="DnsName" class="form-label small fw-bold text-muted mb-1">DNS Name (SAN)</label>
+        <input asp-for="DnsName" class="form-control ecos-input shadow-none rounded-3 px-3 py-2" placeholder="Ex: sub.domain.com or *.domain.com" required />
+        <span asp-validation-for="DnsName" class="text-danger small mt-1"></span>
+    </div>
+
+</div>

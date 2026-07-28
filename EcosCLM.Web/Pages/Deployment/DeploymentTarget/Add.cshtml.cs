@@ -35,7 +35,7 @@ namespace EcosCLM.Web.Pages.Deployment.DeploymentTarget
             return Page();
         }
 
-        public async Task<IActionResult> OnPostSaveAsync()
+        public async Task<IActionResult> OnPostAsync()
         {
             _logger.LogInformation("===== ONPOSTSAVE EXECUTADO =====");
 

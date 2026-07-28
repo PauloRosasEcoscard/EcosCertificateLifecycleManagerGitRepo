@@ -1,0 +1,16 @@
+﻿@page
+@model EcosCLM.Web.Pages.Certificates.RenewalJob.AddModel
+@{
+    ViewData["Title"] = "Add Renewal Job";
+}
+
+<div class="row">
+    <div class="col-12 mt-3">
+        <ecos-form title="Add Renewal Job"
+                   subtitle="Schedule an automated or tracked certificate renewal task.">
+
+            <partial name="_RenewalJobFormFields" for="Item" />
+
+        </ecos-form>
+    </div>
+</div>

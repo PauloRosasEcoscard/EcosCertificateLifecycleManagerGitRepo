@@ -1,0 +1,16 @@
+﻿@page
+@model EcosCLM.Web.Pages.Security.HsmCluster.AddModel
+@{
+    ViewData["Title"] = "Add HSM Cluster";
+}
+
+<div class="row">
+    <div class="col-12 mt-3">
+        <ecos-form title="Add HSM Cluster"
+                   subtitle="Configure hardware security module endpoint connections and partitions.">
+
+            <partial name="_HsmClusterFormFields" for="Item" />
+
+        </ecos-form>
+    </div>
+</div>

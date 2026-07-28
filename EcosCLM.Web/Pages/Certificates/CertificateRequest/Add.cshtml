@@ -1,0 +1,16 @@
+﻿@page
+@model EcosCLM.Web.Pages.Certificates.CertificateRequest.AddModel
+@{
+    ViewData["Title"] = "Add Certificate Request";
+}
+
+<div class="row">
+    <div class="col-12 mt-3">
+        <ecos-form title="Add Certificate Request"
+                   subtitle="Submit or draft a new certificate issuance request.">
+
+            <partial name="_CertificateRequestFormFields" for="Item" />
+
+        </ecos-form>
+    </div>
+</div>

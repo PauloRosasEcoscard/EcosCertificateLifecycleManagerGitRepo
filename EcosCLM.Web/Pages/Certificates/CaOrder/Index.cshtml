@@ -1,0 +1,106 @@
+﻿@page
+@model EcosCLM.Web.Pages.Certificates.CaOrder.IndexModel
+@{
+    ViewData["Title"] = "CA Orders";
+    ViewData["Breadcrumb"] = "Certificates";
+    ViewData["PageName"] = "CA Orders";
+}
+
+<div class="row">
+    <div class="col-12 mt-3">
+
+        <ecos-grid config="Model.GridConfig">
+
+            @if (Model.Itens?.Any() == true)
+            {
+                @foreach (var item in Model.Itens)
+                {
+                    <div class="ecos-model-card p-3">
+                        <div class="row align-items-center w-100 m-0">
+
+                            <div class="col-12 col-md-3 mb-2 mb-md-0">
+                                <span class="ecos-card-label">External Order ID</span>
+                                <span class="ecos-card-value fw-semibold text-main d-block">
+                                    @(string.IsNullOrEmpty(item.ExternalOrderId) ? "N/A" : item.ExternalOrderId)
+                                </span>
+                            </div>
+
+                            <div class="col-12 col-md-2 mb-2 mb-md-0">
+                                <span class="ecos-card-label">Status</span>
+                                <span class="ecos-card-value d-block">
+                                    <span class="badge bg-soft-info text-dark border">@item.Status</span>
+                                </span>
+                            </div>
+
+                            <div class="col-12 col-md-2 mb-2 mb-md-0">
+                                <span class="ecos-card-label">Submitted At</span>
+                                <span class="ecos-card-value text-muted d-block">
+                                    @(item.SubmittedAt.HasValue ? item.SubmittedAt.Value.ToString("g") : "N/A")
+                                </span>
+                            </div>
+
+                            <div class="col-12 col-md-2 mb-2 mb-md-0">
+                                <span class="ecos-card-label">Completed At</span>
+                                <span class="ecos-card-value text-muted d-block">
+                                    @(item.CompletedAt.HasValue ? item.CompletedAt.Value.ToString("g") : "N/A")
+                                </span>
+                            </div>
+
+                            <div class="col-12 col-md-3 text-end ms-auto card-action-col">
+                                <div class="d-flex justify-content-end gap-1">
+                                    <button type="button" class="btn btn-link text-muted p-1 d-inline-flex align-items-center" data-bs-toggle="modal" data-bs-target="#orderDetailsModal-@item.Id" title="View Details">
+                                        <i class="material-symbols-outlined fs-5">visibility</i>
+                                    </button>
+                                    <a asp-page="Update" asp-route-id="@item.Id" class="btn btn-link text-primary p-1 d-inline-flex align-items-center" title="Edit">
+                                        <i class="material-symbols-outlined fs-5">edit</i>
+                                    </a>
+                                    <a asp-page="Delete" asp-route-id="@item.Id" class="btn btn-link text-danger p-1 d-inline-flex align-items-center" title="Delete">
+                                        <i class="material-symbols-outlined fs-5">delete</i>
+                                    </a>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="modal fade" id="orderDetailsModal-@item.Id" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content border-0 shadow">
+                                <div class="modal-header border-bottom-0 pb-0">
+                                    <h5 class="modal-title fw-bold text-main">CA Order Details</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body py-3">
+                                    <div class="d-flex flex-column gap-2" style="font-size: 0.9rem;">
+                                        <div><span class="text-muted small d-block">Request ID</span><strong class="text-main">@item.RequestId</strong></div>
+                                        <div><span class="text-muted small d-block">CA ID</span><span class="text-main">@item.CaId</span></div>
+                                        <div><span class="text-muted small d-block">External Order ID</span><span class="text-main">@(string.IsNullOrEmpty(item.ExternalOrderId) ? "N/A" : item.ExternalOrderId)</span></div>
+                                        <div><span class="text-muted small d-block">External Certificate ID</span><span class="text-main">@(string.IsNullOrEmpty(item.ExternalCertificateId) ? "N/A" : item.ExternalCertificateId)</span></div>
+                                        <div><span class="text-muted small d-block">Status</span><span class="text-main">@item.Status</span></div>
+                                        <div><span class="text-muted small d-block">Submitted At</span><span class="text-main">@(item.SubmittedAt.HasValue ? item.SubmittedAt.Value.ToString("F") : "N/A")</span></div>
+                                        <div><span class="text-muted small d-block">Completed At</span><span class="text-main">@(item.CompletedAt.HasValue ? item.CompletedAt.Value.ToString("F") : "N/A")</span></div>
+                                        <div><span class="text-muted small d-block">Error Code / Message</span><span class="text-main">@(string.IsNullOrEmpty(item.ErrorCode) ? "None" : $"{item.ErrorCode}: {item.ErrorMessage}")</span></div>
+                                        <div><span class="text-muted small d-block">Response Ref</span><span class="text-main text-break">@(string.IsNullOrEmpty(item.RawResponseRef) ? "N/A" : item.RawResponseRef)</span></div>
+                                        <div><span class="text-muted small d-block">Created At</span><span class="text-main">@item.CreatedAt.ToString("F")</span></div>
+                                        <div><span class="text-muted small d-block">Updated At</span><span class="text-main">@item.UpdatedAt.ToString("F")</span></div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer border-top-0 pt-0">
+                                    <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="ecos-model-card p-4 text-center text-muted small">
+                    No CA orders registered yet.
+                </div>
+            }
+
+        </ecos-grid>
+
+    </div>
+</div>

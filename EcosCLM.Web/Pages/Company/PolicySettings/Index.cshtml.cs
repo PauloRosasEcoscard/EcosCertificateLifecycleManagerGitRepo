@@ -48,7 +48,7 @@ namespace EcosCLM.Web.Pages.Company.PolicySettings
             return Page();
         }
 
-        public async Task<IActionResult> OnPostSaveAsync()
+        public async Task<IActionResult> OnPostAsync()
         {
             if (ModelState.IsValid)
             {

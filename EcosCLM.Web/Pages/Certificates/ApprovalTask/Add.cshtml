@@ -1,0 +1,16 @@
+﻿@page
+@model EcosCLM.Web.Pages.Certificates.ApprovalTask.AddModel
+@{
+    ViewData["Title"] = "Add Approval Task";
+}
+
+<div class="row">
+    <div class="col-12 mt-3">
+        <ecos-form title="Add Approval Task"
+                   subtitle="Create a new workflow step for certificate request validation.">
+
+            <partial name="_ApprovalTaskFormFields" for="Item" />
+
+        </ecos-form>
+    </div>
+</div>

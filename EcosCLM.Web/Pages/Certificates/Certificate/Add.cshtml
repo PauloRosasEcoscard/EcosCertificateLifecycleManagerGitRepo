@@ -1,0 +1,16 @@
+﻿@page
+@model EcosCLM.Web.Pages.Certificates.Certificate.AddModel
+@{
+    ViewData["Title"] = "Add Certificate";
+}
+
+<div class="row">
+    <div class="col-12 mt-3">
+        <ecos-form title="Add Certificate"
+                   subtitle="Register an issued X.509 certificate and metadata.">
+
+            <partial name="_CertificateFormFields" for="Item" />
+
+        </ecos-form>
+    </div>
+</div>

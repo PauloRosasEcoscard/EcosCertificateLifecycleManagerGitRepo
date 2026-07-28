@@ -1,0 +1,109 @@
+﻿@page
+@model EcosCLM.Web.Pages.Security.HsmKeyRef.IndexModel
+@{
+    ViewData["Title"] = "HSM Key References";
+    ViewData["Breadcrumb"] = "Security";
+    ViewData["PageName"] = "Key References";
+}
+
+<div class="row">
+    <div class="col-12 mt-3">
+
+        <ecos-grid config="Model.GridConfig">
+
+            @if (Model.Itens?.Any() == true)
+            {
+                @foreach (var item in Model.Itens)
+                {
+                    <div class="ecos-model-card p-3">
+                        <div class="row align-items-center w-100 m-0">
+
+                            <div class="col-12 col-md-3 mb-2 mb-md-0">
+                                <span class="ecos-card-label">Key Label</span>
+                                <span class="ecos-card-value fw-semibold text-main d-block">@item.KeyLabel</span>
+                            </div>
+
+                            <div class="col-12 col-md-2 mb-2 mb-md-0">
+                                <span class="ecos-card-label">Handle</span>
+                                <span class="ecos-card-value text-muted d-block">@item.KeyHandle</span>
+                            </div>
+
+                            <div class="col-12 col-md-2 mb-2 mb-md-0">
+                                <span class="ecos-card-label">Algorithm</span>
+                                <span class="ecos-card-value text-muted d-block">
+                                    @item.Algorithm @(item.KeySize.HasValue ? $"({item.KeySize} bits)" : "")
+                                </span>
+                            </div>
+
+                            <div class="col-12 col-md-2 mb-2 mb-md-0">
+                                <span class="ecos-card-label">Extractable</span>
+                                <span class="ecos-card-value d-block">
+                                    <span class="badge @(item.Extractable == 1 ? "bg-soft-warning text-warning" : "bg-soft-success text-success") border">
+                                        @(item.Extractable == 1 ? "Yes" : "No (Hardware)")
+                                    </span>
+                                </span>
+                            </div>
+
+                            <div class="col-12 col-md-1 mb-2 mb-md-0">
+                                <span class="ecos-card-label">Status</span>
+                                <span class="ecos-card-value d-block">
+                                    <span class="badge bg-soft-info text-dark border">@item.Status</span>
+                                </span>
+                            </div>
+
+                            <div class="col-12 col-md-2 text-end ms-auto card-action-col">
+                                <div class="d-flex justify-content-end gap-1">
+                                    <button type="button" class="btn btn-link text-muted p-1 d-inline-flex align-items-center" data-bs-toggle="modal" data-bs-target="#keyDetailsModal-@item.Id" title="View Details">
+                                        <i class="material-symbols-outlined fs-5">visibility</i>
+                                    </button>
+                                    <a asp-page="Update" asp-route-id="@item.Id" class="btn btn-link text-primary p-1 d-inline-flex align-items-center" title="Edit">
+                                        <i class="material-symbols-outlined fs-5">edit</i>
+                                    </a>
+                                    <a asp-page="Delete" asp-route-id="@item.Id" class="btn btn-link text-danger p-1 d-inline-flex align-items-center" title="Delete">
+                                        <i class="material-symbols-outlined fs-5">delete</i>
+                                    </a>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="modal fade" id="keyDetailsModal-@item.Id" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content border-0 shadow">
+                                <div class="modal-header border-bottom-0 pb-0">
+                                    <h5 class="modal-title fw-bold text-main">HSM Key Details</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body py-3">
+                                    <div class="d-flex flex-column gap-2" style="font-size: 0.9rem;">
+                                        <div><span class="text-muted small d-block">Key Label</span><strong class="text-main">@item.KeyLabel</strong></div>
+                                        <div><span class="text-muted small d-block">Key Handle</span><span class="text-main">@item.KeyHandle</span></div>
+                                        <div><span class="text-muted small d-block">HSM Cluster ID</span><span class="text-main">@item.HsmClusterId</span></div>
+                                        <div><span class="text-muted small d-block">Algorithm / Size</span><span class="text-main">@item.Algorithm @(item.KeySize.HasValue ? $"({item.KeySize} bits)" : "")</span></div>
+                                        <div><span class="text-muted small d-block">Curve Name</span><span class="text-main">@(string.IsNullOrEmpty(item.CurveName) ? "N/A" : item.CurveName)</span></div>
+                                        <div><span class="text-muted small d-block">Extractable</span><span class="text-main">@(item.Extractable == 1 ? "Yes" : "No (Hardware Protected)")</span></div>
+                                        <div><span class="text-muted small d-block">Status</span><span class="text-main">@item.Status</span></div>
+                                        <div><span class="text-muted small d-block">Created At</span><span class="text-main">@item.CreatedAt.ToString("F")</span></div>
+                                        <div><span class="text-muted small d-block">Updated At</span><span class="text-main">@item.UpdatedAt.ToString("F")</span></div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer border-top-0 pt-0">
+                                    <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="ecos-model-card p-4 text-center text-muted small">
+                    No HSM key references registered yet.
+                </div>
+            }
+
+        </ecos-grid>
+
+    </div>
+</div>

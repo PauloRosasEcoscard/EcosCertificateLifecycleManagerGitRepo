@@ -50,7 +50,7 @@ namespace EcosCLM.Web.Pages.Integration.ApiIdempotencyKey
             }
         }
 
-        public async Task<IActionResult> OnPostSaveAsync()
+        public async Task<IActionResult> OnPostAsync()
         {
             // Campos preenchidos pelo servidor
             Item.CustomerId = CustumerId;

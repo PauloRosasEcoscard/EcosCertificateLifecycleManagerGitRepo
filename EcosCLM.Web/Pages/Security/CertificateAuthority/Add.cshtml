@@ -1,0 +1,16 @@
+﻿@page
+@model EcosCLM.Web.Pages.Security.CertificateAuthority.AddModel
+@{
+    ViewData["Title"] = "Add Certificate Authority";
+}
+
+<div class="row">
+    <div class="col-12 mt-3">
+        <ecos-form title="Add Certificate Authority"
+                   subtitle="Configure connection details and capabilities for a CA provider.">
+
+            <partial name="_CertificateAuthorityFormFields" for="Item" />
+
+        </ecos-form>
+    </div>
+</div>

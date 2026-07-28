@@ -1,0 +1,72 @@
+﻿@model EcosCLM.Application.ViewModels.Security.HsmKeyRefViewModel
+
+<div class="row g-4 px-2 pb-2">
+
+    <div class="col-12">
+        <h6 class="fw-bold mb-0 pb-2 border-bottom border-2" style="border-color: var(--bs-primary) !important; color: var(--bs-primary);">
+            HSM Key Reference Specifications
+        </h6>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="HsmClusterId" class="form-label small fw-bold text-muted mb-1">HSM Cluster ID</label>
+        <input asp-for="HsmClusterId" class="form-control ecos-input shadow-none rounded-3 px-3 py-2" placeholder="Ex: 00000000-0000-0000-0000-000000000000" required />
+        <span asp-validation-for="HsmClusterId" class="text-danger small mt-1"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="KeyLabel" class="form-label small fw-bold text-muted mb-1">Key Label</label>
+        <input asp-for="KeyLabel" class="form-control ecos-input shadow-none rounded-3 px-3 py-2" placeholder="Ex: ROOT_CA_SIGNING_KEY" required />
+        <span asp-validation-for="KeyLabel" class="text-danger small mt-1"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="KeyHandle" class="form-label small fw-bold text-muted mb-1">Key Handle / Reference</label>
+        <input asp-for="KeyHandle" class="form-control ecos-input shadow-none rounded-3 px-3 py-2" placeholder="Ex: 0x00000001 or key-alias-prod" required />
+        <span asp-validation-for="KeyHandle" class="text-danger small mt-1"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="Algorithm" class="form-label small fw-bold text-muted mb-1">Algorithm</label>
+        <select asp-for="Algorithm" class="form-select ecos-input shadow-none rounded-3 px-3 py-2" required>
+            <option value="RSA">RSA</option>
+            <option value="ECDSA">ECDSA</option>
+            <option value="AES">AES</option>
+            <option value="ED25519">ED25519</option>
+        </select>
+        <span asp-validation-for="Algorithm" class="text-danger small mt-1"></span>
+    </div>
+
+    <div class="col-md-4">
+        <label asp-for="KeySize" class="form-label small fw-bold text-muted mb-1">Key Size (bits)</label>
+        <input asp-for="KeySize" type="number" class="form-control ecos-input shadow-none rounded-3 px-3 py-2" placeholder="Ex: 2048, 4096" />
+        <span asp-validation-for="KeySize" class="text-danger small mt-1"></span>
+    </div>
+
+    <div class="col-md-4">
+        <label asp-for="CurveName" class="form-label small fw-bold text-muted mb-1">Curve Name (ECC)</label>
+        <input asp-for="CurveName" class="form-control ecos-input shadow-none rounded-3 px-3 py-2" placeholder="Ex: P-256, secp256k1" />
+        <span asp-validation-for="CurveName" class="text-danger small mt-1"></span>
+    </div>
+
+    <div class="col-md-4">
+        <label asp-for="Extractable" class="form-label small fw-bold text-muted mb-1">Extractable</label>
+        <select asp-for="Extractable" class="form-select ecos-input shadow-none rounded-3 px-3 py-2">
+            <option value="0">No (Hardware Locked)</option>
+            <option value="1">Yes</option>
+        </select>
+        <span asp-validation-for="Extractable" class="text-danger small mt-1"></span>
+    </div>
+
+    <div class="col-md-12">
+        <label asp-for="Status" class="form-label small fw-bold text-muted mb-1">Status</label>
+        <select asp-for="Status" class="form-select ecos-input shadow-none rounded-3 px-3 py-2">
+            <option value="ACTIVE">Active</option>
+            <option value="INACTIVE">Inactive</option>
+            <option value="REVOKED">Revoked</option>
+            <option value="DESTROYED">Destroyed</option>
+        </select>
+        <span asp-validation-for="Status" class="text-danger small mt-1"></span>
+    </div>
+
+</div>

@@ -1,0 +1,19 @@
+﻿@page "{id:Guid}"
+@model EcosCLM.Web.Pages.Security.HsmKeyRef.UpdateModel
+@{
+    ViewData["Title"] = "Edit HSM Key Reference";
+}
+
+<div class="row">
+    <div class="col-12 mt-3">
+        <ecos-form title="Edit HSM Key Reference"
+                   subtitle="Modify key labels, algorithm specs, or status.">
+
+            <input type="hidden" asp-for="Item.Id" />
+            <input type="hidden" asp-for="Item.CreatedAt" />
+
+            <partial name="_HsmKeyRefFormFields" for="Item" />
+
+        </ecos-form>
+    </div>
+</div>

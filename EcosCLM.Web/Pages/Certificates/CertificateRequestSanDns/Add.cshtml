@@ -1,0 +1,16 @@
+﻿@page
+@model EcosCLM.Web.Pages.Certificates.CertificateRequestSanDns.AddModel
+@{
+    ViewData["Title"] = "Add SAN DNS Entry";
+}
+
+<div class="row">
+    <div class="col-12 mt-3">
+        <ecos-form title="Add SAN DNS Entry"
+                   subtitle="Define an alternative domain name for a certificate request.">
+
+            <partial name="_CertificateRequestSanDnsFormFields" for="Item" />
+
+        </ecos-form>
+    </div>
+</div>

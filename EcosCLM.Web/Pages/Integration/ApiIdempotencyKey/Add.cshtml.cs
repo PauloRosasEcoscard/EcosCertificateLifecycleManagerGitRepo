@@ -29,7 +29,7 @@ namespace EcosCLM.Web.Pages.Integration.ApiIdempotencyKey
             return Page();
         }
 
-        public async Task<IActionResult> OnPostSaveAsync()
+        public async Task<IActionResult> OnPostAsync()
         {
             // Campos preenchidos pelo servidor
             Item.CustomerId = CustumerId;

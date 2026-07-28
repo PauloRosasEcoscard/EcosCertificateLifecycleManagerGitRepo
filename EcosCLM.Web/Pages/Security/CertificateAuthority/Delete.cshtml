@@ -1,0 +1,44 @@
+﻿@page "{id:Guid}"
+@model EcosCLM.Web.Pages.Security.CertificateAuthority.DeleteModel
+@{
+    ViewData["Title"] = "Delete Certificate Authority";
+    ViewData["Breadcrumb"] = "Security";
+    ViewData["PageName"] = "Certificate Authorities";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card my-4">
+
+            <div class="card-header p-0 position-relative">
+                <div class="card-body d-flex align-items-center justify-content-between bg-secondary pt-4 pb-3">
+                    <h5 class="text-white text-capitalize fw-bold fs-5 mb-0">Delete Certificate Authority</h5>
+                </div>
+            </div>
+
+            <div class="card-body px-4 pb-4">
+
+                <form method="post">
+                    <input type="hidden" asp-for="Item.Id" />
+
+                    <p>Are you sure you want to delete the certificate authority <strong>@Model.Item.Name</strong>?</p>
+                    <p class="fw-bold text-danger">This action will delete all linked records and is <u>irreversible</u>.</p>
+
+                    <div class="col-md-12 text-center mt-4">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <a asp-page="Index" class="btn btn-secondary w-100">Cancel</a>
+                            </div>
+                            <div class="col-md-6">
+                                <button type="submit" class="btn-danger btn w-100">
+                                    Delete
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>

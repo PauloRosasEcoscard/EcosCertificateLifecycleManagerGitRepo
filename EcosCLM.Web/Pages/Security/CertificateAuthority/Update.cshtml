@@ -1,0 +1,19 @@
+﻿@page "{id:Guid}"
+@model EcosCLM.Web.Pages.Security.CertificateAuthority.UpdateModel
+@{
+    ViewData["Title"] = "Edit Certificate Authority";
+}
+
+<div class="row">
+    <div class="col-12 mt-3">
+        <ecos-form title="Edit Certificate Authority"
+                   subtitle="Update CA provider settings, endpoints or status.">
+
+            <input type="hidden" asp-for="Item.Id" />
+            <input type="hidden" asp-for="Item.CreatedAt" />
+
+            <partial name="_CertificateAuthorityFormFields" for="Item" />
+
+        </ecos-form>
+    </div>
+</div>

@@ -56,7 +56,7 @@ namespace EcosCLM.Web.Pages.Deployment.DeploymentTarget
             }
         }
 
-        public async Task<IActionResult> OnPostSaveAsync()
+        public async Task<IActionResult> OnPostAsync()
         {
             // Campos preenchidos pelo servidor
             Item.CustomerId = CustumerId;

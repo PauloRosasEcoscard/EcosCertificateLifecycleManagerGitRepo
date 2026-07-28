@@ -1,0 +1,21 @@
+﻿@page "{id:Guid}"
+@model EcosCLM.Web.Pages.Certificates.CaOrder.UpdateModel
+@{
+    ViewData["Title"] = "Edit CA Order";
+}
+
+<div class="row">
+    <div class="col-12 mt-3">
+        <ecos-form title="Edit CA Order"
+                   subtitle="Modify order status, external references, or error details.">
+
+            <input type="hidden" asp-for="Item.Id" />
+            <input type="hidden" asp-for="Item.CreatedAt" />
+            <input type="hidden" asp-for="Item.SubmittedAt" />
+            <input type="hidden" asp-for="Item.CompletedAt" />
+
+            <partial name="_CaOrderFormFields" for="Item" />
+
+        </ecos-form>
+    </div>
+</div>

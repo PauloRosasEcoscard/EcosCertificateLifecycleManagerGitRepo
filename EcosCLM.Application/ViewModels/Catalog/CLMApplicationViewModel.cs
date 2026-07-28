@@ -2,6 +2,7 @@
 using EcosCLM.Application.Validators.Catalog;
 using EcosCLM.Application.ViewModels.Deployment;
 using EcosCLM.Domain.Entities.Base;
+using EcosCLM.Domain.Entities.Catalog;
 using Microsoft.Extensions.DependencyInjection;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Cryptography.X509Certificates;
@@ -34,11 +35,11 @@ namespace EcosCLM.Application.ViewModels.Catalog
         }
     }
 
-    public class AccessLogsProfile : Profile
+    public class CLMApplicationProfile : Profile
     {
-        public AccessLogsProfile()
+        public CLMApplicationProfile()
         {
-            CreateMap<AuditLogs, AuditLogsViewModel>().ReverseMap();
+            CreateMap<CLMApplication, CLMApplicationViewModel>().ReverseMap();
         }
     }
 }

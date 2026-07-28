@@ -1,0 +1,19 @@
+﻿@page "{id:Guid}"
+@model EcosCLM.Web.Pages.Certificates.CertificateRequest.UpdateModel
+@{
+    ViewData["Title"] = "Edit Certificate Request";
+}
+
+<div class="row">
+    <div class="col-12 mt-3">
+        <ecos-form title="Edit Certificate Request"
+                   subtitle="Modify request parameters, status or CSR metadata.">
+
+            <input type="hidden" asp-for="Item.Id" />
+            <input type="hidden" asp-for="Item.CreatedAt" />
+
+            <partial name="_CertificateRequestFormFields" for="Item" />
+
+        </ecos-form>
+    </div>
+</div>

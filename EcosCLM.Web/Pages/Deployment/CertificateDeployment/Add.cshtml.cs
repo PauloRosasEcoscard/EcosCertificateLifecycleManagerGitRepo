@@ -41,7 +41,7 @@ namespace EcosCLM.Web.Pages.Deployment.CertificateDeployment
             return Page();
         }
 
-        public async Task<IActionResult> OnPostSaveAsync()
+        public async Task<IActionResult> OnPostAsync()
         {
             Item.CustomerId = CustumerId;
             Item.CreatedAt = DateTime.UtcNow;

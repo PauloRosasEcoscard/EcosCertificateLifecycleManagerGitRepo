@@ -58,7 +58,7 @@ namespace Ecos_Cloud_Vhsm_Dashboard.Pages.Company.SyslogServers
                 // URL para a página de criação. Se for nula ou vazia, o botão "New" desaparece automaticamente.
                 AddPageUrl = "Add",
 
-                // Texto do placeholder do campo de busca por texto padrão. 
+                // Texto do placeholder do campo de busca por texto padrão.
                 // ATENÇÃO: Se for deixado nulo ou vazio, o input 'Search.TxName' NÃO será renderizado na tela.
                 SearchPlaceholder = null,
 
@@ -76,7 +76,7 @@ namespace Ecos_Cloud_Vhsm_Dashboard.Pages.Company.SyslogServers
             };
         }
 
-        public async Task<IActionResult> OnPostSaveAsync()
+        public async Task<IActionResult> OnPostAsync()
         {
             Item.CustumerId = CustumerId;
 
