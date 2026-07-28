@@ -47,7 +47,7 @@ namespace EcosCLM.Web.Pages.Integration.ApiIdempotencyKey
                 if (Item.Id == Guid.Empty)
                     Item.Id = Guid.NewGuid();
 
-                await _repository.AddAsync(_repository.ToEntity(Item));
+                await _repository.AddAsync(_repository.ToEntity(Item)).ConfigureAwait(false);
 
                 TempData["success"] = "API idempotency key created successfully.";
 

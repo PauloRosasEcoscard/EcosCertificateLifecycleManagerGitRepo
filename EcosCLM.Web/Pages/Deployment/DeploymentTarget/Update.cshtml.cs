@@ -32,7 +32,7 @@ namespace EcosCLM.Web.Pages.Deployment.DeploymentTarget
             {
                 LoadLists();
 
-                var entity = await _repository.FindOneAsync(x => x.Id == id);
+                var entity = await _repository.FindOneAsync(x => x.Id == id).ConfigureAwait(false);
 
                 if (entity == null)
                     return RedirectToPage("Index");
@@ -74,7 +74,7 @@ namespace EcosCLM.Web.Pages.Deployment.DeploymentTarget
 
             try
             {
-                var entity = await _repository.FindOneAsync(x => x.Id == Item.Id);
+                var entity = await _repository.FindOneAsync(x => x.Id == Item.Id).ConfigureAwait(false);
 
                 if (entity == null)
                 {
@@ -91,7 +91,7 @@ namespace EcosCLM.Web.Pages.Deployment.DeploymentTarget
                 entity.CustomerId = Item.CustomerId;
                 entity.UpdatedAt = Item.UpdatedAt;
 
-                await _repository.UpdAsync(entity);
+                await _repository.UpdAsync(entity).ConfigureAwait(false);
 
                 TempData["success"] = "Deployment target updated successfully.";
 

@@ -1,5 +1,8 @@
 ﻿using EcosCLM.Application.Interfaces;
 using EcosCLM.Application.Services;
+using EcosCLM.Application.Validators.Certificates;
+using EcosCLM.Application.Validators.Deployment;
+using EcosCLM.Application.Validators.Integration;
 using EcosCLM.Data.Context;
 using EcosCLM.Data.Repositories;
 using EcosCLM.Data.Services;
@@ -109,8 +112,6 @@ namespace EcosCLM.Data.Extensions
             services.AddScoped<DeploymentTargetValidator>();
             services.AddScoped<ApiIdempotencyKeyValidator>();
             services.AddScoped<EventOutboxValidator>();
-            #endregion
-        }
 
             #endregion DependencyInjection
         }

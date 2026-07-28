@@ -37,7 +37,7 @@ namespace EcosCLM.Web.Pages.Deployment.CertificateDeployment
 
         public async Task<IActionResult> OnGetAsync()
         {
-            await LoadInitialDataAsync();
+            await LoadInitialDataAsync().ConfigureAwait(false);
             return Page();
         }
 
@@ -53,13 +53,13 @@ namespace EcosCLM.Web.Pages.Deployment.CertificateDeployment
 
             if (!ModelState.IsValid)
             {
-                await LoadInitialDataAsync();
+                await LoadInitialDataAsync().ConfigureAwait(false);
                 return Page();
             }
 
             try
             {
-                await _repository.AddAsync(_repository.ToEntity(Item));
+                await _repository.AddAsync(_repository.ToEntity(Item)).ConfigureAwait(false);
 
                 TempData["success"] = "Certificate deployment created successfully.";
 
@@ -72,7 +72,7 @@ namespace EcosCLM.Web.Pages.Deployment.CertificateDeployment
                 _logger.LogError(ex,
                     "Error creating certificate deployment.");
 
-                await LoadInitialDataAsync();
+                await LoadInitialDataAsync().ConfigureAwait(false);
 
                 return Page();
             }
@@ -165,7 +165,7 @@ namespace EcosCLM.Web.Pages.Deployment.CertificateDeployment
                     "Error loading certificate deployment auxiliary data.");
             }
 
-            await Task.CompletedTask;
+            await Task.CompletedTask.ConfigureAwait(false);
         }
     }
 }

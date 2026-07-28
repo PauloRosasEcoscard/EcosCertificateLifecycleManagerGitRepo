@@ -39,7 +39,7 @@ namespace EcosCLM.Web.Pages.Deployment.CertificateDeployment
         {
             try
             {
-                var entity = await _repository.FindOneAsync(x => x.Id == id);
+                var entity = await _repository.FindOneAsync(x => x.Id == id).ConfigureAwait(false);
 
                 if (entity == null)
                     return RedirectToPage("Index");
@@ -52,7 +52,7 @@ namespace EcosCLM.Web.Pages.Deployment.CertificateDeployment
                     return RedirectToPage("Index");
                 }
 
-                await LoadInitialDataAsync();
+                await LoadInitialDataAsync().ConfigureAwait(false);
 
                 return Page();
             }
@@ -80,13 +80,13 @@ namespace EcosCLM.Web.Pages.Deployment.CertificateDeployment
 
             if (!ModelState.IsValid)
             {
-                await LoadInitialDataAsync();
+                await LoadInitialDataAsync().ConfigureAwait(false);
                 return Page();
             }
 
             try
             {
-                await _repository.UpdAsync(_repository.ToEntity(Item));
+                await _repository.UpdAsync(_repository.ToEntity(Item)).ConfigureAwait(false);
 
                 TempData["success"] = "Certificate deployment updated successfully.";
 
@@ -100,7 +100,7 @@ namespace EcosCLM.Web.Pages.Deployment.CertificateDeployment
                     ex,
                     "Error updating certificate deployment.");
 
-                await LoadInitialDataAsync();
+                await LoadInitialDataAsync().ConfigureAwait(false);
 
                 return Page();
             }
@@ -146,7 +146,7 @@ namespace EcosCLM.Web.Pages.Deployment.CertificateDeployment
                     "Error loading auxiliary data.");
             }
 
-            await Task.CompletedTask;
+            await Task.CompletedTask.ConfigureAwait(false);
         }
     }
 }

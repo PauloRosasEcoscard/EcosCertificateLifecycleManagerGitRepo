@@ -39,7 +39,7 @@ namespace EcosCLM.Web.Pages.Deployment.DeploymentTarget
 
             Search = GetFilters();
 
-            await GetData();
+            await GetData().ConfigureAwait(false);
 
             AddGridConfig();
 
@@ -70,7 +70,7 @@ namespace EcosCLM.Web.Pages.Deployment.DeploymentTarget
         {
             try
             {
-                await GetItens();
+                await GetItens().ConfigureAwait(false);
 
                 if (Itens != null)
                 {
@@ -119,7 +119,7 @@ namespace EcosCLM.Web.Pages.Deployment.DeploymentTarget
                 Itens = new List<DeploymentTargetViewModel>();
             }
 
-            await Task.CompletedTask;
+            await Task.CompletedTask.ConfigureAwait(false);
         }
     }
 }

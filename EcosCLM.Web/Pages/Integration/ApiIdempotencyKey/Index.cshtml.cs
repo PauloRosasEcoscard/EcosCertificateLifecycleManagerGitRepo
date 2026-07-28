@@ -37,7 +37,7 @@ namespace EcosCLM.Web.Pages.Integration.ApiIdempotencyKey
 
             Search = GetFilters();
 
-            await GetData();
+            await GetData().ConfigureAwait(false);
 
             AddGridConfig();
 
@@ -97,7 +97,7 @@ namespace EcosCLM.Web.Pages.Integration.ApiIdempotencyKey
                     "Error loading api idempotency keys.");
             }
 
-            await Task.CompletedTask;
+            await Task.CompletedTask.ConfigureAwait(false);
         }
     }
 }

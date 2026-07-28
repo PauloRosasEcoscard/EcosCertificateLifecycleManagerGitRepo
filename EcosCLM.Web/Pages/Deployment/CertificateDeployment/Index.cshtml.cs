@@ -39,7 +39,7 @@ namespace EcosCLM.Web.Pages.Deployment.CertificateDeployment
 
             Search = GetFilters();
 
-            await GetData();
+            await GetData().ConfigureAwait(false);
 
             AddGridConfig();
 
@@ -70,7 +70,7 @@ namespace EcosCLM.Web.Pages.Deployment.CertificateDeployment
         {
             try
             {
-                await GetItens();
+                await GetItens().ConfigureAwait(false);
 
                 if (Itens != null)
                 {
@@ -123,7 +123,7 @@ namespace EcosCLM.Web.Pages.Deployment.CertificateDeployment
                 Itens = new List<CertificateDeploymentViewModel>();
             }
 
-            await Task.CompletedTask;
+            await Task.CompletedTask.ConfigureAwait(false);
         }
     }
 }

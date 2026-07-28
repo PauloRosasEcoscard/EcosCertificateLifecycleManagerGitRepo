@@ -76,7 +76,7 @@ namespace EcosCLM.Web.Pages.Deployment.DeploymentTarget
 
                 var entity = _repository.ToEntity(Item);
 
-                await _repository.AddAsync(entity);
+                await _repository.AddAsync(entity).ConfigureAwait(false);
 
                 _logger.LogInformation("Registro salvo com sucesso.");
 
