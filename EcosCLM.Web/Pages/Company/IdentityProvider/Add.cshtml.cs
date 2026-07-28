@@ -36,7 +36,7 @@ namespace EcosCLM.Web.Pages.Company.IdentityProvider
             return Page();
         }
 
-        public async Task<IActionResult> OnPostSaveAsync()
+        public async Task<IActionResult> OnPostAsync()
         {
             ModelState.Remove("AzureRoleMappingsJson");
             if (ModelState.IsValid)

@@ -1,0 +1,41 @@
+﻿@model EcosCLM.Application.ViewModels.Certificates.RenewalJobViewModel
+
+<div class="row g-4 px-2 pb-2">
+
+    <div class="col-12">
+        <h6 class="fw-bold mb-0 pb-2 border-bottom border-2" style="border-color: var(--bs-primary) !important; color: var(--bs-primary);">
+            Renewal Job Specifications
+        </h6>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="CertificateId" class="form-label small fw-bold text-muted mb-1">Certificate ID</label>
+        <input asp-for="CertificateId" class="form-control ecos-input shadow-none rounded-3 px-3 py-2" placeholder="Ex: 00000000-0000-0000-0000-000000000000" required />
+        <span asp-validation-for="CertificateId" class="text-danger small mt-1"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="Status" class="form-label small fw-bold text-muted mb-1">Status</label>
+        <select asp-for="Status" class="form-select ecos-input shadow-none rounded-3 px-3 py-2">
+            <option value="SCHEDULED">Scheduled</option>
+            <option value="IN_PROGRESS">In Progress</option>
+            <option value="COMPLETED">Completed</option>
+            <option value="FAILED">Failed</option>
+            <option value="CANCELLED">Cancelled</option>
+        </select>
+        <span asp-validation-for="Status" class="text-danger small mt-1"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="ScheduledAt" class="form-label small fw-bold text-muted mb-1">Scheduled Date</label>
+        <input asp-for="ScheduledAt" type="datetime-local" class="form-control ecos-input shadow-none rounded-3 px-3 py-2" required />
+        <span asp-validation-for="ScheduledAt" class="text-danger small mt-1"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="DueAt" class="form-label small fw-bold text-muted mb-1">Due Date</label>
+        <input asp-for="DueAt" type="datetime-local" class="form-control ecos-input shadow-none rounded-3 px-3 py-2" required />
+        <span asp-validation-for="DueAt" class="text-danger small mt-1"></span>
+    </div>
+
+</div>

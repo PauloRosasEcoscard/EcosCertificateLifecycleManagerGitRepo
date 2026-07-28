@@ -1,0 +1,89 @@
+using EcosCLM.Application.Extensions.Catalog;
+using EcosCLM.Application.Interfaces;
+using EcosCLM.Application.ViewModels.Catalog;
+using EcosCLM.Web.EcosLoginIntegration.Interfaces;
+using EcosCLM.Web.Infrastructure.Core;
+using Microsoft.AspNetCore.Mvc;
+
+namespace EcosCLM.Web.Pages.Catalog.ManagedDomain
+{
+    public class UpdateModel : BasePageModel<ManagedDomainViewModel>
+    {
+        private readonly IManagedDomainRepository _repository;
+        private readonly ILogger<UpdateModel> _logger;
+
+        public UpdateModel(
+            ILogger<UpdateModel> logger,
+            IConfiguration configuration,
+            IEcosLoginService ecosLoginService,
+            IManagedDomainRepository repository)
+            : base(ecosLoginService, configuration)
+        {
+            _logger = logger;
+            _repository = repository;
+        }
+
+        public async Task<IActionResult> OnGetAsync(Guid id)
+        {
+            try
+            {
+                Item = await _repository.GetByIdAsync(id).ConfigureAwait(false);
+
+                if (Item == null)
+                {
+                    TempData["warning"] = "Managed Domain not found.";
+                    return RedirectToPage("Index");
+                }
+
+                if (Item.CustomerId != CustumerId)
+                {
+                    TempData["warning"] = "Unauthorized action.";
+                    return RedirectToPage("Index");
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["error"] = ex.Message;
+                _logger.LogError(ex, "Error retrieving managed domain for update.");
+                return RedirectToPage("Index");
+            }
+
+            return Page();
+        }
+
+        public async Task<IActionResult> OnPostAsync()
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var existingEntity = await _repository.FindOneAsync(x => x.Id == Item.Id).ConfigureAwait(false);
+                    if (existingEntity == null || existingEntity.CustomerId != CustumerId)
+                    {
+                        TempData["warning"] = "Operation not allowed.";
+                        return RedirectToPage("Index");
+                    }
+
+                    existingEntity.Fqdn = Item.Fqdn;
+                    existingEntity.ValidationStatus = Item.ValidationStatus;
+                    existingEntity.ApplicationId = Item.ApplicationId;
+                    existingEntity.ExpiresAt = Item.ExpiresAt;
+                    existingEntity.UpdatedAt = DateTime.UtcNow;
+
+                    await _repository.UpdAsync(existingEntity).ConfigureAwait(false);
+
+                    TempData["success"] = "Managed Domain updated successfully!";
+                    return RedirectToPage("Index");
+                }
+                catch (Exception ex)
+                {
+                    TempData["error"] = ex.Message;
+                    _logger.LogError(ex, "Error updating managed domain.");
+                    return Page();
+                }
+            }
+
+            return Page();
+        }
+    }
+}

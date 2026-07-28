@@ -36,7 +36,7 @@ namespace EcosCLM.Web.Pages.Integration.EventOutbox
             return Page();
         }
 
-        public async Task<IActionResult> OnPostSaveAsync()
+        public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
             {
@@ -49,7 +49,7 @@ namespace EcosCLM.Web.Pages.Integration.EventOutbox
                 if (Item.Id == Guid.Empty)
                     Item.Id = Guid.NewGuid();
 
-                await _repository.AddAsync(_repository.ToEntity(Item));
+                await _repository.AddAsync(_repository.ToEntity(Item)).ConfigureAwait(false);
 
                 TempData["success"] = "Event created successfully.";
 

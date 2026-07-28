@@ -1,0 +1,60 @@
+﻿@model EcosCLM.Application.ViewModels.Security.CertificateAuthorityViewModel
+
+<div class="row g-4 px-2 pb-2">
+
+    <div class="col-12">
+        <h6 class="fw-bold mb-0 pb-2 border-bottom border-2" style="border-color: var(--bs-primary) !important; color: var(--bs-primary);">
+            Certificate Authority Specifications
+        </h6>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="Name" class="form-label small fw-bold text-muted mb-1">CA Name</label>
+        <input asp-for="Name" class="form-control ecos-input shadow-none rounded-3 px-3 py-2" placeholder="Ex: Let's Encrypt Production, DigiCert Public CA" required />
+        <span asp-validation-for="Name" class="text-danger small mt-1"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="ProviderType" class="form-label small fw-bold text-muted mb-1">Provider Type</label>
+        <select asp-for="ProviderType" class="form-select ecos-input shadow-none rounded-3 px-3 py-2" required>
+            <option value="ACME">ACME Protocol</option>
+            <option value="DIGICERT">DigiCert CertCentral</option>
+            <option value="SECTIGO">Sectigo Certificate Manager</option>
+            <option value="MS_CA">Microsoft Active Directory CS</option>
+            <option value="CUSTOM">Custom REST Provider</option>
+        </select>
+        <span asp-validation-for="ProviderType" class="text-danger small mt-1"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="BaseUrl" class="form-label small fw-bold text-muted mb-1">Base Endpoint URL</label>
+        <input asp-for="BaseUrl" class="form-control ecos-input shadow-none rounded-3 px-3 py-2" placeholder="Ex: https://acme-v02.api.letsencrypt.org/directory" />
+        <span asp-validation-for="BaseUrl" class="text-danger small mt-1"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="AccountRef" class="form-label small fw-bold text-muted mb-1">Account Reference / ID</label>
+        <input asp-for="AccountRef" class="form-control ecos-input shadow-none rounded-3 px-3 py-2" placeholder="Ex: ACC-987456" />
+        <span asp-validation-for="AccountRef" class="text-danger small mt-1"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="SupportsAcme" class="form-label small fw-bold text-muted mb-1">Supports ACME</label>
+        <select asp-for="SupportsAcme" class="form-select ecos-input shadow-none rounded-3 px-3 py-2">
+            <option value="1">Yes</option>
+            <option value="0">No</option>
+        </select>
+        <span asp-validation-for="SupportsAcme" class="text-danger small mt-1"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="Status" class="form-label small fw-bold text-muted mb-1">Status</label>
+        <select asp-for="Status" class="form-select ecos-input shadow-none rounded-3 px-3 py-2">
+            <option value="ACTIVE">Active</option>
+            <option value="INACTIVE">Inactive</option>
+            <option value="MAINTENANCE">Maintenance</option>
+        </select>
+        <span asp-validation-for="Status" class="text-danger small mt-1"></span>
+    </div>
+
+</div>

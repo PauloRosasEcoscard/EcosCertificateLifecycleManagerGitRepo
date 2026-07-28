@@ -37,7 +37,7 @@ namespace EcosCLM.Web.Pages.Integration.EventOutbox
 
             Search = GetFilters();
 
-            await GetData();
+            await GetData().ConfigureAwait(false);
 
             AddGridConfig();
 
@@ -94,7 +94,7 @@ namespace EcosCLM.Web.Pages.Integration.EventOutbox
                 _logger.LogError(ex, "Error loading event outbox.");
             }
 
-            await Task.CompletedTask;
+            await Task.CompletedTask.ConfigureAwait(false);
         }
     }
 }

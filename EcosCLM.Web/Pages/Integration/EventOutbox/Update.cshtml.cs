@@ -31,7 +31,7 @@ namespace EcosCLM.Web.Pages.Integration.EventOutbox
             {
                 LoadLists();
 
-                var entity = await _repository.FindOneAsync(x => x.Id == id);
+                var entity = await _repository.FindOneAsync(x => x.Id == id).ConfigureAwait(false);
 
                 if (entity == null)
                     return RedirectToPage("Index");
@@ -50,7 +50,7 @@ namespace EcosCLM.Web.Pages.Integration.EventOutbox
             }
         }
 
-        public async Task<IActionResult> OnPostSaveAsync()
+        public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
             {
@@ -60,7 +60,7 @@ namespace EcosCLM.Web.Pages.Integration.EventOutbox
 
             try
             {
-                await _repository.UpdAsync(_repository.ToEntity(Item));
+                await _repository.UpdAsync(_repository.ToEntity(Item)).ConfigureAwait(false);
 
                 TempData["success"] = "Event updated successfully.";
 

@@ -83,5 +83,29 @@ namespace EcosCLM.Application.Extensions.Certificates
             var query = await repository.AddAsync(entity).ConfigureAwait(false);
             return repository.ToViewModel(query);
         }
+
+        public static async Task<RenewalJobViewModel> EditAsync(this IRenewalJobRepository repository, RenewalJobViewModel model)
+        {
+            ArgumentNullException.ThrowIfNull(repository);
+            ArgumentNullException.ThrowIfNull(model);
+
+            var entity = repository.ToEntity(model);
+            var query = await repository.UpdAsync(entity).ConfigureAwait(false);
+            return repository.ToViewModel(query);
+        }
+
+        public static async Task<bool> DeleteAsync(this IRenewalJobRepository repository, Guid id)
+        {
+            ArgumentNullException.ThrowIfNull(repository);
+
+            var entity = await repository.FindOneAsync(x => x.Id == id).ConfigureAwait(false);
+
+            if (entity != null)
+            {
+                await repository.DelAsync(entity).ConfigureAwait(false);
+            }
+
+            return true;
+        }
     }
 }

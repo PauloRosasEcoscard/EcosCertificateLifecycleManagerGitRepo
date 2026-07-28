@@ -51,7 +51,7 @@ namespace EcosCLM.Web.Pages.Catalog.DeploymentEnvironment
             return Page();
         }
 
-        public async Task<IActionResult> OnPostSaveAsync()
+        public async Task<IActionResult> OnPostAsync()
         {
             if (ModelState.IsValid)
             {

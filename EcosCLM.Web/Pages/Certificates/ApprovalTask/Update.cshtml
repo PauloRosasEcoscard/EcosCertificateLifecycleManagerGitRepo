@@ -1,0 +1,19 @@
+﻿@page "{id:Guid}"
+@model EcosCLM.Web.Pages.Certificates.ApprovalTask.UpdateModel
+@{
+    ViewData["Title"] = "Edit Approval Task";
+}
+
+<div class="row">
+    <div class="col-12 mt-3">
+        <ecos-form title="Edit Approval Task"
+                   subtitle="Modify workflow step decision, approvers or status.">
+
+            <input type="hidden" asp-for="Item.Id" />
+            <input type="hidden" asp-for="Item.CreatedAt" />
+
+            <partial name="_ApprovalTaskFormFields" for="Item" />
+
+        </ecos-form>
+    </div>
+</div>

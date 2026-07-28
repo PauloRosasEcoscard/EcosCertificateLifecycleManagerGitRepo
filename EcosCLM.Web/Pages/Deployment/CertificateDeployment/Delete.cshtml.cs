@@ -24,7 +24,7 @@ namespace EcosCLM.Web.Pages.Deployment.CertificateDeployment
 
         public async Task<IActionResult> OnGet(Guid id)
         {
-            await GetData(id);
+            await GetData(id).ConfigureAwait(false);
 
             if (Item == null)
                 return RedirectToPage("Index");
@@ -42,7 +42,7 @@ namespace EcosCLM.Web.Pages.Deployment.CertificateDeployment
         {
             try
             {
-                var entity = await _repository.FindOneAsync(x => x.Id == Item.Id);
+                var entity = await _repository.FindOneAsync(x => x.Id == Item.Id).ConfigureAwait(false);
 
                 if (entity == null)
                 {
@@ -50,7 +50,7 @@ namespace EcosCLM.Web.Pages.Deployment.CertificateDeployment
                     return RedirectToPage("Index");
                 }
 
-                await _repository.DelAsync(entity);
+                await _repository.DelAsync(entity).ConfigureAwait(false);
 
                 TempData["success"] = "Certificate Deployment deleted successfully.";
             }
@@ -68,7 +68,7 @@ namespace EcosCLM.Web.Pages.Deployment.CertificateDeployment
         {
             try
             {
-                var entity = await _repository.FindOneAsync(x => x.Id == id);
+                var entity = await _repository.FindOneAsync(x => x.Id == id).ConfigureAwait(false);
 
                 if (entity != null)
                 {

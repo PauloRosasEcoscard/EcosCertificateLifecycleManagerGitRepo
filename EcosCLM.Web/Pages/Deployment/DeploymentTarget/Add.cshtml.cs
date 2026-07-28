@@ -35,7 +35,7 @@ namespace EcosCLM.Web.Pages.Deployment.DeploymentTarget
             return Page();
         }
 
-        public async Task<IActionResult> OnPostSaveAsync()
+        public async Task<IActionResult> OnPostAsync()
         {
             _logger.LogInformation("===== ONPOSTSAVE EXECUTADO =====");
 
@@ -76,7 +76,7 @@ namespace EcosCLM.Web.Pages.Deployment.DeploymentTarget
 
                 var entity = _repository.ToEntity(Item);
 
-                await _repository.AddAsync(entity);
+                await _repository.AddAsync(entity).ConfigureAwait(false);
 
                 _logger.LogInformation("Registro salvo com sucesso.");
 

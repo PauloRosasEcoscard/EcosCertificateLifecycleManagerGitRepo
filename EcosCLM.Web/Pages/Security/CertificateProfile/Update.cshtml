@@ -1,0 +1,19 @@
+﻿@page "{id:Guid}"
+@model EcosCLM.Web.Pages.Security.CertificateProfile.UpdateModel
+@{
+    ViewData["Title"] = "Edit Certificate Profile";
+}
+
+<div class="row">
+    <div class="col-12 mt-3">
+        <ecos-form title="Edit Certificate Profile"
+                   subtitle="Modify cryptographic constraints, lifecycle windows, or approval requirements.">
+
+            <input type="hidden" asp-for="Item.Id" />
+            <input type="hidden" asp-for="Item.CreatedAt" />
+
+            <partial name="_CertificateProfileFormFields" for="Item" />
+
+        </ecos-form>
+    </div>
+</div>

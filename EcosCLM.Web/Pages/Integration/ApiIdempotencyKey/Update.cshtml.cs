@@ -26,7 +26,7 @@ namespace EcosCLM.Web.Pages.Integration.ApiIdempotencyKey
         {
             try
             {
-                var entity = await _repository.FindOneAsync(x => x.Id == id);
+                var entity = await _repository.FindOneAsync(x => x.Id == id).ConfigureAwait(false);
 
                 if (entity == null)
                     return RedirectToPage("Index");
@@ -50,7 +50,7 @@ namespace EcosCLM.Web.Pages.Integration.ApiIdempotencyKey
             }
         }
 
-        public async Task<IActionResult> OnPostSaveAsync()
+        public async Task<IActionResult> OnPostAsync()
         {
             // Campos preenchidos pelo servidor
             Item.CustomerId = CustumerId;
@@ -65,7 +65,7 @@ namespace EcosCLM.Web.Pages.Integration.ApiIdempotencyKey
 
             try
             {
-                await _repository.UpdAsync(_repository.ToEntity(Item));
+                await _repository.UpdAsync(_repository.ToEntity(Item)).ConfigureAwait(false);
 
                 TempData["success"] = "API idempotency key updated successfully.";
 

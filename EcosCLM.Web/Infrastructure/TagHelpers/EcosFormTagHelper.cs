@@ -25,7 +25,7 @@ namespace EcosCLM.Web.Infrastructure.TagHelpers
         public string Subtitle { get; set; } = string.Empty;
 
         [HtmlAttributeName("handler")]
-        public string Handler { get; set; } = "Save";
+        public string? Handler { get; set; }
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
@@ -34,12 +34,16 @@ namespace EcosCLM.Web.Infrastructure.TagHelpers
             var currentPath = httpContext?.Request.Path.Value ?? string.Empty;
 
             // Transforma a tag do TagHelper no próprio <form>
+            var formAction = string.IsNullOrWhiteSpace(Handler)
+                                ? currentPath
+                                : $"{currentPath}?handler={Uri.EscapeDataString(Handler)}";
+
             output.TagName = "form";
             output.Attributes.SetAttribute("method", "post");
-            output.Attributes.SetAttribute("action", $"{currentPath}?handler={Handler}");
+            output.Attributes.SetAttribute("action", formAction);
             output.Attributes.SetAttribute("class", "ecos-card p-0");
 
-            var childContent = await output.GetChildContentAsync().ConfigureAwait(false);
+            var headerHtml = new StringBuilder();
 
             // 1. Token Anti-Forgery + Cabeçalho
             headerHtml.Append($"<input type='hidden' name='__RequestVerificationToken' value='{antiforgeryToken.RequestToken}' />");

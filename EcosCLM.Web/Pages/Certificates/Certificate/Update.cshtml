@@ -1,0 +1,21 @@
+﻿@page "{id:Guid}"
+@model EcosCLM.Web.Pages.Certificates.Certificate.UpdateModel
+@{
+    ViewData["Title"] = "Edit Certificate";
+}
+
+<div class="row">
+    <div class="col-12 mt-3">
+        <ecos-form title="Edit Certificate"
+                   subtitle="Modify certificate status, revocation reasons, or PEM metadata.">
+
+            <input type="hidden" asp-for="Item.Id" />
+            <input type="hidden" asp-for="Item.CreatedAt" />
+            <input type="hidden" asp-for="Item.RevokedAt" />
+            <input type="hidden" asp-for="Item.InstalledAt" />
+
+            <partial name="_CertificateFormFields" for="Item" />
+
+        </ecos-form>
+    </div>
+</div>

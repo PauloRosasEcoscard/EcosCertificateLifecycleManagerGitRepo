@@ -1,0 +1,19 @@
+﻿@page "{id:Guid}"
+@model EcosCLM.Web.Pages.Certificates.CertificateRequestSanDns.UpdateModel
+@{
+    ViewData["Title"] = "Edit SAN DNS Entry";
+}
+
+<div class="row">
+    <div class="col-12 mt-3">
+        <ecos-form title="Edit SAN DNS Entry"
+                   subtitle="Modify the SAN DNS domain name or request association.">
+
+            <input type="hidden" asp-for="Item.Id" />
+            <input type="hidden" asp-for="Item.CreatedAt" />
+
+            <partial name="_CertificateRequestSanDnsFormFields" for="Item" />
+
+        </ecos-form>
+    </div>
+</div>

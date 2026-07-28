@@ -1,0 +1,76 @@
+﻿@model EcosCLM.Application.ViewModels.Certificates.CertificateViewModel
+
+<div class="row g-4 px-2 pb-2">
+
+    <div class="col-12">
+        <h6 class="fw-bold mb-0 pb-2 border-bottom border-2" style="border-color: var(--bs-primary) !important; color: var(--bs-primary);">
+            Certificate Specifications
+        </h6>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="SerialNumber" class="form-label small fw-bold text-muted mb-1">Serial Number</label>
+        <input asp-for="SerialNumber" class="form-control ecos-input shadow-none rounded-3 px-3 py-2" placeholder="Ex: 00:A1:B2:C3:D4" required />
+        <span asp-validation-for="SerialNumber" class="text-danger small mt-1"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="ThumbprintSha256" class="form-label small fw-bold text-muted mb-1">Thumbprint (SHA-256)</label>
+        <input asp-for="ThumbprintSha256" class="form-control ecos-input shadow-none rounded-3 px-3 py-2" placeholder="Ex: E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855" required />
+        <span asp-validation-for="ThumbprintSha256" class="text-danger small mt-1"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="SubjectDn" class="form-label small fw-bold text-muted mb-1">Subject DN</label>
+        <input asp-for="SubjectDn" class="form-control ecos-input shadow-none rounded-3 px-3 py-2" placeholder="Ex: CN=api.example.com, O=Ecos, C=BR" required />
+        <span asp-validation-for="SubjectDn" class="text-danger small mt-1"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="IssuerDn" class="form-label small fw-bold text-muted mb-1">Issuer DN</label>
+        <input asp-for="IssuerDn" class="form-control ecos-input shadow-none rounded-3 px-3 py-2" placeholder="Ex: CN=Let's Encrypt Authority X3, O=Let's Encrypt, C=US" required />
+        <span asp-validation-for="IssuerDn" class="text-danger small mt-1"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="NotBefore" class="form-label small fw-bold text-muted mb-1">Valid From (Not Before)</label>
+        <input asp-for="NotBefore" type="datetime-local" class="form-control ecos-input shadow-none rounded-3 px-3 py-2" required />
+        <span asp-validation-for="NotBefore" class="text-danger small mt-1"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="NotAfter" class="form-label small fw-bold text-muted mb-1">Valid Until (Not After)</label>
+        <input asp-for="NotAfter" type="datetime-local" class="form-control ecos-input shadow-none rounded-3 px-3 py-2" required />
+        <span asp-validation-for="NotAfter" class="text-danger small mt-1"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="Status" class="form-label small fw-bold text-muted mb-1">Status</label>
+        <select asp-for="Status" class="form-select ecos-input shadow-none rounded-3 px-3 py-2">
+            <option value="ISSUED">Issued</option>
+            <option value="ACTIVE">Active</option>
+            <option value="EXPIRED">Expired</option>
+            <option value="REVOKED">Revoked</option>
+        </select>
+        <span asp-validation-for="Status" class="text-danger small mt-1"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="RevocationReason" class="form-label small fw-bold text-muted mb-1">Revocation Reason</label>
+        <input asp-for="RevocationReason" class="form-control ecos-input shadow-none rounded-3 px-3 py-2" placeholder="Ex: KeyCompromise, CessationOfOperation" />
+        <span asp-validation-for="RevocationReason" class="text-danger small mt-1"></span>
+    </div>
+
+    <div class="col-12">
+        <label asp-for="CertificatePem" class="form-label small fw-bold text-muted mb-1">Certificate PEM</label>
+        <textarea asp-for="CertificatePem" class="form-control ecos-input shadow-none rounded-3 px-3 py-2 font-monospace" rows="4" placeholder="-----BEGIN CERTIFICATE----- ... -----END CERTIFICATE-----" required></textarea>
+        <span asp-validation-for="CertificatePem" class="text-danger small mt-1"></span>
+    </div>
+
+    <div class="col-12">
+        <label asp-for="ChainPem" class="form-label small fw-bold text-muted mb-1">Chain PEM</label>
+        <textarea asp-for="ChainPem" class="form-control ecos-input shadow-none rounded-3 px-3 py-2 font-monospace" rows="4" placeholder="-----BEGIN CERTIFICATE----- ... -----END CERTIFICATE-----"></textarea>
+        <span asp-validation-for="ChainPem" class="text-danger small mt-1"></span>
+    </div>
+
+</div>

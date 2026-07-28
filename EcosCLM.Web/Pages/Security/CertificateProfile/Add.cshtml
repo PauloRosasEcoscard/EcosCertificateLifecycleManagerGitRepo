@@ -1,0 +1,16 @@
+﻿@page
+@model EcosCLM.Web.Pages.Security.CertificateProfile.AddModel
+@{
+    ViewData["Title"] = "Add Certificate Profile";
+}
+
+<div class="row">
+    <div class="col-12 mt-3">
+        <ecos-form title="Add Certificate Profile"
+                   subtitle="Define issuance rules, validity periods, and cryptographic requirements.">
+
+            <partial name="_CertificateProfileFormFields" for="Item" />
+
+        </ecos-form>
+    </div>
+</div>

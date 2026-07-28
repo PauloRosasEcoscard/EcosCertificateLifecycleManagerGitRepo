@@ -1,0 +1,16 @@
+﻿@page
+@model EcosCLM.Web.Pages.Security.HsmKeyRef.AddModel
+@{
+    ViewData["Title"] = "Add HSM Key Reference";
+}
+
+<div class="row">
+    <div class="col-12 mt-3">
+        <ecos-form title="Add HSM Key Reference"
+                   subtitle="Map a key handle stored inside a Hardware Security Module cluster.">
+
+            <partial name="_HsmKeyRefFormFields" for="Item" />
+
+        </ecos-form>
+    </div>
+</div>

@@ -26,7 +26,7 @@ namespace EcosCLM.Web.Pages.Integration.ApiIdempotencyKey
         {
             try
             {
-                var entity = await _repository.FindOneAsync(x => x.Id == id);
+                var entity = await _repository.FindOneAsync(x => x.Id == id).ConfigureAwait(false);
 
                 if (entity == null)
                     return RedirectToPage("Index");
@@ -54,7 +54,7 @@ namespace EcosCLM.Web.Pages.Integration.ApiIdempotencyKey
         {
             try
             {
-                var entity = await _repository.FindOneAsync(x => x.Id == Item.Id);
+                var entity = await _repository.FindOneAsync(x => x.Id == Item.Id).ConfigureAwait(false);
 
                 if (entity == null)
                 {
@@ -68,7 +68,7 @@ namespace EcosCLM.Web.Pages.Integration.ApiIdempotencyKey
                     return RedirectToPage("Index");
                 }
 
-                await _repository.DelAsync(entity);
+                await _repository.DelAsync(entity).ConfigureAwait(false);
 
                 TempData["success"] = "API idempotency key deleted successfully.";
 

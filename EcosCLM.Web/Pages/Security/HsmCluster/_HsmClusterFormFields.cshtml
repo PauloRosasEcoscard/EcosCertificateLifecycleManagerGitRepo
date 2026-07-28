@@ -1,0 +1,62 @@
+﻿@model EcosCLM.Application.ViewModels.Security.HsmClusterViewModel
+
+<div class="row g-4 px-2 pb-2">
+
+    <div class="col-12">
+        <h6 class="fw-bold mb-0 pb-2 border-bottom border-2" style="border-color: var(--bs-primary) !important; color: var(--bs-primary);">
+            HSM Cluster Specifications
+        </h6>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="Name" class="form-label small fw-bold text-muted mb-1">Cluster Name</label>
+        <input asp-for="Name" class="form-control ecos-input shadow-none rounded-3 px-3 py-2" placeholder="Ex: Primary Payment HSM Cluster" required />
+        <span asp-validation-for="Name" class="text-danger small mt-1"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="Vendor" class="form-label small fw-bold text-muted mb-1">Vendor</label>
+        <input asp-for="Vendor" class="form-control ecos-input shadow-none rounded-3 px-3 py-2" placeholder="Ex: Thales, Utimaco, AWS CloudHSM" />
+        <span asp-validation-for="Vendor" class="text-danger small mt-1"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="Model" class="form-label small fw-bold text-muted mb-1">Model</label>
+        <input asp-for="Model" class="form-control ecos-input shadow-none rounded-3 px-3 py-2" placeholder="Ex: Luna PCIe HSM7, CryptoServer" />
+        <span asp-validation-for="Model" class="text-danger small mt-1"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="PartitionLabel" class="form-label small fw-bold text-muted mb-1">Partition Label / Name</label>
+        <input asp-for="PartitionLabel" class="form-control ecos-input shadow-none rounded-3 px-3 py-2" placeholder="Ex: PARTITION_PROD_01" />
+        <span asp-validation-for="PartitionLabel" class="text-danger small mt-1"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="EndpointRef" class="form-label small fw-bold text-muted mb-1">Endpoint Reference / Address</label>
+        <input asp-for="EndpointRef" class="form-control ecos-input shadow-none rounded-3 px-3 py-2" placeholder="Ex: hsm-cluster-1.internal.net:1786" />
+        <span asp-validation-for="EndpointRef" class="text-danger small mt-1"></span>
+    </div>
+
+    <div class="col-md-3">
+        <label asp-for="FipsLevel" class="form-label small fw-bold text-muted mb-1">FIPS Level</label>
+        <select asp-for="FipsLevel" class="form-select ecos-input shadow-none rounded-3 px-3 py-2">
+            <option value="">None / Standard</option>
+            <option value="FIPS_140_2_L2">FIPS 140-2 Level 2</option>
+            <option value="FIPS_140_2_L3">FIPS 140-2 Level 3</option>
+            <option value="FIPS_140_3_L3">FIPS 140-3 Level 3</option>
+        </select>
+        <span asp-validation-for="FipsLevel" class="text-danger small mt-1"></span>
+    </div>
+
+    <div class="col-md-3">
+        <label asp-for="Status" class="form-label small fw-bold text-muted mb-1">Status</label>
+        <select asp-for="Status" class="form-select ecos-input shadow-none rounded-3 px-3 py-2">
+            <option value="ACTIVE">Active</option>
+            <option value="INACTIVE">Inactive</option>
+            <option value="MAINTENANCE">Maintenance</option>
+        </select>
+        <span asp-validation-for="Status" class="text-danger small mt-1"></span>
+    </div>
+
+</div>
