@@ -9,8 +9,13 @@
     </div>
 
     <div class="col-md-6">
-        <label asp-for="HsmClusterId" class="form-label small fw-bold text-muted mb-1">HSM Cluster ID</label>
-        <input asp-for="HsmClusterId" class="form-control ecos-input shadow-none rounded-3 px-3 py-2" placeholder="Ex: 00000000-0000-0000-0000-000000000000" required />
+        <label asp-for="HsmClusterId" class="form-label small fw-bold text-muted mb-1">HSM Cluster</label>
+        <select asp-for="HsmClusterId"
+                asp-items="@(ViewData["HsmClusterList"] as SelectList)"
+                class="form-select ecos-input shadow-none rounded-3 px-3 py-2"
+                required>
+            <option value="">Select an HSM Cluster...</option>
+        </select>
         <span asp-validation-for="HsmClusterId" class="text-danger small mt-1"></span>
     </div>
 

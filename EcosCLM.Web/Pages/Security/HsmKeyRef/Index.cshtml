@@ -79,7 +79,12 @@
                                     <div class="d-flex flex-column gap-2" style="font-size: 0.9rem;">
                                         <div><span class="text-muted small d-block">Key Label</span><strong class="text-main">@item.KeyLabel</strong></div>
                                         <div><span class="text-muted small d-block">Key Handle</span><span class="text-main">@item.KeyHandle</span></div>
-                                        <div><span class="text-muted small d-block">HSM Cluster ID</span><span class="text-main">@item.HsmClusterId</span></div>
+                                        <div>
+                                            <span class="text-muted small d-block">HSM Cluster</span>
+                                            <span class="text-main fw-semibold">
+                                                @(string.IsNullOrEmpty(item.HsmCluster.Name.ToString()) ? "Unknown Cluster" : item.HsmCluster.Name.ToString())
+                                            </span>
+                                        </div>
                                         <div><span class="text-muted small d-block">Algorithm / Size</span><span class="text-main">@item.Algorithm @(item.KeySize.HasValue ? $"({item.KeySize} bits)" : "")</span></div>
                                         <div><span class="text-muted small d-block">Curve Name</span><span class="text-main">@(string.IsNullOrEmpty(item.CurveName) ? "N/A" : item.CurveName)</span></div>
                                         <div><span class="text-muted small d-block">Extractable</span><span class="text-main">@(item.Extractable == 1 ? "Yes" : "No (Hardware Protected)")</span></div>

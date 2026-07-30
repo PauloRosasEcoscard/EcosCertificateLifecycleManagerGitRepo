@@ -61,7 +61,8 @@ namespace EcosCLM.Application.Extensions.Security
             if (page > 0)
                 query = query.Take(page);
 
-            var list = await query.ToListAsync().ConfigureAwait(false);
+            var list = await query.Include(x => x.HsmCluster).ToListAsync().ConfigureAwait(false);
+
             return repository.ToListViewModel(list);
         }
 

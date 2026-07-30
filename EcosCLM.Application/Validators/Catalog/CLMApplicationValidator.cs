@@ -7,9 +7,6 @@ namespace EcosCLM.Application.Validators.Catalog
     {
         public CLMApplicationValidator()
         {
-            RuleFor(x => x.CustomerId)
-                .NotEmpty();
-
             RuleFor(x => x.Code)
                 .NotEmpty()
                 .MaximumLength(100);
