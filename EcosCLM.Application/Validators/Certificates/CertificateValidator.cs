@@ -7,8 +7,7 @@ namespace EcosCLM.Application.Validators.Certificates
     {
         public CertificateValidator()
         {
-            RuleFor(x => x.CustomerId)
-                .NotEmpty();
+           
 
             RuleFor(x => x.SerialNumber)
                 .NotEmpty()
