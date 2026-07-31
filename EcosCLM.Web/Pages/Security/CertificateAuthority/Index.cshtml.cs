@@ -61,11 +61,13 @@ namespace EcosCLM.Web.Pages.Security.CertificateAuthority
         {
             try
             {
-                var filterJson = Search != null ? Newtonsoft.Json.JsonConvert.SerializeObject(Search) : null;
+                // Envia apenas o termo de busca em vez do JSON serializado
+                var searchTerm = Search?.Name;
+
                 var listResult = await _repository.GetAllWithPageAsync(
                     page: PageSize,
                     offset: (PageCurrent - 1) * PageSize,
-                    filter: filterJson,
+                    filter: searchTerm,
                     oderBy: "name",
                     customer: CustumerId
                 ).ConfigureAwait(false);

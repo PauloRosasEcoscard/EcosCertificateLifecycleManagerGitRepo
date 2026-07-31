@@ -7,9 +7,6 @@ namespace EcosCLM.Application.Validators.Security
     {
         public HsmKeyRefValidator()
         {
-            RuleFor(x => x.CustomerId)
-                .NotEmpty();
-
             RuleFor(x => x.HsmClusterId)
                 .NotEmpty();
 

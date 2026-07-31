@@ -7,8 +7,6 @@ namespace EcosCLM.Application.Validators.Certificates
     {
         public CertificateValidator()
         {
-           
-
             RuleFor(x => x.SerialNumber)
                 .NotEmpty()
                 .MaximumLength(100);

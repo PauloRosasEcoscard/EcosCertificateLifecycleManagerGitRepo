@@ -7,9 +7,6 @@ namespace EcosCLM.Application.Validators.Security
     {
         public HsmClusterValidator()
         {
-            RuleFor(x => x.CustomerId)
-                .NotEmpty();
-
             RuleFor(x => x.Name)
                 .NotEmpty()
                 .MaximumLength(200);

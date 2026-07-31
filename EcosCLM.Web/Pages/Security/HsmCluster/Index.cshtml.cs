@@ -61,7 +61,7 @@ namespace EcosCLM.Web.Pages.Security.HsmCluster
         {
             try
             {
-                var filterJson = Search != null ? Newtonsoft.Json.JsonConvert.SerializeObject(Search) : null;
+                var filterJson = Search?.Name;
                 var listResult = await _repository.GetAllWithPageAsync(
                     page: PageSize,
                     offset: (PageCurrent - 1) * PageSize,
