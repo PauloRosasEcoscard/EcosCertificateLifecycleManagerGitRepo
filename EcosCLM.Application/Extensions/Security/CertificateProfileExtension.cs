@@ -3,6 +3,7 @@ using EcosCLM.Application.Interfaces;
 using EcosCLM.Application.ViewModels.Security;
 using EcosCLM.Domain.Entities.Security;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace EcosCLM.Application.Extensions.Security
 {
@@ -39,7 +40,14 @@ namespace EcosCLM.Application.Extensions.Security
             return repository.ToViewModel(entity);
         }
 
-        public static async Task<List<CertificateProfileViewModel>> GetAllWithPageAsync(this ICertificateProfileRepository repository, int page = 0, int offset = 0, string? filter = null, string? oderBy = null, Guid? customer = null)
+        public static async Task<List<CertificateProfileViewModel>> GetAllWithPageAsync(
+                                                                        this ICertificateProfileRepository repository,
+                                                                        int page = 0,
+                                                                        int offset = 0,
+                                                                        string? filter = null,
+                                                                        string? oderBy = null,
+                                                                        string? orderDirection = null,
+                                                                        Guid? customer = null)
         {
             ArgumentNullException.ThrowIfNull(repository);
 
@@ -50,9 +58,50 @@ namespace EcosCLM.Application.Extensions.Security
                 query = query.Where(x => x.CustomerId == customer.Value);
             }
 
+            if (!string.IsNullOrEmpty(oderBy))
+            {
+                switch (oderBy)
+                {
+                    case "name":
+                        query = orderDirection == "desc" ? query.OrderByDescending(i => i.Name) : query.OrderBy(i => i.Name);
+                        break;
+
+                    case "type":
+                        query = orderDirection == "desc" ? query.OrderByDescending(i => i.CertificateType) : query.OrderBy(i => i.CertificateType);
+                        break;
+
+                    default:
+                        query = query.OrderByDescending(x => x.CreatedAt);
+                        break;
+                }
+            }
+            else
+            {
+                query = query.OrderByDescending(x => x.CreatedAt);
+            }
+
             if (!string.IsNullOrWhiteSpace(filter))
             {
-                query = query.Where(x => x.Name.Contains(filter) || x.CertificateType.Contains(filter));
+                try
+                {
+                    var search = JsonConvert.DeserializeObject<CertificateProfileViewModel>(filter);
+
+                    if (search != null)
+                    {
+                        if (!string.IsNullOrWhiteSpace(search.Name))
+                            query = query.Where(x => x.Name.Contains(search.Name));
+
+                        if (!string.IsNullOrWhiteSpace(search.CertificateType))
+                            query = query.Where(x => x.CertificateType.Contains(search.CertificateType));
+
+                        if (!string.IsNullOrWhiteSpace(search.Status))
+                            query = query.Where(x => x.Status == search.Status);
+                    }
+                }
+                catch (JsonException)
+                {
+                    query = query.Where(x => x.Name.Contains(filter) || x.CertificateType.Contains(filter));
+                }
             }
 
             if (offset > 0)
