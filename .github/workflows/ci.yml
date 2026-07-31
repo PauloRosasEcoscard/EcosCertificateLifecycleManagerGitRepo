@@ -1,0 +1,33 @@
+name: EcosCLM Pull Request CI
+
+on:
+  pull_request:
+    branches: [ master ]
+  push:
+    branches: [ master ]
+
+jobs:
+  validate-and-test:
+    name: Build, Test and Quality Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Restore NuGet Packages
+        run: dotnet restore
+
+      - name: Check Code Formatting
+        run: dotnet format --verify-no-changes --no-restore
+
+      - name: Build Application with Analyzers
+        run: dotnet build --no-restore --configuration Release
+
+      - name: Run Tests (Including Testcontainers)
+        run: dotnet test --no-build --configuration Release --verbosity normal
