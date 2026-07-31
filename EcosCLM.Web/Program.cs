@@ -17,7 +17,7 @@ using Serilog;
 
 public class Program
 {
-    public static void Main(string[] args)
+    public static async Task Main(string[] args)
     {
         Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Debug()
@@ -156,7 +156,9 @@ public class Program
                 }
             });
 
-            app.Run();
+            await app.MigrateAndSeedEcosCLMAsync().ConfigureAwait(false);
+
+            await app.RunAsync().ConfigureAwait(false);
         }
         catch (Exception ex)
         {
