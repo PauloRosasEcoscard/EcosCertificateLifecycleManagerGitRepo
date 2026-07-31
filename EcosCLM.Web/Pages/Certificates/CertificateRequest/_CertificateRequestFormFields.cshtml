@@ -1,27 +1,46 @@
 ﻿@model EcosCLM.Application.ViewModels.Certificates.CertificateRequestViewModel
+@using Microsoft.AspNetCore.Mvc.Rendering
 
 <div class="row g-4 px-2 pb-2">
 
     <div class="col-12">
-        <h6 class="fw-bold mb-0 pb-2 border-bottom border-2" style="border-color: var(--bs-primary) !important; color: var(--bs-primary);">
+        <h6 class="fw-bold mb-0 pb-2 border-bottom border-2"
+            style="border-color: var(--bs-primary) !important; color: var(--bs-primary);">
             Certificate Request Specifications
         </h6>
     </div>
 
+
     <div class="col-md-6">
-        <label asp-for="RequestType" class="form-label small fw-bold text-muted mb-1">Request Type</label>
-        <select asp-for="RequestType" class="form-select ecos-input shadow-none rounded-3 px-3 py-2" required>
+        <label asp-for="RequestType" class="form-label small fw-bold text-muted mb-1">
+            Request Type
+        </label>
+
+        <select asp-for="RequestType"
+                class="form-select ecos-input shadow-none rounded-3 px-3 py-2"
+                required>
+
             <option value="NEW">New Certificate</option>
             <option value="RENEWAL">Renewal</option>
             <option value="REKEY">Rekey</option>
             <option value="REVOCATION">Revocation</option>
+
         </select>
-        <span asp-validation-for="RequestType" class="text-danger small mt-1"></span>
+
+        <span asp-validation-for="RequestType"
+              class="text-danger small mt-1"></span>
     </div>
 
+
     <div class="col-md-6">
-        <label asp-for="Status" class="form-label small fw-bold text-muted mb-1">Status</label>
-        <select asp-for="Status" class="form-select ecos-input shadow-none rounded-3 px-3 py-2">
+        <label asp-for="Status"
+               class="form-label small fw-bold text-muted mb-1">
+            Status
+        </label>
+
+        <select asp-for="Status"
+                class="form-select ecos-input shadow-none rounded-3 px-3 py-2">
+
             <option value="DRAFT">Draft</option>
             <option value="PENDING_APPROVAL">Pending Approval</option>
             <option value="APPROVED">Approved</option>
@@ -29,56 +48,145 @@
             <option value="ISSUED">Issued</option>
             <option value="REJECTED">Rejected</option>
             <option value="FAILED">Failed</option>
+
         </select>
-        <span asp-validation-for="Status" class="text-danger small mt-1"></span>
+
+        <span asp-validation-for="Status"
+              class="text-danger small mt-1"></span>
     </div>
 
-    <div class="col-md-6">
-        <label asp-for="SubjectDn" class="form-label small fw-bold text-muted mb-1">Subject DN</label>
-        <input asp-for="SubjectDn" class="form-control ecos-input shadow-none rounded-3 px-3 py-2" placeholder="Ex: CN=api.domain.com, O=Company, C=BR" required />
-        <span asp-validation-for="SubjectDn" class="text-danger small mt-1"></span>
-    </div>
 
     <div class="col-md-6">
-        <label asp-for="CertificateRequestCLMApplicationId" class="form-label small fw-bold text-muted mb-1">Application ID</label>
-        <input asp-for="CertificateRequestCLMApplicationId" class="form-control ecos-input shadow-none rounded-3 px-3 py-2" placeholder="Ex: 00000000-0000-0000-0000-000000000000" />
-        <span asp-validation-for="CertificateRequestCLMApplicationId" class="text-danger small mt-1"></span>
+        <label asp-for="SubjectDn"
+               class="form-label small fw-bold text-muted mb-1">
+            Subject DN
+        </label>
+
+        <input asp-for="SubjectDn"
+               class="form-control ecos-input shadow-none rounded-3 px-3 py-2"
+               required />
+
+        <span asp-validation-for="SubjectDn"
+              class="text-danger small mt-1"></span>
     </div>
 
-    <div class="col-md-6">
-        <label asp-for="CertificateRequestDomainId" class="form-label small fw-bold text-muted mb-1">Managed Domain ID</label>
-        <input asp-for="CertificateRequestDomainId" class="form-control ecos-input shadow-none rounded-3 px-3 py-2" placeholder="Ex: 00000000-0000-0000-0000-000000000000" />
-        <span asp-validation-for="CertificateRequestDomainId" class="text-danger small mt-1"></span>
-    </div>
 
     <div class="col-md-6">
-        <label asp-for="CertificateRequestProfileId" class="form-label small fw-bold text-muted mb-1">Certificate Profile ID</label>
-        <input asp-for="CertificateRequestProfileId" class="form-control ecos-input shadow-none rounded-3 px-3 py-2" placeholder="Ex: 00000000-0000-0000-0000-000000000000" />
-        <span asp-validation-for="CertificateRequestProfileId" class="text-danger small mt-1"></span>
+        <label class="form-label small fw-bold text-muted mb-1">
+            Application
+        </label>
+
+        <select asp-for="CertificateRequestCLMApplicationId"
+                asp-items="@(ViewData["Applications"] as IEnumerable<SelectListItem>)"
+                class="form-select ecos-input shadow-none rounded-3 px-3 py-2">
+
+            <option value="">Select Application</option>
+
+        </select>
+
+        <span asp-validation-for="CertificateRequestCLMApplicationId"
+              class="text-danger small mt-1"></span>
     </div>
 
-    <div class="col-md-6">
-        <label asp-for="CaId" class="form-label small fw-bold text-muted mb-1">Certificate Authority ID</label>
-        <input asp-for="CaId" class="form-control ecos-input shadow-none rounded-3 px-3 py-2" placeholder="Ex: 00000000-0000-0000-0000-000000000000" />
-        <span asp-validation-for="CaId" class="text-danger small mt-1"></span>
-    </div>
 
     <div class="col-md-6">
-        <label asp-for="HsmClusterId" class="form-label small fw-bold text-muted mb-1">HSM Cluster ID</label>
-        <input asp-for="HsmClusterId" class="form-control ecos-input shadow-none rounded-3 px-3 py-2" placeholder="Ex: 00000000-0000-0000-0000-000000000000" />
-        <span asp-validation-for="HsmClusterId" class="text-danger small mt-1"></span>
+        <label class="form-label small fw-bold text-muted mb-1">
+            Managed Domain
+        </label>
+
+        <select asp-for="CertificateRequestDomainId"
+                asp-items="@(ViewData["Domains"] as IEnumerable<SelectListItem>)"
+                class="form-select ecos-input shadow-none rounded-3 px-3 py-2">
+
+            <option value="">Select Domain</option>
+
+        </select>
+
+        <span asp-validation-for="CertificateRequestDomainId"
+              class="text-danger small mt-1"></span>
     </div>
+
+
+    <div class="col-md-6">
+        <label class="form-label small fw-bold text-muted mb-1">
+            Certificate Profile
+        </label>
+
+        <select asp-for="CertificateRequestProfileId"
+                asp-items="@(ViewData["Profiles"] as IEnumerable<SelectListItem>)"
+                class="form-select ecos-input shadow-none rounded-3 px-3 py-2">
+
+            <option value="">Select Profile</option>
+
+        </select>
+
+        <span asp-validation-for="CertificateRequestProfileId"
+              class="text-danger small mt-1"></span>
+    </div>
+
+
+    <div class="col-md-6">
+        <label class="form-label small fw-bold text-muted mb-1">
+            Certificate Authority
+        </label>
+
+        <select asp-for="CaId"
+                asp-items="@(ViewData["Authorities"] as IEnumerable<SelectListItem>)"
+                class="form-select ecos-input shadow-none rounded-3 px-3 py-2">
+
+            <option value="">Select CA</option>
+
+        </select>
+
+        <span asp-validation-for="CaId"
+              class="text-danger small mt-1"></span>
+    </div>
+
+
+    <div class="col-md-6">
+        <label class="form-label small fw-bold text-muted mb-1">
+            HSM Cluster
+        </label>
+
+        <select asp-for="HsmClusterId"
+                asp-items="@(ViewData["HsmClusters"] as IEnumerable<SelectListItem>)"
+                class="form-select ecos-input shadow-none rounded-3 px-3 py-2">
+
+            <option value="">Select HSM Cluster</option>
+
+        </select>
+
+        <span asp-validation-for="HsmClusterId"
+              class="text-danger small mt-1"></span>
+    </div>
+
 
     <div class="col-12">
-        <label asp-for="CsrPem" class="form-label small fw-bold text-muted mb-1">CSR PEM</label>
-        <textarea asp-for="CsrPem" class="form-control ecos-input shadow-none rounded-3 px-3 py-2 font-monospace" rows="4" placeholder="-----BEGIN CERTIFICATE REQUEST----- ... -----END CERTIFICATE REQUEST-----"></textarea>
-        <span asp-validation-for="CsrPem" class="text-danger small mt-1"></span>
+        <label asp-for="CsrPem"
+               class="form-label small fw-bold text-muted mb-1">
+            CSR PEM
+        </label>
+
+        <textarea asp-for="CsrPem"
+                  class="form-control ecos-input shadow-none rounded-3 px-3 py-2 font-monospace"
+                  rows="4"></textarea>
+
+        <span asp-validation-for="CsrPem"
+              class="text-danger small mt-1"></span>
     </div>
 
+
     <div class="col-12">
-        <label asp-for="FailureReason" class="form-label small fw-bold text-muted mb-1">Failure Reason</label>
-        <input asp-for="FailureReason" class="form-control ecos-input shadow-none rounded-3 px-3 py-2" placeholder="Describe error or reason if rejected/failed..." />
-        <span asp-validation-for="FailureReason" class="text-danger small mt-1"></span>
+        <label asp-for="FailureReason"
+               class="form-label small fw-bold text-muted mb-1">
+            Failure Reason
+        </label>
+
+        <input asp-for="FailureReason"
+               class="form-control ecos-input shadow-none rounded-3 px-3 py-2" />
+
+        <span asp-validation-for="FailureReason"
+              class="text-danger small mt-1"></span>
     </div>
 
 </div>

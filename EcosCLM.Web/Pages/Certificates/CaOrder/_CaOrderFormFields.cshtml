@@ -1,66 +1,192 @@
-﻿@model EcosCLM.Application.ViewModels.Certificates.CaOrderViewModel
+﻿@using EcosCLM.Application.ViewModels.Certificates
+@using EcosCLM.Application.ViewModels.Security
+
+@model EcosCLM.Application.ViewModels.Certificates.CaOrderViewModel
+
 
 <div class="row g-4 px-2 pb-2">
 
     <div class="col-12">
-        <h6 class="fw-bold mb-0 pb-2 border-bottom border-2" style="border-color: var(--bs-primary) !important; color: var(--bs-primary);">
+        <h6 class="fw-bold mb-0 pb-2 border-bottom border-2"
+            style="border-color: var(--bs-primary) !important; color: var(--bs-primary);">
             CA Order Specifications
         </h6>
     </div>
 
-    <div class="col-md-6">
-        <label asp-for="RequestId" class="form-label small fw-bold text-muted mb-1">Certificate Request ID</label>
-        <input asp-for="RequestId" class="form-control ecos-input shadow-none rounded-3 px-3 py-2" placeholder="Ex: 00000000-0000-0000-0000-000000000000" required />
-        <span asp-validation-for="RequestId" class="text-danger small mt-1"></span>
-    </div>
 
     <div class="col-md-6">
-        <label asp-for="CaId" class="form-label small fw-bold text-muted mb-1">Certificate Authority ID</label>
-        <input asp-for="CaId" class="form-control ecos-input shadow-none rounded-3 px-3 py-2" placeholder="Ex: 00000000-0000-0000-0000-000000000000" required />
-        <span asp-validation-for="CaId" class="text-danger small mt-1"></span>
+
+        <label asp-for="RequestId"
+               class="form-label small fw-bold text-muted mb-1">
+            Certificate Request
+        </label>
+
+        <select asp-for="RequestId"
+                class="form-select ecos-input shadow-none rounded-3 px-3 py-2"
+                required>
+
+            <option value="">
+                Select Request
+            </option>
+
+
+            @foreach (var request in ViewData["CertificateRequests"] as IEnumerable<CertificateRequestViewModel> ?? [])
+            {
+                <option value="@request.Id">
+                    @request.SubjectDn
+                </option>
+            }
+
+        </select>
+
+        <span asp-validation-for="RequestId"
+              class="text-danger small mt-1"></span>
+
     </div>
 
-    <div class="col-md-6">
-        <label asp-for="ExternalOrderId" class="form-label small fw-bold text-muted mb-1">External Order ID</label>
-        <input asp-for="ExternalOrderId" class="form-control ecos-input shadow-none rounded-3 px-3 py-2" placeholder="Ex: EXT-ORD-987456" />
-        <span asp-validation-for="ExternalOrderId" class="text-danger small mt-1"></span>
-    </div>
+
 
     <div class="col-md-6">
-        <label asp-for="ExternalCertificateId" class="form-label small fw-bold text-muted mb-1">External Certificate ID</label>
-        <input asp-for="ExternalCertificateId" class="form-control ecos-input shadow-none rounded-3 px-3 py-2" placeholder="Ex: EXT-CERT-123456" />
-        <span asp-validation-for="ExternalCertificateId" class="text-danger small mt-1"></span>
+
+        <label asp-for="CaId"
+               class="form-label small fw-bold text-muted mb-1">
+            Certificate Authority
+        </label>
+
+
+        <select asp-for="CaId"
+                class="form-select ecos-input shadow-none rounded-3 px-3 py-2"
+                required>
+
+            <option value="">
+                Select CA
+            </option>
+
+
+            @foreach (var ca in ViewData["CertificateAuthorities"] as IEnumerable<CertificateAuthorityViewModel> ?? [])
+            {
+                <option value="@ca.Id">
+                    @ca.Name
+                </option>
+            }
+
+        </select>
+
+
+        <span asp-validation-for="CaId"
+              class="text-danger small mt-1"></span>
+
     </div>
 
+
+
     <div class="col-md-6">
-        <label asp-for="Status" class="form-label small fw-bold text-muted mb-1">Status</label>
-        <select asp-for="Status" class="form-select ecos-input shadow-none rounded-3 px-3 py-2">
+
+        <label asp-for="ExternalOrderId"
+               class="form-label small fw-bold text-muted mb-1">
+            External Order ID
+        </label>
+
+
+        <input asp-for="ExternalOrderId"
+               class="form-control ecos-input shadow-none rounded-3 px-3 py-2"
+               placeholder="Ex: EXT-ORD-987456" />
+
+        <span asp-validation-for="ExternalOrderId"
+              class="text-danger small mt-1"></span>
+
+    </div>
+
+
+
+    <div class="col-md-6">
+
+        <label asp-for="ExternalCertificateId"
+               class="form-label small fw-bold text-muted mb-1">
+            External Certificate ID
+        </label>
+
+
+        <input asp-for="ExternalCertificateId"
+               class="form-control ecos-input shadow-none rounded-3 px-3 py-2"
+               placeholder="Ex: EXT-CERT-123456" />
+
+        <span asp-validation-for="ExternalCertificateId"
+              class="text-danger small mt-1"></span>
+
+    </div>
+
+
+
+    <div class="col-md-6">
+
+        <label asp-for="Status"
+               class="form-label small fw-bold text-muted mb-1">
+            Status
+        </label>
+
+
+        <select asp-for="Status"
+                class="form-select ecos-input shadow-none rounded-3 px-3 py-2">
+
             <option value="CREATED">Created</option>
             <option value="SUBMITTED">Submitted</option>
             <option value="PENDING_VALIDATION">Pending Validation</option>
             <option value="COMPLETED">Completed</option>
             <option value="FAILED">Failed</option>
             <option value="CANCELLED">Cancelled</option>
+
         </select>
-        <span asp-validation-for="Status" class="text-danger small mt-1"></span>
+
+        <span asp-validation-for="Status"
+              class="text-danger small mt-1"></span>
+
     </div>
 
-    <div class="col-md-6">
-        <label asp-for="RawResponseRef" class="form-label small fw-bold text-muted mb-1">Raw Response Reference</label>
-        <input asp-for="RawResponseRef" class="form-control ecos-input shadow-none rounded-3 px-3 py-2" placeholder="Ex: s3://logs/ca-responses/ord-001.json" />
-        <span asp-validation-for="RawResponseRef" class="text-danger small mt-1"></span>
-    </div>
+
 
     <div class="col-md-6">
-        <label asp-for="ErrorCode" class="form-label small fw-bold text-muted mb-1">Error Code</label>
-        <input asp-for="ErrorCode" class="form-control ecos-input shadow-none rounded-3 px-3 py-2" placeholder="Ex: ERR_CA_TIMEOUT" />
-        <span asp-validation-for="ErrorCode" class="text-danger small mt-1"></span>
+
+        <label asp-for="RawResponseRef"
+               class="form-label small fw-bold text-muted mb-1">
+            Raw Response Reference
+        </label>
+
+
+        <input asp-for="RawResponseRef"
+               class="form-control ecos-input shadow-none rounded-3 px-3 py-2" />
+
     </div>
 
+
+
     <div class="col-md-6">
-        <label asp-for="ErrorMessage" class="form-label small fw-bold text-muted mb-1">Error Message</label>
-        <input asp-for="ErrorMessage" class="form-control ecos-input shadow-none rounded-3 px-3 py-2" placeholder="Ex: Provider unreachable" />
-        <span asp-validation-for="ErrorMessage" class="text-danger small mt-1"></span>
+
+        <label asp-for="ErrorCode"
+               class="form-label small fw-bold text-muted mb-1">
+            Error Code
+        </label>
+
+
+        <input asp-for="ErrorCode"
+               class="form-control ecos-input shadow-none rounded-3 px-3 py-2" />
+
     </div>
+
+
+
+    <div class="col-md-6">
+
+        <label asp-for="ErrorMessage"
+               class="form-label small fw-bold text-muted mb-1">
+            Error Message
+        </label>
+
+
+        <input asp-for="ErrorMessage"
+               class="form-control ecos-input shadow-none rounded-3 px-3 py-2" />
+
+    </div>
+
 
 </div>

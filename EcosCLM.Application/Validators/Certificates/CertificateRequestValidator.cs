@@ -6,10 +6,7 @@ namespace EcosCLM.Application.Validators.Certificates
     public class CertificateRequestValidator : AbstractValidator<CertificateRequestViewModel>
     {
         public CertificateRequestValidator()
-        {
-            RuleFor(x => x.CustomerId)
-                .NotEmpty();
-
+        { 
             RuleFor(x => x.RequestType)
                 .NotEmpty()
                 .MaximumLength(50);
