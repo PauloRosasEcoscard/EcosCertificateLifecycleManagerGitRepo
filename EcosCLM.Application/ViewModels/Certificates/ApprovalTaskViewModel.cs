@@ -15,7 +15,7 @@ namespace EcosCLM.Application.ViewModels.Certificates
         public int StepOrder { get; set; } = 1;
         public Guid? ApproverRoleId { get; set; }
         public Guid? ApproverUserId { get; set; }
-        public string Status { get; set; } = "PENDING";
+        public string Status { get; set; } = string.Empty;
         public string? DecisionComment { get; set; }
         public Guid? DecidedBy { get; set; }
         public DateTime? DecidedAt { get; set; }

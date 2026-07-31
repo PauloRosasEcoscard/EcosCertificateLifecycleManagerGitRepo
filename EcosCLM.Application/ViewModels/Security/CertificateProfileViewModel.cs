@@ -14,8 +14,8 @@ namespace EcosCLM.Application.ViewModels.Security
         public Guid CustomerId { get; set; }
         public string Name { get; set; } = string.Empty;
         public string? Description { get; set; }
-        public string CertificateType { get; set; } = "TLS_SERVER";
-        public string KeyAlgorithm { get; set; } = "RSA";
+        public string CertificateType { get; set; } = string.Empty;
+        public string KeyAlgorithm { get; set; } = string.Empty;
         public int? KeySize { get; set; }
         public string? CurveName { get; set; }
         public string? SignatureAlgorithm { get; set; }
@@ -24,7 +24,7 @@ namespace EcosCLM.Application.ViewModels.Security
         public string SubjectTemplateJson { get; set; } = "{}";
         public string SanPolicyJson { get; set; } = "{}";
         public short RequireApproval { get; set; } = 1;
-        public string Status { get; set; } = "ACTIVE";
+        public string Status { get; set; } = string.Empty;
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
 

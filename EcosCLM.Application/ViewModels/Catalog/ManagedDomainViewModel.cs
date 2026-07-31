@@ -14,7 +14,7 @@ namespace EcosCLM.Application.ViewModels.Catalog
         public Guid CustomerId { get; set; }
         public Guid? ApplicationId { get; set; }
         public string Fqdn { get; set; } = string.Empty;
-        public string ValidationStatus { get; set; } = "PENDING";
+        public string ValidationStatus { get; set; } = string.Empty;
         public DateTime? ValidatedAt { get; set; }
         public DateTime? ExpiresAt { get; set; }
         public string MetadataJson { get; set; } = "{}";

@@ -15,7 +15,7 @@ namespace EcosCLM.Application.ViewModels.Certificates
         public Guid CaId { get; set; }
         public string? ExternalOrderId { get; set; }
         public string? ExternalCertificateId { get; set; }
-        public string Status { get; set; } = "CREATED";
+        public string Status { get; set; } = string.Empty;
         public DateTime? SubmittedAt { get; set; }
         public DateTime? CompletedAt { get; set; }
         public string? ErrorCode { get; set; }

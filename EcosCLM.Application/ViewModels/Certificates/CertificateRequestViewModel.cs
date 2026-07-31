@@ -15,7 +15,7 @@ namespace EcosCLM.Application.ViewModels.Certificates
         public Guid Id { get; set; }
         public Guid CustomerId { get; set; }
         public string RequestType { get; set; } = string.Empty;
-        public string Status { get; set; } = "DRAFT";
+        public string Status { get; set; } = string.Empty;
         public Guid? CertificateRequestCLMApplicationId { get; set; }
         public Guid? CertificateRequestDomainId { get; set; }
         public Guid? CertificateRequestProfileId { get; set; }
