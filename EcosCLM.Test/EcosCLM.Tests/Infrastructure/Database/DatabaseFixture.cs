@@ -8,7 +8,7 @@ namespace EcosCLM.Tests.Infrastructure.Database
     public class DatabaseFixture : IAsyncLifetime
     {
         private readonly MySqlContainer _dbContainer = new MySqlBuilder()
-            .WithImage("mcr.microsoft.com/mysql/server:2022-latest")
+            .WithImage("mysql:8.0")
             .Build();
 
         public string ConnectionString => _dbContainer.GetConnectionString();
