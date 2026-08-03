@@ -1,14 +1,14 @@
 ﻿using EcosCLM.Data.Context;
 using Microsoft.EntityFrameworkCore;
-using Testcontainers.MsSql;
+using Testcontainers.MySql;
 using Xunit;
 
 namespace EcosCLM.Tests.Infrastructure.Database
 {
     public class DatabaseFixture : IAsyncLifetime
     {
-        private readonly MsSqlContainer _dbContainer = new MsSqlBuilder()
-            .WithImage("mcr.microsoft.com/mssql/server:2022-latest")
+        private readonly MySqlContainer _dbContainer = new MySqlBuilder()
+            .WithImage("mcr.microsoft.com/mysql/server:2022-latest")
             .Build();
 
         public string ConnectionString => _dbContainer.GetConnectionString();

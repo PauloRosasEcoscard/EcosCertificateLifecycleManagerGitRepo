@@ -15,7 +15,7 @@
 		<PackageReference Include="xunit.runner.visualstudio" />
 		<PackageReference Include="FluentAssertions" />
 		<PackageReference Include="AutoMapper" />
-		<PackageReference Include="Testcontainers.MsSql" />
+		<PackageReference Include="Testcontainers.MySql" />
 		<PackageReference Include="NSubstitute" />
 	</ItemGroup>
 
