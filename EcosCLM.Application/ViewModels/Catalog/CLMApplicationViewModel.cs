@@ -39,7 +39,9 @@ namespace EcosCLM.Application.ViewModels.Catalog
     {
         public CLMApplicationProfile()
         {
-            CreateMap<CLMApplication, CLMApplicationViewModel>().ReverseMap();
+            CreateMap<CLMApplication, CLMApplicationViewModel>()
+                .ReverseMap()
+                .ForPath(dest => dest.CLMApplicationCertificateRequests, opt => opt.Ignore());
         }
     }
 }

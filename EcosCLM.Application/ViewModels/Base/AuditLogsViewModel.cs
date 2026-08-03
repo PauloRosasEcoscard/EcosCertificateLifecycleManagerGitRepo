@@ -23,7 +23,10 @@ namespace EcosCLM.Application.ViewModels
     {
         public AccessLogsProfile()
         {
-            CreateMap<AuditLogs, AuditLogsViewModel>().ReverseMap();
+            CreateMap<AuditLogs, AuditLogsViewModel>()
+                .ForMember(dest => dest.SearchStartDate, opt => opt.Ignore())
+                .ForMember(dest => dest.SearchEndDate, opt => opt.Ignore())
+                .ReverseMap();
         }
     }
 }
